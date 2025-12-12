@@ -1,0 +1,506 @@
+[
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/AudioStream.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/AudioStream.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/AudioStream.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/AudioStream.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/CrashReport.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/CrashReport.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/CrashReport.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/CrashReport.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/DMAChannel.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/DMAChannel.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/DMAChannel.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/DMAChannel.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/EventResponder.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/EventResponder.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/EventResponder.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/EventResponder.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/HardwareSerial.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/HardwareSerial.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/HardwareSerial1.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial1.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial1.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/HardwareSerial1.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/HardwareSerial2.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial2.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial2.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/HardwareSerial2.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/HardwareSerial3.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial3.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial3.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/HardwareSerial3.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/HardwareSerial4.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial4.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial4.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/HardwareSerial4.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/HardwareSerial5.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial5.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial5.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/HardwareSerial5.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/HardwareSerial6.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial6.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial6.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/HardwareSerial6.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/HardwareSerial7.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial7.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial7.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/HardwareSerial7.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/HardwareSerial8.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial8.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/HardwareSerial8.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/HardwareSerial8.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/IPAddress.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/IPAddress.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/IPAddress.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/IPAddress.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/IntervalTimer.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/IntervalTimer.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/IntervalTimer.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/IntervalTimer.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/Print.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/Print.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/Print.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/Print.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/Stream.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/Stream.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/Stream.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/Stream.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/Time.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/Time.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/Time.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/Time.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/Tone.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/Tone.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/Tone.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/Tone.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/WMath.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/WMath.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/WMath.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/WMath.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/WString.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/WString.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/WString.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/WString.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/analog.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/analog.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/analog.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/analog.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/bootdata.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/bootdata.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/bootdata.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/bootdata.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/clockspeed.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/clockspeed.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/clockspeed.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/clockspeed.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/debugprintf.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/debugprintf.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/debugprintf.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/debugprintf.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/delay.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/delay.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/delay.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/delay.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/digital.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/digital.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/digital.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/digital.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/eeprom.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/eeprom.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/eeprom.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/eeprom.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/extmem.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/extmem.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/extmem.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/extmem.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/fuse.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/fuse.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/fuse.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/fuse.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/interrupt.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/interrupt.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/interrupt.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/interrupt.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/keylayouts.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/keylayouts.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/keylayouts.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/keylayouts.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/libc.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/libc.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/libc.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/libc.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/main.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/main.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/main.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/main.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -mthumb -mcpu=cortex-m7 -mfloat-abi=hard -mfpu=fpv5-d16 -x assembler-with-cpp -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 -c -o .pio/build/teensy41_custom/FrameworkArduino/memcpy-armv7m.S.o /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/memcpy-armv7m.S",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/memcpy-armv7m.S",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/memcpy-armv7m.S.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -mthumb -mcpu=cortex-m7 -mfloat-abi=hard -mfpu=fpv5-d16 -x assembler-with-cpp -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 -c -o .pio/build/teensy41_custom/FrameworkArduino/memset.S.o /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/memset.S",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/memset.S",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/memset.S.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/new.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/new.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/new.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/new.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/nonstd.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/nonstd.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/nonstd.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/nonstd.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/pwm.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/pwm.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/pwm.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/pwm.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/rtc.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/rtc.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/rtc.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/rtc.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/serialEvent.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/serialEvent.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/serialEvent1.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent1.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent1.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/serialEvent1.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/serialEvent2.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent2.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent2.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/serialEvent2.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/serialEvent3.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent3.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent3.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/serialEvent3.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/serialEvent4.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent4.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent4.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/serialEvent4.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/serialEvent5.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent5.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent5.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/serialEvent5.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/serialEvent6.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent6.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent6.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/serialEvent6.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/serialEvent7.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent7.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent7.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/serialEvent7.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/serialEvent8.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent8.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEvent8.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/serialEvent8.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/serialEventUSB1.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEventUSB1.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEventUSB1.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/serialEventUSB1.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/serialEventUSB2.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEventUSB2.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/serialEventUSB2.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/serialEventUSB2.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/sm_alloc_valid.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_alloc_valid.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_alloc_valid.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/sm_alloc_valid.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/sm_calloc.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_calloc.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_calloc.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/sm_calloc.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/sm_free.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_free.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_free.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/sm_free.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/sm_hash.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_hash.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_hash.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/sm_hash.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/sm_malloc.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_malloc.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_malloc.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/sm_malloc.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/sm_malloc_stats.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_malloc_stats.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_malloc_stats.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/sm_malloc_stats.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/sm_pool.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_pool.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_pool.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/sm_pool.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/sm_realloc.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_realloc.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_realloc.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/sm_realloc.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/sm_realloc_i.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_realloc_i.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_realloc_i.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/sm_realloc_i.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/sm_realloc_move.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_realloc_move.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_realloc_move.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/sm_realloc_move.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/sm_szalloc.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_szalloc.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_szalloc.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/sm_szalloc.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/sm_util.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_util.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_util.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/sm_util.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/sm_zalloc.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_zalloc.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/sm_zalloc.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/sm_zalloc.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/startup.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/startup.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/startup.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/startup.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/tempmon.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/tempmon.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/tempmon.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/tempmon.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/usb.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/usb_audio.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_audio.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_audio.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_audio.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/usb_desc.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_desc.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_desc.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_desc.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/usb_flightsim.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_flightsim.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_flightsim.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_flightsim.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/usb_inst.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_inst.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_inst.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_inst.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/usb_joystick.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_joystick.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_joystick.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_joystick.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/usb_keyboard.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_keyboard.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_keyboard.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_keyboard.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/usb_midi.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_midi.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_midi.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_midi.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/usb_mouse.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_mouse.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_mouse.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_mouse.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/usb_mtp.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_mtp.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_mtp.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_mtp.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/usb_rawhid.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_rawhid.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_rawhid.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_rawhid.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/usb_seremu.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_seremu.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_seremu.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_seremu.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/usb_serial.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_serial.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_serial.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_serial.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/usb_serial2.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_serial2.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_serial2.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_serial2.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/usb_serial3.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_serial3.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_serial3.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_serial3.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-gcc -o .pio/build/teensy41_custom/FrameworkArduino/usb_touch.c.o -c -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_touch.c",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/usb_touch.c",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/usb_touch.c.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/FrameworkArduino/yield.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 /Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/yield.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4/yield.cpp",
+        "output": ".pio/build/teensy41_custom/FrameworkArduino/yield.cpp.o"
+    },
+    {
+        "command": "/Users/alfieeagleton/.platformio/packages/toolchain-gccarmnoneeabi-teensy/bin/arm-none-eabi-g++ -o .pio/build/teensy41_custom/src/main.cpp.o -c -std=c++20 -fno-exceptions -felide-constructors -fno-rtti -std=gnu++17 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -DPLATFORMIO=60118 -D__IMXRT1062__ -DARDUINO_TEENSY41 -DTEENSY_CORE -DUSB_SERIAL -DARDUINO=10805 -DTEENSYDUINO=159 -DCORE_TEENSY -DF_CPU=600000000 -DLAYOUT_US_ENGLISH -Iinclude -Isrc -I/Users/alfieeagleton/.platformio/packages/framework-arduinoteensy/cores/teensy4 src/main.cpp",
+        "directory": "/Users/alfieeagleton/Desktop/Desktop - Alfie\u2019s MacBook Air/Uni/Thesis/Code/Thesis",
+        "file": "src/main.cpp",
+        "output": ".pio/build/teensy41_custom/src/main.cpp.o"
+    }
+]
