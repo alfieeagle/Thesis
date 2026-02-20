@@ -1,1 +1,0 @@
-Make sure to remake this directory with the ros2 package setup once docker is setup.
