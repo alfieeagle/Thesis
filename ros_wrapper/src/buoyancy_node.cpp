@@ -25,7 +25,7 @@ BuoyancyNode::BuoyancyNode()
   _depthSub = this->create_subscription<geometry_msgs::msg::Pose>(
     "/depth",
     rclcpp::SensorDataQoS(),
-    std::bind(&BuoyancyNode::depthCallback, this, std::placeholders::_1));
+    std::bind(&BuoyancyNode::depth_callback, this, std::placeholders::_1));
 }
 
 BuoyancyNode::~BuoyancyNode()
@@ -33,7 +33,7 @@ BuoyancyNode::~BuoyancyNode()
   RCLCPP_INFO(this->get_logger(), "Buoyancy Node Shutdown");
 }
 
-void BuoyancyNode::depthCallback(const geometry_msgs::msg::Pose::SharedPtr msg)
+void BuoyancyNode::depth_callback(const geometry_msgs::msg::Pose::SharedPtr msg)
 {
   float depth = msg->position.z;
   _VBS->update_depth(depth);

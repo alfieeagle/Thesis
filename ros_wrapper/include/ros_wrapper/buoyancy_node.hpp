@@ -36,7 +36,7 @@ class BuoyancyNode : public rclcpp::Node
         rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr _depthSub;
 
         // Callback
-        void depthCallback(const geometry_msgs::msg::Pose::SharedPtr msg);
+        void depth_callback(const geometry_msgs::msg::Pose::SharedPtr msg);
 
         // Node knows the VBS class
         std::unique_ptr<VBS> _VBS;
