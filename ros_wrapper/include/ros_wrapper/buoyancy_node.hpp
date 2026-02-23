@@ -38,8 +38,15 @@ class BuoyancyNode : public rclcpp::Node
         // Callback
         void depth_callback(const geometry_msgs::msg::Pose::SharedPtr msg);
 
+        // Tim
+        
+
         // Node knows the VBS class
         std::unique_ptr<VBS> _VBS;
+
+        #ifndef CORE_TEENSY
+            rclcpp::TimerBase::SharedPtr _simTimer;
+        #endif
 };
 
 #endif

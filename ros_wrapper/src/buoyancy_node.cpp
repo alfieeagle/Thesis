@@ -17,7 +17,7 @@ Dependencies:
 BuoyancyNode::BuoyancyNode()
 : Node("buoyancy_node")
 {
-  _VBS = std::make_unique<VBS>(4.0, 4.0, -5.0);
+  _VBS = std::make_unique<VBS>();
 
   auto qos = rclcpp::QoS(rclcpp::KeepLast(10)).reliable();
 
@@ -28,6 +28,13 @@ BuoyancyNode::BuoyancyNode()
     "/depth",
     qos,
     std::bind(&BuoyancyNode::depth_callback, this, std::placeholders::_1));
+
+    #ifndef CORE_TEENSY
+        _simTimer = this->create_wall_timer(
+            std::chrono::milliseconds(100),
+            [this](){ _VBS->step(); }
+        );
+    #endif
 }
 
 BuoyancyNode::~BuoyancyNode()

@@ -2,6 +2,13 @@
 
 #define VBS_HPP
 
+#ifdef CORE_TEENSY
+    #include <IntervalTimer.h>   
+    #pragma message("Building for Hardware")
+#else 
+    #pragma message("Building for Simulation")
+#endif
+
 /** ------------------------ vbs.hpp ------------------------
 
 Author:			Alfie
@@ -20,7 +27,7 @@ class VBS
 {
     public:
         // Constructor and destructor
-        VBS(float screwLead, float systemVolume, float referenceDepth);
+        VBS();
         ~VBS();
 
         // Function to update the controller inputs and calculate output
@@ -28,20 +35,21 @@ class VBS
 
         // Update member variables
         void update_depth(float depth);
-        void update_piston_volume(float pistonVolume);
+        float get_piston_volume();
 
     private:	
-        // System parameters
-        const float _screwLead; // mm
-        const float _systemVolume; // L
-        const float _referenceDepth; // m
-        
-        // Variable parameters
-        float _pistonVolume; // m^3
-        float _depth; // m
+        float _referenceDepth;
 
         // Controller
         VBSController _Controller;
+
+        // Controller input and output structs
+        VBSController::ExtU_VBSController_T _inputs;
+        VBSController::ExtY_VBSController_T _outputs;
+
+        #ifdef CORE_TEENSY
+            IntervalTimer _controllerTimer; 
+        #endif
 };
 
 #endif

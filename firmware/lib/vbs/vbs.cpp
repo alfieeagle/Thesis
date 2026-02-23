@@ -13,15 +13,25 @@ Dependencies:	vbs.hpp
 
 #include "vbs.hpp"
 
-VBS::VBS(float screwLead, float systemVolume, float referenceDepth)
-: _screwLead(screwLead),
-_systemVolume(systemVolume),
-_referenceDepth(referenceDepth)
+// Create static pointer for use with C style interrupts
+static VBS* instance_ptr = nullptr;
+
+// The ISR (Interrupt Service Routine)
+void vbs_timer_isr() {
+    if (instance_ptr) instance_ptr->step();
+}
+
+VBS::VBS()
 {
     _Controller.initialize();
 
-   _pistonVolume = 0.0f;
-   _depth = 0.0f;
+    #ifdef CORE_TEENSY
+        instance_ptr = this;
+        _controllerTimer.begin(step, 100000); 
+    #endif
+
+    _referenceDepth = 0.0f;
+
 }
 
 VBS::~VBS()
@@ -31,12 +41,9 @@ VBS::~VBS()
 
 void VBS::step()
 {
-    // Create local input and output variables
-    VBSController::ExtU_VBSController_T inputs;
-    VBSController::ExtY_VBSController_T outputs;
-
-    inputs.moorx = _depth;
-    inputs.ReferenceDepthm = _referenceDepth;
+    #ifdef CORE_TEENSY
+        noInterrupts(); 
+    #endif
 
     static bool OverrunFlag{ false };
 
@@ -48,26 +55,29 @@ void VBS::step()
 
     OverrunFlag = true;
 
-    _Controller.setExternalInputs(&inputs);
+    _Controller.setExternalInputs(&_inputs);
 
     // Step the model
     _Controller.step();
 
-    outputs = _Controller.getExternalOutputs();
-    _pistonVolume = outputs.mv;
+    _outputs = _Controller.getExternalOutputs();
 
     // Indicate task complete
     OverrunFlag = false;
+
+    #ifdef CORE_TEENSY
+        interrupts(); 
+    #endif
 }
 
 // Update VBS depth
 void  VBS::update_depth(float depth)
 {
-    _depth = depth;
+    _inputs.moorx = depth;
 }
 
 // Update VBS current volume
-void VBS::update_piston_volume(float pistonVolume)
+float VBS::get_piston_volume()
 {
-    _pistonVolume = pistonVolume;
+    return _outputs.mv;
 }
