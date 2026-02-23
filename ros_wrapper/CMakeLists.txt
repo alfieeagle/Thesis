@@ -11,7 +11,18 @@ find_package(ament_cmake REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-add_executable(buoyancy_node src/buoyancy_node.cpp)
+include_directories(
+  include
+  /home/alfieeagle/Documents/uni/Thesis/firmware/lib/vbs
+  /home/alfieeagle/Documents/uni/Thesis/firmware/lib/controller
+)
+
+add_executable(buoyancy_node 
+  src/buoyancy_node.cpp
+  src/vbs.cpp
+  src/VBSController.cpp
+  )
+
 target_include_directories(buoyancy_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)

@@ -1,0 +1,106 @@
+[0.317s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--cmake-args', '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON']
+[0.317s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=8, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=['-DCMAKE_EXPORT_COMPILE_COMMANDS=ON'], cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x74d1f42ad1c0>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x74d1f42acec0>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x74d1f42acec0>>, mixin_verb=('build',))
+[0.429s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.429s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.430s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.430s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.430s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.430s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.430s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper'
+[0.430s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.431s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.431s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.431s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.431s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.431s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.431s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.431s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.431s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.506s] DEBUG:colcon.colcon_core.package_identification:Package '.' with type 'ros.ament_cmake' and name 'ros_wrapper'
+[0.506s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.506s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.506s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.506s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.506s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.554s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.554s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.561s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 15 installed packages in /home/alfieeagle/Documents/uni/turtlebot3_ws/install
+[0.567s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 383 installed packages in /opt/ros/jazzy
+[0.573s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.736s] Level 5:colcon.colcon_core.verb:set package 'ros_wrapper' build argument 'cmake_args' from command line to '['-DCMAKE_EXPORT_COMPILE_COMMANDS=ON']'
+[0.736s] Level 5:colcon.colcon_core.verb:set package 'ros_wrapper' build argument 'cmake_target' from command line to 'None'
+[0.736s] Level 5:colcon.colcon_core.verb:set package 'ros_wrapper' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.736s] Level 5:colcon.colcon_core.verb:set package 'ros_wrapper' build argument 'cmake_clean_cache' from command line to 'False'
+[0.736s] Level 5:colcon.colcon_core.verb:set package 'ros_wrapper' build argument 'cmake_clean_first' from command line to 'False'
+[0.736s] Level 5:colcon.colcon_core.verb:set package 'ros_wrapper' build argument 'cmake_force_configure' from command line to 'False'
+[0.736s] Level 5:colcon.colcon_core.verb:set package 'ros_wrapper' build argument 'ament_cmake_args' from command line to 'None'
+[0.736s] Level 5:colcon.colcon_core.verb:set package 'ros_wrapper' build argument 'catkin_cmake_args' from command line to 'None'
+[0.736s] Level 5:colcon.colcon_core.verb:set package 'ros_wrapper' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.736s] DEBUG:colcon.colcon_core.verb:Building package 'ros_wrapper' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': ['-DCMAKE_EXPORT_COMPILE_COMMANDS=ON'], 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper', 'merge_install': False, 'path': '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper', 'symlink_install': False, 'test_result_base': None}
+[0.736s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.738s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.738s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper' with build type 'ament_cmake'
+[0.739s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper'
+[0.746s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.747s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.747s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.771s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_teleop:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_example:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/alfieeagle/Documents/uni/Thesis/ros_wrapper -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper
+[4.296s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_teleop:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_example:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/alfieeagle/Documents/uni/Thesis/ros_wrapper -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper
+[4.300s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_teleop:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_example:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper -- -j8 -l8
+[5.036s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_teleop:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_example:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper -- -j8 -l8
+[5.103s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_teleop:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_example:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper
+[5.188s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(ros_wrapper)
+[5.192s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_teleop:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_example:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper
+[5.211s] Level 1:colcon.colcon_core.environment:checking '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper' for CMake module files
+[5.215s] Level 1:colcon.colcon_core.environment:checking '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper' for CMake config files
+[5.217s] Level 1:colcon.colcon_core.shell:create_environment_hook('ros_wrapper', 'cmake_prefix_path')
+[5.218s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/hook/cmake_prefix_path.ps1'
+[5.220s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/hook/cmake_prefix_path.dsv'
+[5.223s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/hook/cmake_prefix_path.sh'
+[5.229s] Level 1:colcon.colcon_core.environment:checking '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/lib'
+[5.230s] Level 1:colcon.colcon_core.environment:checking '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/bin'
+[5.231s] Level 1:colcon.colcon_core.environment:checking '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/lib/pkgconfig/ros_wrapper.pc'
+[5.232s] Level 1:colcon.colcon_core.environment:checking '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/lib/python3.12/site-packages'
+[5.235s] Level 1:colcon.colcon_core.environment:checking '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/bin'
+[5.236s] INFO:colcon.colcon_core.shell:Creating package script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/package.ps1'
+[5.242s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/package.dsv'
+[5.245s] INFO:colcon.colcon_core.shell:Creating package script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/package.sh'
+[5.250s] INFO:colcon.colcon_core.shell:Creating package script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/package.bash'
+[5.255s] INFO:colcon.colcon_core.shell:Creating package script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/package.zsh'
+[5.259s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/colcon-core/packages/ros_wrapper)
+[5.263s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(ros_wrapper)
+[5.264s] Level 1:colcon.colcon_core.environment:checking '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper' for CMake module files
+[5.269s] Level 1:colcon.colcon_core.environment:checking '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper' for CMake config files
+[5.271s] Level 1:colcon.colcon_core.shell:create_environment_hook('ros_wrapper', 'cmake_prefix_path')
+[5.272s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/hook/cmake_prefix_path.ps1'
+[5.275s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/hook/cmake_prefix_path.dsv'
+[5.277s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/hook/cmake_prefix_path.sh'
+[5.281s] Level 1:colcon.colcon_core.environment:checking '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/lib'
+[5.282s] Level 1:colcon.colcon_core.environment:checking '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/bin'
+[5.283s] Level 1:colcon.colcon_core.environment:checking '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/lib/pkgconfig/ros_wrapper.pc'
+[5.285s] Level 1:colcon.colcon_core.environment:checking '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/lib/python3.12/site-packages'
+[5.287s] Level 1:colcon.colcon_core.environment:checking '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/bin'
+[5.288s] INFO:colcon.colcon_core.shell:Creating package script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/package.ps1'
+[5.292s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/package.dsv'
+[5.296s] INFO:colcon.colcon_core.shell:Creating package script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/package.sh'
+[5.298s] INFO:colcon.colcon_core.shell:Creating package script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/package.bash'
+[5.302s] INFO:colcon.colcon_core.shell:Creating package script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/package.zsh'
+[5.305s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/colcon-core/packages/ros_wrapper)
+[5.306s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[5.307s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[5.309s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[5.309s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[5.352s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[5.352s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[5.353s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[5.455s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[5.456s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/local_setup.ps1'
+[5.466s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/_local_setup_util_ps1.py'
+[5.501s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/setup.ps1'
+[5.514s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/local_setup.sh'
+[5.518s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/_local_setup_util_sh.py'
+[5.522s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/setup.sh'
+[5.536s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/local_setup.bash'
+[5.540s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/setup.bash'
+[5.557s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/local_setup.zsh'
+[5.566s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/setup.zsh'

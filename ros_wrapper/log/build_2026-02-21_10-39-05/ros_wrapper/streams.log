@@ -1,0 +1,51 @@
+[0.031s] Invoking command in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_teleop:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_example:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/alfieeagle/Documents/uni/Thesis/ros_wrapper -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper
+[0.193s] -- The C compiler identification is GNU 13.3.0
+[0.371s] -- The CXX compiler identification is GNU 13.3.0
+[0.422s] -- Detecting C compiler ABI info
+[0.739s] -- Detecting C compiler ABI info - done
+[0.830s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.832s] -- Detecting C compile features
+[0.836s] -- Detecting C compile features - done
+[0.890s] -- Detecting CXX compiler ABI info
+[1.579s] -- Detecting CXX compiler ABI info - done
+[1.655s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[1.657s] -- Detecting CXX compile features
+[1.663s] -- Detecting CXX compile features - done
+[1.701s] -- Found ament_cmake: 2.5.4 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[2.395s] -- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+[3.046s] -- Found ament_lint_auto: 0.17.3 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+[3.456s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[3.456s] -- Configured cppcheck include dirs: $<BUILD_INTERFACE:/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/include>
+[3.456s] -- Configured cppcheck exclude dirs and/or files: 
+[3.470s] -- Added test 'lint_cmake' to check CMake code style
+[3.505s] -- Added test 'uncrustify' to check C / C++ code style
+[3.505s] -- Configured uncrustify additional arguments: 
+[3.513s] -- Added test 'xmllint' to check XML markup files
+[3.521s] -- Configuring done (3.5s)
+[3.536s] -- Generating done (0.0s)
+[3.543s] -- Build files have been written to: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper
+[3.556s] Invoked command in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_teleop:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_example:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/alfieeagle/Documents/uni/Thesis/ros_wrapper -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper
+[3.560s] Invoking command in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_teleop:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_example:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper -- -j8 -l8
+[3.720s] [ 50%] [32mBuilding CXX object CMakeFiles/buoyancy_node.dir/src/buoyancy_node.cpp.o[0m
+[3.917s] [100%] [32m[1mLinking CXX executable buoyancy_node[0m
+[4.225s] [100%] Built target buoyancy_node
+[4.296s] Invoked command in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_teleop:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_example:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper -- -j8 -l8
+[4.361s] Invoking command in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_teleop:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_example:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper
+[4.418s] -- Install configuration: ""
+[4.421s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/lib/ros_wrapper/buoyancy_node
+[4.422s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ament_index/resource_index/package_run_dependencies/ros_wrapper
+[4.424s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ament_index/resource_index/parent_prefix_path/ros_wrapper
+[4.425s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/environment/ament_prefix_path.sh
+[4.427s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/environment/ament_prefix_path.dsv
+[4.429s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/environment/path.sh
+[4.430s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/environment/path.dsv
+[4.431s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/local_setup.bash
+[4.432s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/local_setup.sh
+[4.432s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/local_setup.zsh
+[4.434s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/local_setup.dsv
+[4.435s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/package.dsv
+[4.440s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ament_index/resource_index/packages/ros_wrapper
+[4.441s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/cmake/ros_wrapperConfig.cmake
+[4.441s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/cmake/ros_wrapperConfig-version.cmake
+[4.442s] -- Installing: /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/install/ros_wrapper/share/ros_wrapper/package.xml
+[4.452s] Invoked command in '/home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_teleop:/home/alfieeagle/Documents/uni/turtlebot3_ws/install/turtlebot3_example:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/alfieeagle/Documents/uni/Thesis/ros_wrapper/build/ros_wrapper
