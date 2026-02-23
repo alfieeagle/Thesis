@@ -17,14 +17,16 @@ Dependencies:
 BuoyancyNode::BuoyancyNode()
 : Node("buoyancy_node")
 {
-  auto sensor_qos = rclcpp::SensorDataQoS();
+  _VBS = std::make_unique<VBS>(4.0, 4.0, -5.0);
 
-  _pistonVolPub = this->create_publisher<std_msgs::msg::Float32>("/piston_volume", sensor_qos);
+  auto qos = rclcpp::QoS(rclcpp::KeepLast(10)).reliable();
+
+  _pistonVolPub = this->create_publisher<std_msgs::msg::Float32>("/piston_volume", qos);
 
   // Subscribers to robot sensor topics
   _depthSub = this->create_subscription<geometry_msgs::msg::Pose>(
     "/depth",
-    rclcpp::SensorDataQoS(),
+    qos,
     std::bind(&BuoyancyNode::depth_callback, this, std::placeholders::_1));
 }
 
