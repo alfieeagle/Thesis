@@ -21,7 +21,7 @@ BuoyancyNode::BuoyancyNode()
 
   auto qos = rclcpp::QoS(rclcpp::KeepLast(10)).reliable();
 
-  _pistonVolPub = this->create_publisher<std_msgs::msg::Float32>("/piston_volume", qos);
+  _pistonVolPub = this->create_publisher<std_msgs::msg::Float64>("/piston_volume", qos);
 
   // Subscribers to robot sensor topics
   _depthSub = this->create_subscription<geometry_msgs::msg::Pose>(
@@ -35,9 +35,14 @@ BuoyancyNode::BuoyancyNode()
             [this]()
             { 
               _VBS->step(); 
-                  auto msg = std_msgs::msg::Float32();
-              float m3Volume = _VBS->get_piston_volume(); 
-              msg.data = m3Volume * 1000000;
+              RCLCPP_INFO(this->get_logger(), 
+                "Reference depth: %.5f | Controller output: %.5f", 
+                _VBS->get_reference_depth(), 
+                _VBS->get_piston_volume());
+              auto msg = std_msgs::msg::Float64();
+              double volume = _VBS->get_piston_volume(); 
+
+              msg.data = 0.0009756 + volume;
               
               _pistonVolPub->publish(msg);
             }
@@ -51,9 +56,12 @@ BuoyancyNode::~BuoyancyNode()
 }
 
 void BuoyancyNode::depth_callback(const geometry_msgs::msg::Pose::SharedPtr msg)
-{
-  float depth = msg->position.z;
-  _VBS->update_depth(depth);
+{ 
+  _VBS->update_depth(msg->position.z);
+
+  RCLCPP_INFO(this->get_logger(), 
+                "Depth: %.5f",  
+                _VBS->get_current_depth());
 }
 
 int main(int argc, char * argv[])

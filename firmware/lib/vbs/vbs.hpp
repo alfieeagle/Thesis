@@ -33,12 +33,17 @@ class VBS
         // Function to update the controller inputs and calculate output
         void step();
 
-        // Update member variables
-        void update_depth(float depth);
-        float get_piston_volume();
+        // Setters
+        void update_depth(double depth);
+
+        // Getters
+        double get_piston_volume();
+        double get_reference_depth();
+        double get_current_depth();
+
 
     private:	
-        float _referenceDepth;
+        double _referenceDepth;
 
         // Controller
         VBSController _Controller;

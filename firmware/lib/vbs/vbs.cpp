@@ -27,10 +27,16 @@ VBS::VBS()
 
     #ifdef CORE_TEENSY
         instance_ptr = this;
-        _controllerTimer.begin(step, 100000); 
+        _controllerTimer.begin(vbs_timer_isr, 100000); 
     #endif
 
-    _referenceDepth = 0.0f;
+    _referenceDepth = -5.0f;
+
+    // Initialise inputs and outputs
+    _inputs.moorx = 0.0f;
+    _inputs.ReferenceDepthm = _referenceDepth;
+
+    _outputs.mv = 0.0f;
 
 }
 
@@ -71,13 +77,23 @@ void VBS::step()
 }
 
 // Update VBS depth
-void  VBS::update_depth(float depth)
+void VBS::update_depth(double depth)
 {
     _inputs.moorx = depth;
 }
 
 // Update VBS current volume
-float VBS::get_piston_volume()
+double VBS::get_piston_volume()
 {
     return _outputs.mv;
+}
+
+double VBS::get_reference_depth()
+{
+    return _referenceDepth;
+}
+
+double VBS::get_current_depth()
+{
+    return _inputs.moorx;
 }

@@ -1,6 +1,6 @@
 - ros_topic_name: "piston_volume"
-  gz_topic_name: "model/vbs/piston_volume"
-  ros_type_name: "std_msgs/msg/Float32"
+  gz_topic_name: "model/vbs/buoyancy_engine"
+  ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "gz.msgs.Float"
   subscriber_queue: 5
   publisher_queue: 6
