@@ -16,7 +16,7 @@ Dependencies:	vbs.hpp
 VBS::VBS(float screwLead, float systemVolume, float referenceDepth)
 : _screwLead(screwLead),
 _systemVolume(systemVolume),
-_referncedepth(referenceDepth)
+_referenceDepth(referenceDepth)
 {
     _Controller.initialize();
 
@@ -36,7 +36,7 @@ void VBS::step()
     VBSController::ExtY_VBSController_T outputs;
 
     inputs.moorx = _depth;
-    inputs.ReferenceDepthm = _referncedepth;
+    inputs.ReferenceDepthm = _referenceDepth;
 
     static bool OverrunFlag{ false };
 
@@ -58,4 +58,16 @@ void VBS::step()
 
     // Indicate task complete
     OverrunFlag = false;
+}
+
+// Update VBS depth
+void  VBS::update_depth(float depth)
+{
+    _depth = depth;
+}
+
+// Update VBS current volume
+void VBS::update_piston_volume(float pistonVolume)
+{
+    _pistonVolume = pistonVolume;
 }

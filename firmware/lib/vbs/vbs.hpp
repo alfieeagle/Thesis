@@ -26,11 +26,15 @@ class VBS
         // Function to update the controller inputs and calculate output
         void step();
 
+        // Update member variables
+        void update_depth(float depth);
+        void update_piston_volume(float pistonVolume);
+
     private:	
         // System parameters
         const float _screwLead; // mm
         const float _systemVolume; // L
-        const float _referncedepth; // m
+        const float _referenceDepth; // m
         
         // Variable parameters
         float _pistonVolume; // m^3

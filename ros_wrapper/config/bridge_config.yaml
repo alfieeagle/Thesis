@@ -1,17 +1,17 @@
-# - ros_topic_name: "piston_volume"
-#   gz_topic_name: "gz_piston_volume"
-#   ros_type_name: "std_msgs/msg/Float32"
-#   gz_type_name: "gz.msg.Float"
-#   subscriber_queue: 5
-#   publisher_queue: 6
-#   lazy: false
-#   direction: ROS_TO_GZ
+- ros_topic_name: "piston_volume"
+  gz_topic_name: "gz_piston_volume"
+  ros_type_name: "std_msgs/msg/Float32"
+  gz_type_name: "gz.msgs.Float"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: false
+  direction: ROS_TO_GZ
 
-# - ros_topic_name: "depth"
-#   gz_topic_name: "gz_piston_volume"
-#   ros_type_name: "std_msgs/msg/Float32"
-#   gz_type_name: "gz.msg.Float"
-#   subscriber_queue: 5
-#   publisher_queue: 6
-#   lazy: false
-#   direction: ROS_TO_GZ
+- ros_topic_name: "depth"
+  gz_topic_name: "model/vbs/pose"
+  ros_type_name: "geometry_msgs/msg/Pose"
+  gz_type_name: "gz.msgs.Pose"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: false
+  direction: GZ_TO_ROS

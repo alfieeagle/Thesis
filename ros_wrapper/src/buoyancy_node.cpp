@@ -22,8 +22,20 @@ BuoyancyNode::BuoyancyNode()
   _pistonVolPub = this->create_publisher<std_msgs::msg::Float32>("/piston_volume", sensor_qos);
 
   // Subscribers to robot sensor topics
-  _depthSub = this->create_subscription<std_msgs::msg::Float32>(
+  _depthSub = this->create_subscription<geometry_msgs::msg::Pose>(
     "/depth",
     rclcpp::SensorDataQoS(),
     std::bind(&BuoyancyNode::depthCallback, this, std::placeholders::_1));
 }
+
+BuoyancyNode::~BuoyancyNode()
+{
+  RCLCPP_INFO(this->get_logger(), "Buoyancy Node Shutdown");
+}
+
+void BuoyancyNode::depthCallback(const geometry_msgs::msg::Pose::SharedPtr msg)
+{
+  float depth = msg->position.z;
+  _VBS->update_depth(depth);
+}
+
