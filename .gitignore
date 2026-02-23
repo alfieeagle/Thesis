@@ -52,4 +52,5 @@
 *.DS_Store
 
 build/
-
+log/
+install/

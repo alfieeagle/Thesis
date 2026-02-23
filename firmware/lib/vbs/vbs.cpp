@@ -1,7 +1,3 @@
-#ifndef VBS_CPP
-
-#define VBS_CPP
-
 /** ------------------------ vbs.cpp ------------------------
 
 Author:			Alfie Eagleton
@@ -63,5 +59,3 @@ void VBS::step()
     // Indicate task complete
     OverrunFlag = false;
 }
-
-#endif

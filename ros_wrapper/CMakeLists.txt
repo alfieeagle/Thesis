@@ -7,26 +7,24 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
-
-include_directories(
-  include
-  /home/alfieeagle/Documents/uni/Thesis/firmware/lib/vbs
-  /home/alfieeagle/Documents/uni/Thesis/firmware/lib/controller
-)
+find_package(rclcpp REQUIRED)
 
 add_executable(buoyancy_node 
   src/buoyancy_node.cpp
   src/vbs.cpp
   src/VBSController.cpp
-  )
+)
+
+# This is the "Magic" ROS 2 command that handles rclcpp includes and libraries
+ament_target_dependencies(buoyancy_node rclcpp)
 
 target_include_directories(buoyancy_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
-target_compile_features(buoyancy_node PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+  # Add your firmware libs here if they aren't separate packages
+  /home/alfieeagle/Documents/uni/Thesis/firmware/lib/vbs
+  /home/alfieeagle/Documents/uni/Thesis/firmware/lib/controller
+)  # Require C99 and C++17
 
 install(TARGETS buoyancy_node
   DESTINATION lib/${PROJECT_NAME})

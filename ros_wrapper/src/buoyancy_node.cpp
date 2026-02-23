@@ -1,10 +1,29 @@
-#include <cstdio>
+/** ------------------------ buoyancy_node.cpp ------------------------
 
-int main(int argc, char ** argv)
+Author:			Alfie Eagleton
+
+Date:			23/2/26
+
+Description:
+This file contains the implementation of the buoyancy_node
+that talks to the gazebo buoyancy simulation.
+
+Dependencies:	
+
+**/
+
+#include "ros_wrapper/buoyancy_node.hpp"
+
+BuoyancyNode::BuoyancyNode()
+: Node("buoyancy_node")
 {
-  (void) argc;
-  (void) argv;
+  auto sensor_qos = rclcpp::SensorDataQoS();
 
-  printf("hello world ros_wrapper package\n");
-  return 0;
+  _pistonVolPub = this->create_publisher<std_msgs::msg::Float32>("/piston_volume", sensor_qos);
+
+  // Subscribers to robot sensor topics
+  _depthSub = this->create_subscription<std_msgs::msg::Float32>(
+    "/depth",
+    rclcpp::SensorDataQoS(),
+    std::bind(&BuoyancyNode::depthCallback, this, std::placeholders::_1));
 }
