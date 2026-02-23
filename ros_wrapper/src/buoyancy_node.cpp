@@ -32,7 +32,15 @@ BuoyancyNode::BuoyancyNode()
     #ifndef CORE_TEENSY
         _simTimer = this->create_wall_timer(
             std::chrono::milliseconds(100),
-            [this](){ _VBS->step(); }
+            [this]()
+            { 
+              _VBS->step(); 
+                  auto msg = std_msgs::msg::Float32();
+              float m3Volume = _VBS->get_piston_volume(); 
+              msg.data = m3Volume * 1000000;
+              
+              _pistonVolPub->publish(msg);
+            }
         );
     #endif
 }
