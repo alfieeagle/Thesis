@@ -1,5 +1,5 @@
 - ros_topic_name: "piston_volume"
-  gz_topic_name: "gz_piston_volume"
+  gz_topic_name: "model/vbs/piston_volume"
   ros_type_name: "std_msgs/msg/Float32"
   gz_type_name: "gz.msgs.Float"
   subscriber_queue: 5

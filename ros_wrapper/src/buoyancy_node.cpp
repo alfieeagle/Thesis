@@ -39,3 +39,11 @@ void BuoyancyNode::depth_callback(const geometry_msgs::msg::Pose::SharedPtr msg)
   _VBS->update_depth(depth);
 }
 
+int main(int argc, char * argv[])
+{
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<BuoyancyNode>());
+  rclcpp::shutdown();
+  return 0;
+}
+
