@@ -136,23 +136,24 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
       <plugin
         filename="gz-sim-pose-publisher-system"
         name="gz::sim::systems::PosePublisher">
-        <publish_link_pose>true</publish_link_pose>
+        <publish_link_pose>false</publish_link_pose>
         <publish_collision_pose>false</publish_collision_pose>
         <publish_visual_pose>false</publish_visual_pose>
         <publish_nested_model_pose>true</publish_nested_model_pose>
         <use_pose_vector_msg>false</use_pose_vector_msg>
         <update_frequency>50</update_frequency>
+        <static>false</static>
       </plugin>
       <plugin
         filename="gz-sim-buoyancy-engine-system"
         name="gz::sim::systems::BuoyancyEngine">
         <link_name>body</link_name>
         <namespace>vbs</namespace>
-        <min_volume>0.0031679</min_volume>
+        <min_volume>0.0031929</min_volume>
         <neutral_volume>0.0033929</neutral_volume>
         <default_volume>0.0033929</default_volume>
-        <max_volume>0.0036179</max_volume>
-        <max_inflation_rate>0.00002262</max_inflation_rate>
+        <max_volume>0.0035929</max_volume>
+        <max_inflation_rate>0.00010306</max_inflation_rate>
         <fluid_density>1025</fluid_density>
         <surface>0</surface>
       </plugin>
