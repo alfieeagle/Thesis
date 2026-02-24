@@ -59,9 +59,9 @@ void BuoyancyNode::depth_callback(const geometry_msgs::msg::Pose::SharedPtr msg)
 { 
   _VBS->update_depth(msg->position.z);
 
-  RCLCPP_INFO(this->get_logger(), 
-                "Depth: %.5f",  
-                _VBS->get_current_depth());
+  // RCLCPP_INFO(this->get_logger(), 
+  //               "Depth: %.5f",  
+  //               _VBS->get_current_depth());
 }
 
 int main(int argc, char * argv[])
