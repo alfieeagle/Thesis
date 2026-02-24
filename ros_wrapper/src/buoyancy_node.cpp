@@ -35,14 +35,13 @@ BuoyancyNode::BuoyancyNode()
             [this]()
             { 
               _VBS->step(); 
-              // RCLCPP_INFO(this->get_logger(), 
-              //   "Reference depth: %.5f | Controller output: %.5f", 
-              //   _VBS->get_reference_depth(), 
-              //   _VBS->get_piston_volume());
               auto msg = std_msgs::msg::Float64();
               double volume = _VBS->get_piston_volume(); 
 
-              msg.data = 0.0009756 + volume;
+              msg.data = 0.0033929 + volume;
+              RCLCPP_INFO(this->get_logger(), 
+                "Controller output: %.5f\nFinal volume input: %.5f",  
+                volume, msg.data);
               
               _pistonVolPub->publish(msg);
             }
@@ -59,9 +58,9 @@ void BuoyancyNode::depth_callback(const geometry_msgs::msg::Pose::SharedPtr msg)
 { 
   _VBS->update_depth(msg->position.z);
 
-  RCLCPP_INFO(this->get_logger(), 
-                "Depth: %.5f",  
-                _VBS->get_current_depth());
+  // RCLCPP_INFO(this->get_logger(), 
+  //               "Depth: %.5f",  
+  //               _VBS->get_current_depth());
 }
 
 int main(int argc, char * argv[])
