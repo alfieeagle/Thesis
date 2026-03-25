@@ -21,7 +21,7 @@ This file contains the interface for the VBS class.
 Dependencies:   VBSController.h   
 
 **/
-#include "VBSController.h"
+#include "PID.hpp"
 
 class VBS
 {
@@ -46,11 +46,7 @@ class VBS
         double _referenceDepth;
 
         // Controller
-        VBSController _Controller;
-
-        // Controller input and output structs
-        VBSController::ExtU_VBSController_T _inputs;
-        VBSController::ExtY_VBSController_T _outputs;
+        PID _Controller;
 
         #ifdef CORE_TEENSY
             IntervalTimer _controllerTimer; 

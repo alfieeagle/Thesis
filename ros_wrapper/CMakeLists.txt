@@ -14,7 +14,7 @@ find_package(std_msgs REQUIRED)
 add_executable(buoyancy_node 
   src/buoyancy_node.cpp
   src/vbs.cpp
-  src/VBSController.cpp
+  src/PID.cpp
 )
 
 ament_target_dependencies(buoyancy_node 
