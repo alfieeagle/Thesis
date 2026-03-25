@@ -16,7 +16,7 @@
 // Code generation objectives: Unspecified
 // Validation result: Not run
 //
-#include "VBSController.h"
+#include "ros_wrapper/VBSController.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <array>

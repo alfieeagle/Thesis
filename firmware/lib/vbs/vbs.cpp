@@ -11,7 +11,7 @@ Dependencies:	vbs.hpp
 
 **/
 
-#include "vbs.hpp"
+#include "ros_wrapper/vbs.hpp"
 
 // Create static pointer for use with C style interrupts
 static VBS* instance_ptr = nullptr;
