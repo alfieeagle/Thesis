@@ -1,76 +1,95 @@
 /** ------------------------ PID.cpp ------------------------
 
-Author:			Alfie Eagleton
+Author:         Alfie Eagleton
 
-Date:			25/3/26
+Date:           25/3/26
 
 Description:
 This file contains the implementation of the PID controller
 for the variable buoyancy system.
 
-Dependencies:	PID.hpp 
+Dependencies:   PID.hpp 
 
 **/
 
-#include "PID.hpp"
+#include "ros_wrapper/PID.hpp"
 
-PID::PID(float kp, float kd, float ki, float time_const):
+PID::PID(float kp, float kd, float ki, float timeConst):
 _kp(kp),
 _kd(kd),
 _ki(ki),
-_time_const(time_const)
+_timeConst(timeConst)
 {
     _error = 0.0f;
-    _prev_error = 0.0f;
-    _integral_error = 0.0f;
-    _deriative_error = 0.0f;
-    _max_integral_error = 10.0f;
-    _elapsed_time = 0.0f;
+    _prevError = 0.0f;
+    _integralError = 0.0f;
+    _derivativeError = 0.0f;
+    _maxIntegralError = 10;
+    _elapsedTime = 0.0f;
+    _ref = 0.0f;
 }
 
-float PID::computeError(float ref, float signal)
+float PID::compute_error(float ref, float signal)
 {
     _error = ref - signal;
     return _error;
 }
 
-float PID::integrateError(float error)
+float PID::integrate_error()
 {
-    float final_error;
+    float finalError;
 
-    if(_integral_error < _max_integral_error)
+    if(_integralError < _maxIntegralError)
     {
-        _integral_error += _error;
-        final_error = _integral_error;
+        _integralError += _error;
+        finalError = _integralError;
     }
     else
     {
-        _integral_error = _max_integral_error;
-        final_error = _integral_error;
+        _integralError = _maxIntegralError;
+        finalError = _integralError;
     }
 
-    return final_error;
+    return finalError;
 }
 
-float PID::calculateDerivative(float error)
+float PID::calculate_error_derivative()
 {
-    float final_error;
+    float finalError;
 
-    if(_elapsed_time == 0.0)
+    if(_elapsedTime == 0.0)
     {
-        _deriative_error = 0.0f;
-        final_error = _deriative_error;
+        _derivativeError = 0.0f;
+        _prevError = 0.0f;
+        finalError = _derivativeError;
     }
     else
     {
-        _deriative_error = (_error - _prev_error)/_time_const;
-        final_error = _deriative_error;
+        _derivativeError = (_error - _prevError) / _timeConst;
+        _prevError = _error;
+        finalError = _derivativeError;
     }
 
-    return final_error;
+    return finalError;
 }
 
-float PID::computeControlSignal()
+float PID::compute_control_signal()
 {
-    float u = (_kp * _error) + (_kd * _deriative_error) + (_ki * _integral_error);
+    // Summing the terms using the camelCase internal variables
+    float u = (_kp * _error) + (_kd * _derivativeError) + (_ki * _integralError);
+    return u; 
+}
+
+float PID::step(float ref, float signal)
+{
+    float controlSignal;
+
+    _ref = ref;
+
+    _error = compute_error(_ref, signal);
+    _integralError = integrate_error();
+    _derivativeError = calculate_error_derivative();
+
+    controlSignal = compute_control_signal();
+    return controlSignal;
 }

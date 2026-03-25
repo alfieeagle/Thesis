@@ -16,17 +16,9 @@ class PID
 {
     public:
         // Constructor
-        PID(float kp, float kd, float ki, float time_const);
+        PID(float kp, float kd, float ki, float timeConst);
 
-        // Compute the error
-        float computeError(float ref, float signal);
-
-        // Find integral and derivative error terms
-        float integrateError(float error);
-        float calculateDerivative(float error);
-
-        // Compute the controller output
-        float computeControlSignal();
+        float step(float ref, float signal);
 
     private:
         // Gain values
@@ -36,15 +28,27 @@ class PID
 
         // Errors
         float _error;
-        float _prev_error;
-        float _integral_error;
-        float _deriative_error;
+        float _prevError;
+        float _integralError;
+        float _derivativeError;
 
         // Anti-Integrall Windup
-        int _max_integral_error;
+        int _maxIntegralError;
 
         // Timing
-        float _time_const;
-        float _elapsed_time;
+        float _timeConst;
+        float _elapsedTime;
+
+        float _ref;
+
+        // Compute the error
+        float compute_error(float ref, float signal);
+
+        // Find integral and derivative error terms
+        float integrate_error();
+        float calculate_error_derivative();
+
+        // Compute the controller output
+        float compute_control_signal();
 };
 

@@ -22,13 +22,13 @@ Dependencies:   VBSController.h
 
 **/
 #include "PID.hpp"
+#include <cmath>
 
 class VBS
 {
     public:
         // Constructor and destructor
-        VBS();
-        ~VBS();
+        VBS(float cutoffFrequency, float kp, float kd, float ki, float time_const);
 
         // Function to update the controller inputs and calculate output
         void step();
@@ -41,12 +41,21 @@ class VBS
         double get_reference_depth();
         double get_current_depth();
 
-
     private:	
+
+        // Depths
         double _referenceDepth;
+        double _currentDepth;
+
+        // Piston Volume
+        double _pistonVolume;
 
         // Controller
         PID _Controller;
+
+        // Low pass filter parameters
+        float _alpha;
+        float _cutoffFrequency;
 
         #ifdef CORE_TEENSY
             IntervalTimer _controllerTimer; 
