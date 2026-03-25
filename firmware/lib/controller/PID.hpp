@@ -8,47 +8,50 @@ Description:
 This file contains the interface for the PID controller used in the variable
 buoyancy system.
 
-Dependencies:	    
+Dependencies:   cmath, algorithm   
 
 **/
+#include <cmath>
+#include <algorithm>
 
 class PID
 {
     public:
         // Constructor
-        PID(float kp, float kd, float ki, float timeConst);
+        PID(double kp, double kd, double ki);
 
-        float step(float ref, float signal);
+        double step(float ref, float signal, float dt);
+
+        void set_saturation(double sat);
 
     private:
         // Gain values
-        float _kp;
-        float _kd;
-        float _ki;
+        double _kp;
+        double _kd;
+        double _ki;
 
         // Errors
-        float _error;
-        float _prevError;
-        float _integralError;
-        float _derivativeError;
+        double _error;
+        double _prevError;
+        double _integralError;
+        double _derivativeError;
 
         // Anti-Integrall Windup
-        int _maxIntegralError;
+        double _maxIntegralError;
 
         // Timing
-        float _timeConst;
         float _elapsedTime;
 
-        float _ref;
+        double _saturation;
 
         // Compute the error
-        float compute_error(float ref, float signal);
+        void compute_error(float ref, float signal);
 
         // Find integral and derivative error terms
-        float integrate_error();
-        float calculate_error_derivative();
+        void integrate_error();
+        void calculate_error_derivative(float dt);
 
         // Compute the controller output
-        float compute_control_signal();
+        double compute_control_signal();
 };
 

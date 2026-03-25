@@ -109,7 +109,7 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
       <pose>0 0 -1 0 0 0</pose>
       <link name='body'>
         <inertial>
-          <mass>3.4777</mass>
+          <mass>2.019667085</mass>
           <inertia>
             <ixx>0.02915</ixx>
             <iyy>0.02915</iyy>
@@ -119,16 +119,16 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
         <visual name='vbs_visual'>
           <geometry>
             <cylinder>
-              <radius>0.06</radius>
-              <length>0.3</length>
+              <radius>0.056</radius>
+              <length>0.2</length>
             </cylinder>
           </geometry>
         </visual>
         <collision name='vbs_collision'>
           <geometry>
             <cylinder>
-              <radius>0.06</radius>
-              <length>0.3</length>
+              <radius>0.056</radius>
+              <length>0.2</length>
             </cylinder>
           </geometry>
         </collision>
@@ -149,11 +149,11 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
         name="gz::sim::systems::BuoyancyEngine">
         <link_name>body</link_name>
         <namespace>vbs</namespace>
-        <min_volume>0.0031929</min_volume>
-        <neutral_volume>0.0033929</neutral_volume>
-        <default_volume>0.0033929</default_volume>
-        <max_volume>0.0035929</max_volume>
-        <max_inflation_rate>0.00010306</max_inflation_rate>
+        <min_volume>0.00187947</min_volume>
+        <neutral_volume>0.002</neutral_volume>
+        <default_volume>0.002</default_volume>
+        <max_volume>0.00212053</max_volume>
+        <max_inflation_rate>0.000005858</max_inflation_rate>
         <fluid_density>1025</fluid_density>
         <surface>0</surface>
       </plugin>

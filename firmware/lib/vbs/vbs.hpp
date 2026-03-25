@@ -1,6 +1,7 @@
 #ifndef VBS_HPP
 
 #define VBS_HPP
+#define _USE_MATH_DEFINES
 
 #ifdef CORE_TEENSY
     #include <IntervalTimer.h>   
@@ -18,7 +19,7 @@ Date:			19/2/26
 Description:
 This file contains the interface for the VBS class.
 
-Dependencies:   VBSController.h   
+Dependencies:   PID.hpp, cmath   
 
 **/
 #include "PID.hpp"
@@ -28,7 +29,7 @@ class VBS
 {
     public:
         // Constructor and destructor
-        VBS(float cutoffFrequency, float kp, float kd, float ki, float time_const);
+        VBS(float cutoffFrequency, double kp, double kd, double ki, float dt, float length, float radius);
 
         // Function to update the controller inputs and calculate output
         void step();
@@ -49,6 +50,7 @@ class VBS
 
         // Piston Volume
         double _pistonVolume;
+        double _maxPistonVolume;
 
         // Controller
         PID _Controller;
@@ -56,6 +58,12 @@ class VBS
         // Low pass filter parameters
         float _alpha;
         float _cutoffFrequency;
+        float _dt;
+
+        // Dimensions
+        float _length;
+        float _radius;
+        float _volume;
 
         #ifdef CORE_TEENSY
             IntervalTimer _controllerTimer; 

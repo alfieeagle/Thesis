@@ -14,82 +14,66 @@ Dependencies:   PID.hpp
 
 #include "ros_wrapper/PID.hpp"
 
-PID::PID(float kp, float kd, float ki, float timeConst):
+PID::PID(double kp, double kd, double ki):
 _kp(kp),
 _kd(kd),
-_ki(ki),
-_timeConst(timeConst)
+_ki(ki)
 {
-    _error = 0.0f;
-    _prevError = 0.0f;
-    _integralError = 0.0f;
-    _derivativeError = 0.0f;
+    _error = 0.0;
+    _prevError = 0.0;
+    _integralError = 0.0;
+    _derivativeError = 0.0;
     _maxIntegralError = 10;
     _elapsedTime = 0.0f;
-    _ref = 0.0f;
 }
 
-float PID::compute_error(float ref, float signal)
+void PID::compute_error(float ref, float signal)
 {
     _error = ref - signal;
-    return _error;
 }
 
-float PID::integrate_error()
+void PID::integrate_error()
 {
-    float finalError;
+    _integralError += _error;
 
-    if(_integralError < _maxIntegralError)
-    {
-        _integralError += _error;
-        finalError = _integralError;
-    }
-    else
-    {
-        _integralError = _maxIntegralError;
-        finalError = _integralError;
-    }
-
-    return finalError;
+    _integralError = std::clamp(_integralError, -_maxIntegralError, _maxIntegralError);
 }
 
-float PID::calculate_error_derivative()
+void PID::calculate_error_derivative(float dt)
 {
-    float finalError;
-
     if(_elapsedTime == 0.0)
     {
         _derivativeError = 0.0f;
-        _prevError = 0.0f;
-        finalError = _derivativeError;
     }
     else
     {
-        _derivativeError = (_error - _prevError) / _timeConst;
+        _derivativeError = (_error - _prevError) / dt;
         _prevError = _error;
-        finalError = _derivativeError;
     }
 
-    return finalError;
 }
 
-float PID::compute_control_signal()
+double PID::compute_control_signal()
 {
-    // Summing the terms using the camelCase internal variables
-    float u = (_kp * _error) + (_kd * _derivativeError) + (_ki * _integralError);
-    return u; 
+    double u = (_kp * _error) + (_kd * _derivativeError) + (_ki * _integralError);
+
+    return u = std::clamp(u, -_saturation, _saturation);
 }
 
-float PID::step(float ref, float signal)
+double PID::step(float ref, float signal, float dt)
 {
     float controlSignal;
+    _elapsedTime += dt;
 
-    _ref = ref;
-
-    _error = compute_error(_ref, signal);
-    _integralError = integrate_error();
-    _derivativeError = calculate_error_derivative();
+    compute_error(ref, signal);
+    integrate_error();
+    calculate_error_derivative(dt);
 
     controlSignal = compute_control_signal();
     return controlSignal;
+}
+
+void PID::set_saturation(double sat)
+{
+    _saturation = sat;
 }

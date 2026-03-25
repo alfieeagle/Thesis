@@ -21,9 +21,12 @@ void vbs_timer_isr() {
     if (instance_ptr) instance_ptr->step();
 }
 
-VBS::VBS(float cutoffFrequency, float kp, float kd, float ki, float timeConst):
-_Controller(kp, kd, ki, timeConst),
-_cutoffFrequency(cutoffFrequency)
+VBS::VBS(float cutoffFrequency, double kp, double kd, double ki, float dt, float length, float radius):
+_Controller(kp, kd, ki),
+_cutoffFrequency(cutoffFrequency),
+_dt(dt),
+_length(length),
+_radius(radius)
 {
     #ifdef CORE_TEENSY
         instance_ptr = this;
@@ -31,6 +34,13 @@ _cutoffFrequency(cutoffFrequency)
     #endif
 
     _referenceDepth = -5.0f;
+
+    // Set volume
+    _volume = std::pow(radius,2) * M_PI * _length;
+    _maxPistonVolume = 0.00012053;
+
+    // Set PID saturation based on max volume
+    _Controller.set_saturation(_maxPistonVolume);
 
     // Calculate smoothing factor based on cutoff frequency
     float y = 1 - std::cos(_cutoffFrequency);
@@ -40,7 +50,7 @@ _cutoffFrequency(cutoffFrequency)
 
 void VBS::step()
 {
-    _pistonVolume = (double)_Controller.step((float)_referenceDepth, (float)get_current_depth());
+    _pistonVolume = _Controller.step((float)_referenceDepth, (float)get_current_depth(), _dt);
 }
 
 // Update VBS depth
