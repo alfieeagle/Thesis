@@ -161,13 +161,24 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
         filename="gz-sim-hydrodynamics-system"
         name="gz::sim::systems::Hydrodynamics">
         <link_name>body</link_name>
-        <x_dot_u>-5</x_dot_u>
-        <y_dot_v>-5</y_dot_v>
-        <z_dot_w>-10</z_dot_w>
-        
-        <x_abs_u>-20</x_abs_u>
-        <y_abs_v>-20</y_abs_v>
-        <z_abs_w>-40</z_abs_w>
+        <xDotU>-0.04876161</xDotU>
+        <yDotV>-1.26324739</yDotV>
+        <zDotW>-1.26324739</zDotW>
+        <kDotP>0</kDotP>
+        <mDotQ>-0.3346</mDotQ>
+        <nDotR>-0.3346</nDotR>
+        <xUabsU>-0.62282</xUabsU>
+        <xU>-5</xU>
+        <yVabsV>-60.127</yVabsV>
+        <yV>-5</yV>
+        <zWabsW>-6.0127</zWabsW>
+        <zW>-100</zW>
+        <kPabsP>-0.001916</kPabsP>
+        <kP>-1</kP>
+        <mQabsQ>-6.32698957</mQabsQ>
+        <mQ>-1</mQ>
+        <nRabsR>-6.32698957</nRabsR>
+        <nR>-1</nR>
       </plugin>
     </model>
   </world>
