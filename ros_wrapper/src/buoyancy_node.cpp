@@ -17,7 +17,7 @@ Dependencies:	buoyancy_node.hpp
 BuoyancyNode::BuoyancyNode()
 : Node("buoyancy_node")
 {
-  _VBS = std::make_unique<VBS>(1.59, 0.83, 0.009, 0.005, 0.1, 0.2, 0.056);
+  _VBS = std::make_unique<VBS>(100, 0.9, 0.0002, 0.001, 0.1, 0.2, 0.056);
 
   auto qos = rclcpp::QoS(rclcpp::KeepLast(10)).reliable();
 

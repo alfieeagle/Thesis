@@ -106,7 +106,7 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
     </light>
 
     <model name="vbs">
-      <pose>0 0 0 0 0 0</pose>
+      <pose>0 0 -1 0 0 0</pose>
       <link name='body'>
         <inertial>
           <mass>2.019667085</mass>

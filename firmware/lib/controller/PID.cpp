@@ -24,7 +24,7 @@ _ki(ki)
     _integralError = 0.0;
     _derivativeError = 0.0;
     _maxIntegralError = 0.0;
-    _saturation = 0.0;
+    _saturation = 1.0;
     _elapsedTime = 0.0f;
 }
 
@@ -63,15 +63,13 @@ double PID::compute_control_signal()
 
 double PID::step(float ref, float signal, float dt)
 {
-    float controlSignal;
     _elapsedTime += dt;
 
     compute_error(ref, signal);
     integrate_error();
     calculate_error_derivative(dt);
 
-    controlSignal = compute_control_signal();
-    return controlSignal;
+    return compute_control_signal();
 }
 
 void PID::set_saturation(double sat)
