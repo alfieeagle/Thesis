@@ -33,7 +33,7 @@ _radius(radius)
         _controllerTimer.begin(vbs_timer_isr, 100000); 
     #endif
 
-    _referenceDepth = -1.0f;
+    _referenceDepth = -5.0f;
 
     // Set volume
     _volume = std::pow(radius,2) * M_PI * _length;

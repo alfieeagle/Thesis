@@ -28,7 +28,7 @@ with AnyReader([bag_path]) as reader:
         times.append((timestamp - start_time) / 1e9)
         
         # Extract the data (assuming it's a Double/Float message)
-        values.append(msg.data)
+        values.append(msg.data - 0.002)
 
 # Plotting with Matplotlib
 plt.figure(figsize=(10, 6))
