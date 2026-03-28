@@ -33,7 +33,7 @@ _radius(radius)
         _controllerTimer.begin(vbs_timer_isr, 100000); 
     #endif
 
-    _referenceDepth = -5.0f;
+    _referenceDepth = -1.0f;
 
     // Set volume
     _volume = std::pow(radius,2) * M_PI * _length;
@@ -73,4 +73,9 @@ double VBS::get_reference_depth()
 double VBS::get_current_depth()
 {
     return _currentDepth;
+}
+
+float VBS::get_vbs_volume()
+{
+    return _volume;
 }

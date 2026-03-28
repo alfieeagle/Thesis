@@ -38,10 +38,10 @@ BuoyancyNode::BuoyancyNode()
               auto msg = std_msgs::msg::Float64();
               double volume = _VBS->get_piston_volume(); 
 
-              msg.data = 0.002 + volume;
-              RCLCPP_INFO(this->get_logger(), 
-                "Controller output: %.1f\nFinal volume input: %.1f",  
-                volume * 1000000, msg.data * 1000000);
+              msg.data = _VBS->get_vbs_volume() + volume;
+              // RCLCPP_INFO(this->get_logger(), 
+              //   "Controller output: %.1f\nFinal volume input: %.1f",  
+              //   volume * 1000000, msg.data * 1000000);
               
               _pistonVolPub->publish(msg);
             }

@@ -106,7 +106,7 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
     </light>
 
     <model name="vbs">
-      <pose>0 0 -1 0 0 0</pose>
+      <pose>0 0 -0.1 0 0 0</pose>
       <link name='body'>
         <inertial>
           <mass>2.019667085</mass>
@@ -161,23 +161,23 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
         filename="gz-sim-hydrodynamics-system"
         name="gz::sim::systems::Hydrodynamics">
         <link_name>body</link_name>
-        <xDotU>-0.04876161</xDotU>
-        <yDotV>-1.26324739</yDotV>
-        <zDotW>-1.26324739</zDotW>
-        <kDotP>0</kDotP>
-        <mDotQ>-0.3346</mDotQ>
-        <nDotR>-0.3346</nDotR>
-        <xUabsU>-0.62282</xUabsU>
-        <xU>-5</xU>
-        <yVabsV>-60.127</yVabsV>
-        <yV>-5</yV>
-        <zWabsW>-6.0127</zWabsW>
-        <zW>-100</zW>
-        <kPabsP>-0.001916</kPabsP>
+        <xDotU>-0.7605</xDotU>
+        <yDotV>-0.7605</yDotV>
+        <zDotW>-0.39272</zDotW>
+        <kDotP>-0.0018</kDotP>
+        <mDotQ>-0.0018</mDotQ>
+        <nDotR>-0.0</nDotR>
+        <xUabsU>-1</xUabsU>
+        <xU>-1</xU>
+        <yVabsV>-1</yVabsV>
+        <yV>-1</yV>
+        <zWabsW>-5.6826</zWabsW>
+        <zW>-11.95</zW>
+        <kPabsP>-1</kPabsP>
         <kP>-1</kP>
-        <mQabsQ>-6.32698957</mQabsQ>
+        <mQabsQ>-1</mQabsQ>
         <mQ>-1</mQ>
-        <nRabsR>-6.32698957</nRabsR>
+        <nRabsR>-1</nRabsR>
         <nR>-1</nR>
       </plugin>
     </model>

@@ -1,14 +1,23 @@
 import numpy as np
 import xarray as xr
+import pandas as pd
 import capytaine as cpt
 
-mesh_1 = cpt.load_mesh("./boat_200.mar", file_format="nemoh")
+cylinder_mesh = cpt.mesh_vertical_cylinder(
+    length=0.2,     
+    radius=0.056,        
+    center=(0, 0, 0), 
+    resolution=(10, 20, 30) 
+)
+
+# 2. Define the Floating Body
 body_1 = cpt.FloatingBody(
-            mesh=mesh_1,
-            lid_mesh=mesh_1.generate_lid(faces_max_radius=1.0),  # Adjust to the desired mesh resolution or remove lid entirely
-            dofs=cpt.rigid_body_dofs(rotation_center=(0, 0, 0)),
-            center_of_mass=(0, 0, 0)  # Optional, only for hydrostatics
-        )
+    mesh=cylinder_mesh,
+    name="vbs_cylinder",
+    dofs=cpt.rigid_body_dofs(rotation_center=(0, 0, 0)),
+    center_of_mass=(0, 0, 0)
+)
+
 body_1.inertia_matrix = body_1.compute_rigid_body_inertia(rho=1025)
 body_1.hydrostatic_stiffness = body_1.immersed_part().compute_hydrostatic_stiffness(rho=1025)
 

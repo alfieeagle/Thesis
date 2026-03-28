@@ -39,6 +39,7 @@ class VBS
 
         // Getters
         double get_piston_volume();
+        float get_vbs_volume();
         double get_reference_depth();
         double get_current_depth();
 
