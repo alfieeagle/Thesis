@@ -23,7 +23,8 @@ _ki(ki)
     _prevError = 0.0;
     _integralError = 0.0;
     _derivativeError = 0.0;
-    _maxIntegralError = 10;
+    _maxIntegralError = 0.0;
+    _saturation = 0.0;
     _elapsedTime = 0.0f;
 }
 
@@ -76,4 +77,5 @@ double PID::step(float ref, float signal, float dt)
 void PID::set_saturation(double sat)
 {
     _saturation = sat;
+    _maxIntegralError = _saturation * 0.5;
 }

@@ -17,7 +17,7 @@ Dependencies:	buoyancy_node.hpp
 BuoyancyNode::BuoyancyNode()
 : Node("buoyancy_node")
 {
-  _VBS = std::make_unique<VBS>(1.59, 0.00002, 0.00003, 0.0000001, 0.1, 0.2, 0.056);
+  _VBS = std::make_unique<VBS>(1.59, 0.83, 0.009, 0.005, 0.1, 0.2, 0.056);
 
   auto qos = rclcpp::QoS(rclcpp::KeepLast(10)).reliable();
 
@@ -40,8 +40,8 @@ BuoyancyNode::BuoyancyNode()
 
               msg.data = _VBS->get_vbs_volume() + volume;
               RCLCPP_INFO(this->get_logger(), 
-                "Controller output: %.1f\n",  
-                volume * 1000000);
+                "Controller output: %.1f\nFinal volume: %.1f\n",  
+                volume * 1000000, msg.data * 1000000);
               
               _pistonVolPub->publish(msg);
             }
@@ -57,6 +57,9 @@ BuoyancyNode::~BuoyancyNode()
 void BuoyancyNode::depth_callback(const geometry_msgs::msg::Pose::SharedPtr msg)
 { 
   _VBS->update_depth(msg->position.z);
+  // RCLCPP_INFO(this->get_logger(), 
+  //               "Depth: %.1f\n",  
+  //               msg->position.z);
 }
 
 int main(int argc, char * argv[])

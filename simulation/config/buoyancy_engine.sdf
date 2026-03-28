@@ -106,7 +106,7 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
     </light>
 
     <model name="vbs">
-      <pose>0 0 -0.1 0 0 0</pose>
+      <pose>0 0 0 0 0 0</pose>
       <link name='body'>
         <inertial>
           <mass>2.019667085</mass>
@@ -171,8 +171,8 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
         <xU>-1</xU>
         <yVabsV>-1</yVabsV>
         <yV>-1</yV>
-        <zWabsW>-5.6826</zWabsW>
-        <zW>-11.95</zW>
+        <zWabsW>-5.6551</zWabsW>
+        <zW>-10.585</zW>
         <kPabsP>-1</kPabsP>
         <kP>-1</kP>
         <mQabsQ>-1</mQabsQ>

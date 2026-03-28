@@ -33,14 +33,14 @@ _radius(radius)
         _controllerTimer.begin(vbs_timer_isr, 100000); 
     #endif
 
-    _referenceDepth = -5.0f;
+    _referenceDepth = -1.0;
 
     // Set volume
     _volume = std::pow(radius,2) * M_PI * _length;
     _maxPistonVolume = 0.00012053;
 
     // Set PID saturation based on max volume
-    _Controller.set_saturation(_maxPistonVolume);
+    _Controller.set_saturation(1.0);
 
     // Calculate smoothing factor based on cutoff frequency
     float y = 1 - std::cos(_cutoffFrequency);
@@ -50,7 +50,7 @@ _radius(radius)
 
 void VBS::step()
 {
-    _pistonVolume = _Controller.step((float)_referenceDepth, (float)get_current_depth(), _dt);
+    _pistonVolume = _Controller.step((float)_referenceDepth, (float)get_current_depth(), _dt) * _maxPistonVolume;
 }
 
 // Update VBS depth
