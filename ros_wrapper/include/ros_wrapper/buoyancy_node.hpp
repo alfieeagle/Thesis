@@ -44,6 +44,10 @@ class BuoyancyNode : public rclcpp::Node
         #ifndef CORE_TEENSY
             rclcpp::TimerBase::SharedPtr _simTimer;
         #endif
+
+        // Create timer to align with gazebo time
+        rclcpp::Time _lastStepTime;
+        bool _firstStep = true;
 };
 
 #endif

@@ -29,10 +29,10 @@ class VBS
 {
     public:
         // Constructor and destructor
-        VBS(float cutoffFrequency, double kp, double kd, double ki, float dt, float length, float radius);
+        VBS(double kp, double kd, double ki, float dt, float length, float radius);
 
         // Function to update the controller inputs and calculate output
-        void step();
+        void step(float dt);
 
         // Setters
         void update_depth(double depth);
@@ -56,9 +56,6 @@ class VBS
         // Controller
         PID _Controller;
 
-        // Low pass filter parameters
-        float _alpha;
-        float _cutoffFrequency;
         float _dt;
 
         // Dimensions

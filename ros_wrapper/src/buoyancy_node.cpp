@@ -17,11 +17,13 @@ Dependencies:	buoyancy_node.hpp
 BuoyancyNode::BuoyancyNode()
 : Node("buoyancy_node")
 {
-  _VBS = std::make_unique<VBS>(100, 0.9, 0.0002, 0.001, 0.1, 0.2, 0.056);
+  _VBS = std::make_unique<VBS>(1.0, 0.0, 0.0, 0.1, 0.2, 0.056);
 
   auto qos = rclcpp::QoS(rclcpp::KeepLast(10)).reliable();
 
   _pistonVolPub = this->create_publisher<std_msgs::msg::Float64>("/piston_volume", qos);
+
+  _lastStepTime = this->get_clock()->now();
 
   // Subscribers to robot sensor topics
   _depthSub = this->create_subscription<geometry_msgs::msg::Pose>(
@@ -31,21 +33,37 @@ BuoyancyNode::BuoyancyNode()
 
     #ifndef CORE_TEENSY
         _simTimer = this->create_wall_timer(
-            std::chrono::milliseconds(100),
-            [this]()
-            { 
-              _VBS->step(); 
-              auto msg = std_msgs::msg::Float64();
-              double volume = _VBS->get_piston_volume(); 
+          std::chrono::milliseconds(100),
+          [this]()
+          { 
+              auto currentTime = this->get_clock()->now();
+              
+              // Calculate actual dt in seconds
+              double dt = (currentTime - _lastStepTime).seconds();
+              
+              // Guard against the first step or a zero dt (which would break derivative)
+              if (_firstStep || dt <= 0.0) {
+                  dt = 0.1; // Fallback for the very first frame
+                  _firstStep = false;
+              }
 
-              msg.data = _VBS->get_vbs_volume() + volume;
+              _lastStepTime = currentTime;
+
+              // Step the VBS with the ACTUAL dt
+              _VBS->step(dt); 
+
+              auto msg = std_msgs::msg::Float64();
+              double pistonVolume = _VBS->get_piston_volume(); 
+
+              msg.data = _VBS->get_vbs_volume() + pistonVolume;
+              
               RCLCPP_INFO(this->get_logger(), 
-                "Controller output: %.1f\nFinal volume: %.1f\n",  
-                volume * 1000000, msg.data * 1000000);
+                  "dt: %.3f | Piston: %.1f | Total: %.1f",  
+                  dt, pistonVolume * 1000000, msg.data * 1000000);
               
               _pistonVolPub->publish(msg);
-            }
-        );
+          }
+      );
     #endif
 }
 

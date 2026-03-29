@@ -43,7 +43,7 @@ with AnyReader([bag_path]) as reader:
                 
                 # Normalize time so the plot starts at 0 (the moment the piston started)
                 piston_times.append((timestamp - first_piston_timestamp) / 1e9)
-                piston_values.append((msg.data - 0.002) * 1e6)
+                piston_values.append((msg.data - 0.0019704) * 1e6)
 
 # Plotting with Matplotlib
 plt.figure(figsize=(10, 6))
@@ -55,7 +55,21 @@ plt.ylabel('Piston Volume (mL)')
 plt.grid(True, linestyle='--', alpha=0.7)
 plt.legend()
 
-# Save figure
-plt.savefig('./figures/piston_volume.png', dpi=300)
+# --- Save figure with auto-incrementing number ---
+output_dir = Path('./figures')
+output_dir.mkdir(exist_ok=True) # Ensure the directory exists
+
+base_filename = "piston_volume"
+extension = ".png"
+counter = 1
+
+# Loop until we find a filename that doesn't exist
+while (output_dir / f"{base_filename}_{counter}{extension}").exists():
+    counter += 1
+
+final_path = output_dir / f"{base_filename}_{counter}{extension}"
+
+plt.savefig(final_path, dpi=300)
+print(f"Figure saved as: {final_path}")
 
 plt.show()

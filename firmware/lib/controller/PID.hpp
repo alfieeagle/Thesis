@@ -44,12 +44,16 @@ class PID
 
         double _saturation;
 
+        // Low pass filter parameters
+        float _alpha;
+        float _cutoffFrequency;
+
         // Compute the error
         void compute_error(float ref, float signal);
 
         // Find integral and derivative error terms
-        void integrate_error();
-        void calculate_error_derivative(float dt);
+        void calculate_integral_error(float dt);
+        void calculate_derivative_error(float dt);
 
         // Compute the controller output
         double compute_control_signal();

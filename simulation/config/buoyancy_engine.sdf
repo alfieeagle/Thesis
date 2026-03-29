@@ -149,11 +149,11 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
         name="gz::sim::systems::BuoyancyEngine">
         <link_name>body</link_name>
         <namespace>vbs</namespace>
-        <min_volume>0.00187947</min_volume>
-        <neutral_volume>0.002</neutral_volume>
-        <default_volume>0.002</default_volume>
-        <max_volume>0.00212053</max_volume>
-        <max_inflation_rate>0.000005858</max_inflation_rate>
+        <min_volume>0.0018498</min_volume>
+        <neutral_volume>0.0019704</neutral_volume>
+        <default_volume>0.0019704</default_volume>
+        <max_volume>0.0020909</max_volume>
+        <max_inflation_rate>0.0000058</max_inflation_rate>
         <fluid_density>1025</fluid_density>
         <surface>0</surface>
       </plugin>

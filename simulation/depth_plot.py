@@ -57,7 +57,21 @@ plt.ylabel('Depth (m)')
 plt.grid(True, linestyle='--', alpha=0.7)
 plt.legend()
 
-# Save figure
-plt.savefig('./figures/depth.png', dpi=300)
+# --- Save figure with auto-incrementing number ---
+output_dir = Path('./figures')
+output_dir.mkdir(exist_ok=True) # Ensure the directory exists
+
+base_filename = "depth"
+extension = ".png"
+counter = 1
+
+# Loop until we find a filename that doesn't exist
+while (output_dir / f"{base_filename}_{counter}{extension}").exists():
+    counter += 1
+
+final_path = output_dir / f"{base_filename}_{counter}{extension}"
+
+plt.savefig(final_path, dpi=300)
+print(f"Figure saved as: {final_path}")
 
 plt.show()

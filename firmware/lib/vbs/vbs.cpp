@@ -13,17 +13,16 @@ Dependencies:	vbs.hpp
 
 #include "ros_wrapper/vbs.hpp"
 
-// Create static pointer for use with C style interrupts
-static VBS* instance_ptr = nullptr;
+// // Create static pointer for use with C style interrupts
+// static VBS* instance_ptr = nullptr;
 
-// The ISR (Interrupt Service Routine)
-void vbs_timer_isr() {
-    if (instance_ptr) instance_ptr->step();
-}
+// // The ISR (Interrupt Service Routine)
+// void vbs_timer_isr() {
+//     if (instance_ptr) instance_ptr->step();
+// }
 
-VBS::VBS(float cutoffFrequency, double kp, double kd, double ki, float dt, float length, float radius):
+VBS::VBS(double kp, double kd, double ki, float dt, float length, float radius):
 _Controller(kp, kd, ki),
-_cutoffFrequency(cutoffFrequency),
 _dt(dt),
 _length(length),
 _radius(radius)
@@ -34,6 +33,7 @@ _radius(radius)
     #endif
 
     _referenceDepth = -2.0;
+    _currentDepth = _referenceDepth;
 
     // Set volume
     _volume = std::pow(radius,2) * M_PI * _length;
@@ -42,21 +42,17 @@ _radius(radius)
     // Set PID saturation based on max volume
     _Controller.set_saturation(1.0);
 
-    // Calculate smoothing factor based on cutoff frequency
-    float y = 1 - std::cos(_cutoffFrequency);
-    _alpha = -y + std::sqrt(std::pow(y, 2) + 2 * y);
-
 }
 
-void VBS::step()
+void VBS::step(float dt)
 {
-    _pistonVolume = _Controller.step((float)_referenceDepth, (float)get_current_depth(), _dt) * _maxPistonVolume;
+    _pistonVolume = _Controller.step((float)_referenceDepth, (float)get_current_depth(), dt) * _maxPistonVolume;
 }
 
 // Update VBS depth
 void VBS::update_depth(double depth)
 {
-    _currentDepth = (1.0f - _alpha)*_currentDepth + _alpha * depth;
+    _currentDepth = depth;
 }
 
 // Update VBS current volume
