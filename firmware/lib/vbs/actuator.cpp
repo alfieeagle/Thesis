@@ -88,15 +88,16 @@ float Actuator::calculate_max_motor_speed(float motorTorque)
     rpm = std::clamp(rpm, _minSpeedRPM, _maxSpeedRPM);
 
     // Convert to rad/s
-    float omega = (rpm * _screwLead)/60;
+    float omega = (rpm * 2.0 * M_PI) / 60.0;
     _motorSpeedRAD = omega;
     return omega;
 }
 
 float Actuator::calculate_slew(float speedRAD, float pistonArea)
 {
-    float slewRate = (speedRAD/_gearRatio) * pistonArea;
-    return slewRate;
+    float piston_linear_velocity = (speedRAD / _gearRatio) * (_screwLead / (2.0 * M_PI));
+    float slewRateVolume = piston_linear_velocity * pistonArea; 
+    return slewRateVolume;
 }
 
 float Actuator::calculate_motor_power(float motorTorque,  float rotVel)
