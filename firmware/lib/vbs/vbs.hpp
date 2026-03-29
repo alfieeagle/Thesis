@@ -23,13 +23,35 @@ Dependencies:   PID.hpp, cmath
 
 **/
 #include "PID.hpp"
+#include "actuator.hpp"
+
 #include <cmath>
 
 class VBS
 {
     public:
         // Constructor and destructor
-        VBS(double kp, double kd, double ki, float dt, float length, float radius);
+        VBS(
+            double kp, 
+            double kd, 
+            double ki, 
+            float dt, 
+            float length, 
+            float radius,
+            float e_g, 
+            float e_m, 
+            float GR, 
+            float d_m, 
+            float s_l, 
+            float mu_s, 
+            float T_hold, 
+            float FS, 
+            float torqueCurveGrad, 
+            float torqueCurveInt,
+            float maxMotorSpeed,
+            float minMotorSpeed,
+            float pistonArea
+        );
 
         // Function to update the controller inputs and calculate output
         void step(float dt);
@@ -48,14 +70,21 @@ class VBS
         // Depths
         double _referenceDepth;
         double _currentDepth;
+        int _density;
+        float _g;
 
-        // Piston Volume
+        // Piston 
         double _pistonVolume;
+        double _prevPistonVolume;
         double _maxPistonVolume;
 
         // Controller
-        PID _Controller;
+        PID _controller;
 
+        // Actuator
+        Actuator _actuator;
+
+        // Time step
         float _dt;
 
         // Dimensions

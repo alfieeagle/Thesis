@@ -17,7 +17,51 @@ Dependencies:	buoyancy_node.hpp
 BuoyancyNode::BuoyancyNode()
 : Node("buoyancy_node")
 {
-  _VBS = std::make_unique<VBS>(1.0, 0.0, 0.0, 0.1, 0.2, 0.056);
+  // Controller params
+  double kp = 6.0;
+  double kd = 1.0;
+  double ki = 1.0;
+
+  // VBS params
+  float dt = 0.1f;
+  float length = 0.2f;
+  float radius = 0.056f;
+
+  // Actuator params
+  float e_g = 0.9f;
+  float e_m = 0.8f;
+  float GR = 45.0f;
+  float d_m = 0.0075f;
+  float s_l = 0.008f;
+  float mu_s = 0.007f;
+  float T_hold = 0.4f;
+  float FS = 1.2f; 
+  float torqueCurveGrad  = 5995.0f;
+  float torqueCurveInt = 1978.0f;
+  float maxMotorSpeedRPM = 600.0f;
+  float minMotorSpeedRPM = 130.0f;
+  float pistonArea = 0.0029f;
+
+  _VBS = std::make_unique<VBS>(
+    kp, 
+    kd, 
+    ki, 
+    dt, 
+    length, 
+    radius, 
+    e_g, 
+    e_m, 
+    GR, 
+    d_m, 
+    s_l, 
+    mu_s, 
+    T_hold, 
+    FS, 
+    torqueCurveGrad, 
+    torqueCurveInt, 
+    maxMotorSpeedRPM, 
+    minMotorSpeedRPM, 
+    pistonArea);
 
   auto qos = rclcpp::QoS(rclcpp::KeepLast(10)).reliable();
 

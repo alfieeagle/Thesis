@@ -13,20 +13,22 @@ Dependencies:
 
 **/
 
-#include "actuator.hpp"
+#include "ros_wrapper/actuator.hpp"
 
-Actuator::Actuator(float e_g, 
+Actuator::Actuator(
+    float e_g, 
     float e_m, 
     float GR, 
-    int d_m, 
-    int s_l, 
+    float d_m, 
+    float s_l, 
     float mu_s, 
     float T_hold, 
     float FS, 
     float torqueCuruveGrad, 
     float torqueCurveInt,
-    float maxxMotorSpeed,
-    float minMotorSpeed
+    float maxMotorSpeed,
+    float minMotorSpeed,
+    float pistonArea
 ):
 _gearboxEfficiency(e_g),
 _motorEfficiency(e_m),
@@ -38,10 +40,10 @@ _holdingTorque(T_hold),
 _FS(FS),
 _torqueCurveGrad(torqueCuruveGrad),
 _torqueCurveIntercept(torqueCurveInt),
-_maxSpeedRPM(maxxMotorSpeed),
-_minSpeedRPM(minMotorSpeed)
+_maxSpeedRPM(maxMotorSpeed),
+_minSpeedRPM(minMotorSpeed),
+_pistonArea(pistonArea)
 {
-
 }
 
 float Actuator::calculate_gearbox_torque(float force, int dir)
@@ -101,4 +103,21 @@ float Actuator::calculate_motor_power(float motorTorque,  float rotVel)
 {
     _powerConsumption = (std::abs(motorTorque) * std::abs(rotVel) * _FS)/_motorEfficiency;
     return _powerConsumption;
+}
+
+float Actuator::step(float force, int dir)
+{
+    float gearboxTorque = calculate_gearbox_torque(force, dir);
+    float maxGearboxTorque = calculate_max_gearbox_torque(force);
+    float maxMotorTorque = calculate_motor_torque(maxGearboxTorque);
+    float maxMotorSpeed = calculate_max_motor_speed(maxMotorTorque);
+    float maxSlew = calculate_slew(maxMotorSpeed, _pistonArea);
+
+    return maxSlew;
+
+}
+
+float Actuator::get_piston_area()
+{
+    return _pistonArea;
 }

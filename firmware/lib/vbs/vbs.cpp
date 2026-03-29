@@ -21,8 +21,29 @@ Dependencies:	vbs.hpp
 //     if (instance_ptr) instance_ptr->step();
 // }
 
-VBS::VBS(double kp, double kd, double ki, float dt, float length, float radius):
-_Controller(kp, kd, ki),
+VBS::VBS(
+    double kp, 
+    double kd, 
+    double ki, 
+    float dt, 
+    float length, 
+    float radius,
+    float e_g, 
+    float e_m, 
+    float GR, 
+    float d_m, 
+    float s_l, 
+    float mu_s, 
+    float T_hold, 
+    float FS, 
+    float torqueCurveGrad, 
+    float torqueCurveInt,
+    float maxMotorSpeed,
+    float minMotorSpeed,
+    float pistonArea
+):
+_controller(kp, kd, ki),
+_actuator(e_g, e_m, GR, d_m, s_l, mu_s,T_hold, FS, torqueCurveGrad, torqueCurveInt, maxMotorSpeed, minMotorSpeed, pistonArea),
 _dt(dt),
 _length(length),
 _radius(radius)
@@ -38,15 +59,50 @@ _radius(radius)
     // Set volume
     _volume = std::pow(radius,2) * M_PI * _length;
     _maxPistonVolume = 0.00012053;
+    _pistonVolume = 0.0;
+    _prevPistonVolume = 0.0;
 
     // Set PID saturation based on max volume
-    _Controller.set_saturation(1.0);
+    _controller.set_saturation(1.0);
+
+    _g = 9.81;
+    _density = 1025;
 
 }
 
 void VBS::step(float dt)
 {
-    _pistonVolume = _Controller.step((float)_referenceDepth, (float)get_current_depth(), dt) * _maxPistonVolume;
+    float controllerVolume = _controller.step((float)_referenceDepth, (float)get_current_depth(), dt) * _maxPistonVolume;
+
+    float depthForce = std::abs(get_current_depth()) * _g * _density * _actuator.get_piston_area();
+    float dir;
+
+    // Check the direction of the piston to calculate the correct torque
+    if(_pistonVolume - _prevPistonVolume > 0)
+    {
+        dir = 1;
+    }
+    else if (_pistonVolume - _prevPistonVolume < 0)
+    {
+        dir = -1;
+    }
+    else
+    {
+        dir = 0;
+    }
+
+    // Calculate the max slew rate based on the depth in order to rate limit the actuator
+    float maxSlewRate = _actuator.step(depthForce, dir);
+    if(std::abs(controllerVolume - _pistonVolume)/_dt > maxSlewRate)
+    {
+        _prevPistonVolume = _pistonVolume;
+        _pistonVolume = maxSlewRate * _dt + _prevPistonVolume;
+    }
+    else
+    {
+        _prevPistonVolume = _pistonVolume;
+        _pistonVolume = controllerVolume;
+    }
 }
 
 // Update VBS depth

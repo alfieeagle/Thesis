@@ -30,15 +30,16 @@ class Actuator
             float e_g, 
             float e_m, 
             float GR, 
-            int d_m, 
-            int s_l, 
+            float d_m, 
+            float s_l, 
             float mu_s, 
             float T_hold, 
             float FS, 
             float torqueCurveGrad, 
             float torqueCurveInt,
             float maxMotorSpeed,
-            float minMotorSpeed
+            float minMotorSpeed,
+            float pistonArea
         );
         
         // Gearbox calcs
@@ -53,6 +54,12 @@ class Actuator
         // Volume change
         float calculate_slew(float maxSpeed, float pistonArea);
         float calculate_deta_volume(float maxSlew);
+
+        // Step
+        float step(float depth, int dir);
+
+        // getters
+        float get_piston_area();
         
 
     private:
@@ -80,6 +87,7 @@ class Actuator
         float _maxTorque;
         float _powerConsumption;
         float _FS; // Factor of safety
+        double _pistonArea;
         
 };
 

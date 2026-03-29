@@ -28,6 +28,7 @@ add_executable(buoyancy_node
   src/buoyancy_node.cpp
   src/vbs.cpp
   src/PID.cpp
+  src/actuator.cpp
 )
 
 ament_target_dependencies(buoyancy_node 
