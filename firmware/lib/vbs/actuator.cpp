@@ -64,21 +64,20 @@ float Actuator::calculate_gearbox_torque(float force, int dir)
         gearTorque = _holdingTorque;
     }
 
-    _gearboxTorque = gearTorque;
     return gearTorque;
 }
 
 float Actuator::calculate_max_gearbox_torque(float force)
 {
         // Calculate torque when extending 
-        _maxTorque = (force * _screwPitchDiam/2)*((_screwLead + M_PI * _screwFriction * _screwPitchDiam)/(M_PI * _screwPitchDiam - _screwFriction * _screwLead));
-        return _maxTorque;
+        float maxTorque = (force * _screwPitchDiam/2)*((_screwLead + M_PI * _screwFriction * _screwPitchDiam)/(M_PI * _screwPitchDiam - _screwFriction * _screwLead));
+        return maxTorque;
 }
 
 float Actuator::calculate_motor_torque(float gearboxTorque)
 {
-    _motorTorque = (gearboxTorque)/(_gearboxEfficiency * _gearRatio);
-    return _motorTorque;
+    float motorTorque = (gearboxTorque)/(_gearboxEfficiency * _gearRatio);
+    return motorTorque;
 }
 
 float Actuator::calculate_max_motor_speed(float motorTorque)
@@ -89,21 +88,20 @@ float Actuator::calculate_max_motor_speed(float motorTorque)
 
     // Convert to rad/s
     float omega = (rpm * 2.0 * M_PI) / 60.0;
-    _motorSpeedRAD = omega;
     return omega;
 }
 
-float Actuator::calculate_slew(float speedRAD, float pistonArea)
+float Actuator::calculate_slew(float speedRAD)
 {
     float piston_linear_velocity = (speedRAD / _gearRatio) * (_screwLead / (2.0 * M_PI));
-    float slewRateVolume = piston_linear_velocity * pistonArea; 
+    float slewRateVolume = piston_linear_velocity * _pistonArea; 
     return slewRateVolume;
 }
 
 float Actuator::calculate_motor_power(float motorTorque,  float rotVel)
 {
-    _powerConsumption = (std::abs(motorTorque) * std::abs(rotVel) * _FS)/_motorEfficiency;
-    return _powerConsumption;
+    float powerConsumption = (std::abs(motorTorque) * std::abs(rotVel) * _FS)/_motorEfficiency;
+    return powerConsumption;
 }
 
 float Actuator::step(float force, int dir)
@@ -112,7 +110,7 @@ float Actuator::step(float force, int dir)
     float maxGearboxTorque = calculate_max_gearbox_torque(force);
     float maxMotorTorque = calculate_motor_torque(maxGearboxTorque);
     float maxMotorSpeed = calculate_max_motor_speed(maxMotorTorque);
-    float maxSlew = calculate_slew(maxMotorSpeed, _pistonArea);
+    float maxSlew = calculate_slew(maxMotorSpeed);
 
     return maxSlew;
 

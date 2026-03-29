@@ -93,10 +93,15 @@ void VBS::step(float dt)
 
     // Calculate the max slew rate based on the depth in order to rate limit the actuator
     float maxSlewRate = _actuator.step(depthForce, dir);
-    if(std::abs(controllerVolume - _pistonVolume)/_dt > maxSlewRate)
+    if(std::abs(controllerVolume - _pistonVolume)/dt > maxSlewRate)
     {
         _prevPistonVolume = _pistonVolume;
-        _pistonVolume = maxSlewRate * _dt + _prevPistonVolume;
+        _pistonVolume = _prevPistonVolume + maxSlewRate * dt;
+    }
+    else if (std::abs(controllerVolume - _pistonVolume)/dt < -maxSlewRate)
+    {
+        _prevPistonVolume = _pistonVolume;
+        _pistonVolume = _prevPistonVolume - maxSlewRate * dt;
     }
     else
     {
