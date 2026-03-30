@@ -9,6 +9,7 @@ endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_options(-Wconversion -Wfloat-conversion)
 endif()
 
 # Find standard ROS dependencies
@@ -19,7 +20,6 @@ find_package(std_msgs REQUIRED)
 
 # Find UI dependencies (Required for ImGui)
 find_package(OpenGL REQUIRED)
-# Find GLFW 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GLFW REQUIRED glfw3)
 
@@ -38,7 +38,7 @@ ament_target_dependencies(buoyancy_node
 )
 
 target_include_directories(buoyancy_node PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/ros_wrapper>
   ${CMAKE_CURRENT_SOURCE_DIR}/../../firmware/lib/vbs
   ${CMAKE_CURRENT_SOURCE_DIR}/../../firmware/lib/controller
 ) 

@@ -12,15 +12,15 @@ Dependencies:	buoyancy_node.hpp
 
 **/
 
-#include "ros_wrapper/buoyancy_node.hpp"
+#include "buoyancy_node.hpp"
 
 BuoyancyNode::BuoyancyNode()
 : Node("buoyancy_node")
 {
   // Controller params
-  double kp = 6.0;
-  double kd = 1.0;
-  double ki = 1.0;
+  float kp = 6.0f;
+  float kd = 1.0f;
+  float ki = 1.0f;
 
   // VBS params
   float dt = 0.1f;
@@ -83,11 +83,11 @@ BuoyancyNode::BuoyancyNode()
               auto currentTime = this->get_clock()->now();
               
               // Calculate actual dt in seconds
-              double dt = (currentTime - _lastStepTime).seconds();
+              float dt = (float)(currentTime - _lastStepTime).seconds();
               
               // Guard against the first step or a zero dt (which would break derivative)
               if (_firstStep || dt <= 0.0) {
-                  dt = 0.1; // Fallback for the very first frame
+                  dt = 0.1f; // Fallback for the very first frame
                   _firstStep = false;
               }
 
@@ -118,7 +118,7 @@ BuoyancyNode::~BuoyancyNode()
 
 void BuoyancyNode::depth_callback(const geometry_msgs::msg::Pose::SharedPtr msg)
 { 
-  _VBS->update_depth(msg->position.z);
+  _VBS->update_depth((float)msg->position.z);
   // RCLCPP_INFO(this->get_logger(), 
   //               "Depth: %.1f\n",  
   //               msg->position.z);

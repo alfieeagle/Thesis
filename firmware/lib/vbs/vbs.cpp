@@ -11,7 +11,7 @@ Dependencies:	vbs.hpp
 
 **/
 
-#include "ros_wrapper/vbs.hpp"
+#include "vbs.hpp"
 
 // // Create static pointer for use with C style interrupts
 // static VBS* instance_ptr = nullptr;
@@ -48,16 +48,16 @@ _dt(dt),
 _length(length),
 _radius(radius)
 {
-    #ifdef CORE_TEENSY
-        instance_ptr = this;
-        _controllerTimer.begin(vbs_timer_isr, 100000); 
-    #endif
+    // #ifdef CORE_TEENSY
+    //     instance_ptr = this;
+    //     _controllerTimer.begin(vbs_timer_isr, 100000); 
+    // #endif
 
     _referenceDepth = -2.0;
     _currentDepth = _referenceDepth;
 
     // Set volume
-    _volume = std::pow(radius,2) * M_PI * _length;
+    _volume = (float)std::pow(radius,2) * (float)M_PI * _length;
     _maxPistonVolume = 0.00012053;
     _pistonVolume = 0.0;
     _prevPistonVolume = 0.0;
@@ -65,17 +65,17 @@ _radius(radius)
     // Set PID saturation based on max volume
     _controller.set_saturation(1.0);
 
-    _g = 9.81;
-    _density = 1025;
+    _g = 9.81f;
+    _density = 1025.0f;
 
 }
 
 void VBS::step(float dt)
 {
-    float controllerVolume = _controller.step((float)_referenceDepth, (float)get_current_depth(), dt) * _maxPistonVolume;
+    double controllerVolume = _controller.step(_referenceDepth, get_current_depth(), dt) * _maxPistonVolume;
 
-    float depthForce = std::abs(get_current_depth()) * _g * _density * _actuator.get_piston_area();
-    float dir;
+    float depthForce = (float)std::abs(get_current_depth()) * _g * _density * (float)_actuator.get_piston_area();
+    int dir;
 
     // Check the direction of the piston to calculate the correct torque
     if(_pistonVolume - _prevPistonVolume > 0)
@@ -111,7 +111,7 @@ void VBS::step(float dt)
 }
 
 // Update VBS depth
-void VBS::update_depth(double depth)
+void VBS::update_depth(float depth)
 {
     _currentDepth = depth;
 }
@@ -122,12 +122,12 @@ double VBS::get_piston_volume()
     return _pistonVolume;
 }
 
-double VBS::get_reference_depth()
+float VBS::get_reference_depth()
 {
     return _referenceDepth;
 }
 
-double VBS::get_current_depth()
+float VBS::get_current_depth()
 {
     return _currentDepth;
 }

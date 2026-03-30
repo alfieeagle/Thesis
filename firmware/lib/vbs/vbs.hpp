@@ -57,20 +57,20 @@ class VBS
         void step(float dt);
 
         // Setters
-        void update_depth(double depth);
+        void update_depth(float depth);
 
         // Getters
         double get_piston_volume();
         float get_vbs_volume();
-        double get_reference_depth();
-        double get_current_depth();
+        float get_reference_depth();
+        float get_current_depth();
 
     private:	
 
         // Depths
-        double _referenceDepth;
-        double _currentDepth;
-        int _density;
+        float _referenceDepth;
+        float _currentDepth;
+        float _density;
         float _g;
 
         // Piston 

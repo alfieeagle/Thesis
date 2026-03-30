@@ -18,31 +18,31 @@ class PID
 {
     public:
         // Constructor
-        PID(double kp, double kd, double ki);
+        PID(float kp, float kd, float ki);
 
         double step(float ref, float signal, float dt);
 
-        void set_saturation(double sat);
+        void set_saturation(float sat);
 
     private:
         // Gain values
-        double _kp;
-        double _kd;
-        double _ki;
+        float _kp;
+        float _kd;
+        float _ki;
 
         // Errors
-        double _error;
-        double _prevError;
-        double _integralError;
-        double _derivativeError;
+        float _error;
+        float _prevError;
+        float _integralError;
+        float _derivativeError;
 
         // Anti-Integrall Windup
-        double _maxIntegralError;
+        float _maxIntegralError;
 
         // Timing
         float _elapsedTime;
 
-        double _saturation;
+        float _saturation;
 
         // Low pass filter parameters
         float _alpha;

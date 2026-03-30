@@ -52,13 +52,25 @@ class Actuator
         float calculate_motor_power(float motorTorque,  float rotVel);
 
         // Volume change
-        float calculate_slew(float maxSpeed);
+        double calculate_slew(float maxSpeed);
 
         // Step
         float step(float depth, int dir);
 
         // getters
-        float get_piston_area();
+        double get_piston_area();
+        float get_motor_efficiency();
+        float get_holding_torque();
+        float get_torque_curve_grad();
+        float get_torque_curve_int();
+        float get_max_speed_rpm();
+        float get_min_speed_rpm();
+        int get_gear_ratio();
+        float get_gearbox_efficiency();
+        float get_screw_lead();
+        float get_screw_pitch_diam();
+        float get_screw_friction();
+        float get_factor_of_safety();
         
 
     private:
@@ -71,19 +83,17 @@ class Actuator
         float _minSpeedRPM;
 
         // Gearbox parameters
-        float _gearboxSpeed;
-        int _gearRatio;
+        float _gearRatio;
         float _gearboxEfficiency;
 
         // Screw parameters
-        int _screwLead;
-        int _screwPitchDiam;
+        float _screwLead;
+        float _screwPitchDiam;
         float _screwFriction;
 
         float _FS; // Factor of safety
         double _pistonArea;
         
 };
-
 
 #endif

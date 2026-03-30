@@ -12,9 +12,9 @@ Dependencies:   PID.hpp
 
 **/
 
-#include "ros_wrapper/PID.hpp"
+#include "PID.hpp"
 
-PID::PID(double kp, double kd, double ki):
+PID::PID(float kp, float kd, float ki):
 _kp(kp),
 _kd(kd),
 _ki(ki)
@@ -29,8 +29,8 @@ _ki(ki)
     _cutoffFrequency = 30.0;
 
     // Calculate smoothing factor based on cutoff frequency
-    float y = 1 - std::cos(_cutoffFrequency);
-    _alpha = -y + std::sqrt(std::pow(y, 2) + 2 * y);
+    float y = 1 - (float)std::cos(_cutoffFrequency);
+    _alpha = -y + (float)std::sqrt(std::pow(y, 2) + 2 * y);
 }
 
 void PID::compute_error(float ref, float signal)
@@ -55,9 +55,9 @@ void PID::calculate_derivative_error(float dt) {
 
 double PID::compute_control_signal()
 {
-    double u = (_kp * _error) + (_kd * _derivativeError) + (_ki * _integralError);
+    float u = (_kp * _error) + (_kd * _derivativeError) + (_ki * _integralError);
 
-    return u = std::clamp(u, -_saturation, _saturation);
+    return u = (float)std::clamp(u, -_saturation, _saturation);
 }
 
 double PID::step(float ref, float signal, float dt)
@@ -71,8 +71,8 @@ double PID::step(float ref, float signal, float dt)
     return compute_control_signal();
 }
 
-void PID::set_saturation(double sat)
+void PID::set_saturation(float sat)
 {
     _saturation = sat;
-    _maxIntegralError = _saturation * 0.5;
+    _maxIntegralError = _saturation * 0.5f;
 }

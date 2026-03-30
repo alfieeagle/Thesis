@@ -13,7 +13,7 @@ Dependencies:
 
 **/
 
-#include "ros_wrapper/actuator.hpp"
+#include "actuator.hpp"
 
 Actuator::Actuator(
     float e_g, 
@@ -44,11 +44,13 @@ _maxSpeedRPM(maxMotorSpeed),
 _minSpeedRPM(minMotorSpeed),
 _pistonArea(pistonArea)
 {
+    
 }
 
 float Actuator::calculate_gearbox_torque(float force, int dir)
 {
     float gearTorque;
+
     if (dir == 1)
     {
         // Calculate torque when extending 
@@ -91,10 +93,10 @@ float Actuator::calculate_max_motor_speed(float motorTorque)
     return omega;
 }
 
-float Actuator::calculate_slew(float speedRAD)
+double Actuator::calculate_slew(float speedRAD)
 {
-    float piston_linear_velocity = (speedRAD / _gearRatio) * (_screwLead / (2.0 * M_PI));
-    float slewRateVolume = piston_linear_velocity * _pistonArea; 
+    double piston_linear_velocity = (speedRAD / _gearRatio) * (_screwLead / (2.0 * M_PI));
+    double slewRateVolume = piston_linear_velocity * _pistonArea; 
     return slewRateVolume;
 }
 
@@ -116,7 +118,67 @@ float Actuator::step(float force, int dir)
 
 }
 
-float Actuator::get_piston_area()
+double Actuator::get_piston_area()
 {
     return _pistonArea;
+}
+
+float Actuator::get_motor_efficiency()
+{
+    return _motorEfficiency;
+}
+
+float Actuator::get_holding_torque()
+{
+    return _holdingTorque;
+}
+
+float Actuator::get_torque_curve_grad()
+{
+    return _torqueCurveGrad;
+}
+
+float Actuator::get_torque_curve_int()
+{
+    return _torqueCurveIntercept;
+}
+
+float Actuator::get_max_speed_rpm()
+{
+    return _maxSpeedRPM;
+}
+ 
+float Actuator::get_min_speed_rpm()
+{
+    return _minSpeedRPM;
+}
+
+int Actuator::get_gear_ratio()
+{
+    return _gearRatio;
+}
+
+float Actuator::get_gearbox_efficiency()
+{
+    return _gearboxEfficiency;
+}
+
+float Actuator::get_screw_lead()
+{
+    return _screwLead;
+}
+
+float Actuator::get_screw_pitch_diam()
+{
+    return _screwPitchDiam;
+}
+
+float Actuator::get_screw_friction()
+{
+    return _screwFriction;
+}
+ 
+float Actuator::get_factor_of_safety()
+{
+    return _FS;
 }
