@@ -101,9 +101,9 @@ BuoyancyNode::BuoyancyNode()
 
               msg.data = _VBS->get_vbs_volume() + pistonVolume;
               
-              RCLCPP_INFO(this->get_logger(), 
-                  "dt: %.3f | Piston: %.1f | Total: %.1f",  
-                  dt, pistonVolume * 1000000, msg.data * 1000000);
+              // RCLCPP_INFO(this->get_logger(), 
+              //     "dt: %.3f | Piston: %.1f | Total: %.1f",  
+              //     dt, pistonVolume * 1000000, msg.data * 1000000);
               
               _pistonVolPub->publish(msg);
           }

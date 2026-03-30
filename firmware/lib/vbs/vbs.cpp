@@ -12,6 +12,7 @@ Dependencies:	vbs.hpp
 **/
 
 #include "vbs.hpp"
+#include <iostream>
 
 // // Create static pointer for use with C style interrupts
 // static VBS* instance_ptr = nullptr;
@@ -82,6 +83,7 @@ void VBS::step(float dt) {
     int dir = (requestedChange > 0) ? extend : (requestedChange < 0 ? retract : hold);
     double depthForce = std::abs(get_current_depth()) * _g * _density * _actuator.get_piston_area();
     double maxSlewRate = _actuator.step((float)depthForce, dir);
+    std::cout << "Max Slew Rate: " << maxSlewRate << std::endl;
 
     double maxChangeInStep = maxSlewRate * dt;
 
