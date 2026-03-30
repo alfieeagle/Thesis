@@ -96,7 +96,7 @@ void test_hold_torque_set_correctly()
 
 void test_correct_motor_torque_to_speed()
 {
-    float torques[10] = {0.0, 1.5, 2.6, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 100.0};
+    float torques[10] = {0.0f, 1.5f, 2.5f, 3.5f, 4.5f, 5.5f, 6.5f, 7.5f, 8.5f, 100.0f};
 
     for(int i = 0; i < 10; i++)
     {
@@ -106,6 +106,15 @@ void test_correct_motor_torque_to_speed()
     }
     
 }
+
+void test_slew_rate_calc()
+{
+    double slewRate = actuator.calculate_slew(35.34f);
+
+    TEST_ASSERT_DOUBLE_WITHIN(0.0000001, 0.000002929, slewRate);
+    
+}
+
 
 
 int main(int argc, char **argv)
@@ -117,6 +126,7 @@ int main(int argc, char **argv)
     RUN_TEST(test_extending_more_expensive_than_retracting);
     RUN_TEST(test_hold_torque_set_correctly);
     RUN_TEST(test_correct_motor_torque_to_speed);
+    RUN_TEST(test_slew_rate_calc);
     
 
     UNITY_END();

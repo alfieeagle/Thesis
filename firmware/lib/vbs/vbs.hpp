@@ -32,9 +32,9 @@ class VBS
     public:
         // Constructor and destructor
         VBS(
-            double kp, 
-            double kd, 
-            double ki, 
+            float kp, 
+            float kd, 
+            float ki, 
             float dt, 
             float length, 
             float radius,

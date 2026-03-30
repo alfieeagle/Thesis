@@ -55,7 +55,7 @@ class Actuator
         double calculate_slew(float maxSpeed);
 
         // Step
-        float step(float depth, int dir);
+        double step(float depth, int dir);
 
         // getters
         double get_piston_area();
@@ -65,7 +65,7 @@ class Actuator
         float get_torque_curve_int();
         float get_max_speed_rpm();
         float get_min_speed_rpm();
-        int get_gear_ratio();
+        float get_gear_ratio();
         float get_gearbox_efficiency();
         float get_screw_lead();
         float get_screw_pitch_diam();

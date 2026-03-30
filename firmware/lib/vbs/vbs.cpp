@@ -22,9 +22,9 @@ Dependencies:	vbs.hpp
 // }
 
 VBS::VBS(
-    double kp, 
-    double kd, 
-    double ki, 
+    float kp, 
+    float kd, 
+    float ki, 
     float dt, 
     float length, 
     float radius,
@@ -70,44 +70,25 @@ _radius(radius)
 
 }
 
-void VBS::step(float dt)
-{
+void VBS::step(float dt) {
+    // Setup directions
+    int extend = 1;
+    int retract = -1;
+    int hold = 0;
+
     double controllerVolume = _controller.step(_referenceDepth, get_current_depth(), dt) * _maxPistonVolume;
+    double requestedChange = controllerVolume - _pistonVolume;
+    
+    int dir = (requestedChange > 0) ? extend : (requestedChange < 0 ? retract : hold);
+    double depthForce = std::abs(get_current_depth()) * _g * _density * _actuator.get_piston_area();
+    double maxSlewRate = _actuator.step((float)depthForce, dir);
 
-    float depthForce = (float)std::abs(get_current_depth()) * _g * _density * (float)_actuator.get_piston_area();
-    int dir;
+    double maxChangeInStep = maxSlewRate * dt;
 
-    // Check the direction of the piston to calculate the correct torque
-    if(_pistonVolume - _prevPistonVolume > 0)
-    {
-        dir = 1;
-    }
-    else if (_pistonVolume - _prevPistonVolume < 0)
-    {
-        dir = -1;
-    }
-    else
-    {
-        dir = 0;
-    }
+    double actualChange = std::clamp(requestedChange, -maxChangeInStep, maxChangeInStep);
 
-    // Calculate the max slew rate based on the depth in order to rate limit the actuator
-    float maxSlewRate = _actuator.step(depthForce, dir);
-    if(std::abs(controllerVolume - _pistonVolume)/dt > maxSlewRate)
-    {
-        _prevPistonVolume = _pistonVolume;
-        _pistonVolume = _prevPistonVolume + maxSlewRate * dt;
-    }
-    else if (std::abs(controllerVolume - _pistonVolume)/dt < -maxSlewRate)
-    {
-        _prevPistonVolume = _pistonVolume;
-        _pistonVolume = _prevPistonVolume - maxSlewRate * dt;
-    }
-    else
-    {
-        _prevPistonVolume = _pistonVolume;
-        _pistonVolume = controllerVolume;
-    }
+    _prevPistonVolume = _pistonVolume;
+    _pistonVolume += actualChange;
 }
 
 // Update VBS depth

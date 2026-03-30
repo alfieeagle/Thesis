@@ -54,12 +54,12 @@ float Actuator::calculate_gearbox_torque(float force, int dir)
     if (dir == 1)
     {
         // Calculate torque when extending 
-        gearTorque = (force * _screwPitchDiam/2)*((_screwLead + M_PI * _screwFriction * _screwPitchDiam)/(M_PI * _screwPitchDiam - _screwFriction * _screwLead));
+        gearTorque = (force * _screwPitchDiam/2)*((_screwLead + (float)M_PI * _screwFriction * _screwPitchDiam)/((float)M_PI * _screwPitchDiam - _screwFriction * _screwLead));
     }
     else if (dir == -1)
     {
         // Calculate torque when retracting 
-        gearTorque = (force * _screwPitchDiam/2)*((M_PI * _screwFriction * _screwPitchDiam - _screwLead)/(M_PI * _screwPitchDiam + _screwFriction * _screwLead));
+        gearTorque = (force * _screwPitchDiam/2)*(((float)M_PI * _screwFriction * _screwPitchDiam - _screwLead)/((float)M_PI * _screwPitchDiam + _screwFriction * _screwLead));
     }
     else
     {
@@ -72,7 +72,7 @@ float Actuator::calculate_gearbox_torque(float force, int dir)
 float Actuator::calculate_max_gearbox_torque(float force)
 {
         // Calculate torque when extending 
-        float maxTorque = (force * _screwPitchDiam/2)*((_screwLead + M_PI * _screwFriction * _screwPitchDiam)/(M_PI * _screwPitchDiam - _screwFriction * _screwLead));
+        float maxTorque = (force * _screwPitchDiam/2)*((_screwLead + (float)M_PI * _screwFriction * _screwPitchDiam)/((float)M_PI * _screwPitchDiam - _screwFriction * _screwLead));
         return maxTorque;
 }
 
@@ -89,7 +89,7 @@ float Actuator::calculate_max_motor_speed(float motorTorque)
     rpm = std::clamp(rpm, _minSpeedRPM, _maxSpeedRPM);
 
     // Convert to rad/s
-    float omega = (rpm * 2.0 * M_PI) / 60.0;
+    float omega = (rpm * 2.0f * (float)M_PI) / 60.0f;
     return omega;
 }
 
@@ -106,13 +106,13 @@ float Actuator::calculate_motor_power(float motorTorque,  float rotVel)
     return powerConsumption;
 }
 
-float Actuator::step(float force, int dir)
+double Actuator::step(float force, int dir)
 {
     float gearboxTorque = calculate_gearbox_torque(force, dir);
     float maxGearboxTorque = calculate_max_gearbox_torque(force);
     float maxMotorTorque = calculate_motor_torque(maxGearboxTorque);
     float maxMotorSpeed = calculate_max_motor_speed(maxMotorTorque);
-    float maxSlew = calculate_slew(maxMotorSpeed);
+    double maxSlew = calculate_slew(maxMotorSpeed);
 
     return maxSlew;
 
@@ -153,7 +153,7 @@ float Actuator::get_min_speed_rpm()
     return _minSpeedRPM;
 }
 
-int Actuator::get_gear_ratio()
+float Actuator::get_gear_ratio()
 {
     return _gearRatio;
 }
