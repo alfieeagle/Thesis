@@ -75,6 +75,7 @@ BuoyancyNode::BuoyancyNode()
     qos,
     std::bind(&BuoyancyNode::depth_callback, this, std::placeholders::_1));
 
+    // Control update timer
     #ifndef CORE_TEENSY
         _simTimer = this->create_wall_timer(
           std::chrono::milliseconds(100),
@@ -85,16 +86,50 @@ BuoyancyNode::BuoyancyNode()
               // Calculate actual dt in seconds
               float dt = (float)(currentTime - _lastStepTime).seconds();
               
-              // Guard against the first step or a zero dt (which would break derivative)
+              // Guard against the first step or a zero dt
               if (_firstStep || dt <= 0.0) {
-                  dt = 0.1f; // Fallback for the very first frame
+                  dt = 0.1f;
                   _firstStep = false;
               }
 
               _lastStepTime = currentTime;
 
-              // Step the VBS with the ACTUAL dt
               _VBS->step(dt); 
+
+              auto msg = std_msgs::msg::Float64();
+              double pistonVolume = _VBS->get_piston_volume(); 
+
+              msg.data = _VBS->get_vbs_volume() + pistonVolume;
+              
+              // RCLCPP_INFO(this->get_logger(), 
+              //     "dt: %.3f | Piston: %.1f | Total: %.1f",  
+              //     dt, pistonVolume * 1000000, msg.data * 1000000);
+              
+              _pistonVolPub->publish(msg);
+          }
+      );
+    #endif
+
+    // Actuation update loop
+    #ifndef CORE_TEENSY
+        _simTimer = this->create_wall_timer(
+          std::chrono::milliseconds(10),
+          [this]()
+          { 
+              auto currentTime = this->get_clock()->now();
+              
+              // Calculate actual dt in seconds
+              float dt_act = (float)(currentTime - _lastStepTime).seconds();
+              
+              // Guard against the first step or a zero dt
+              if (_firstStep || dt <= 0.0) {
+                  dt_act = 0.01f;
+                  _firstStep = false;
+              }
+
+              _lastStepTime = currentTime;
+
+              _VBS->step(dt_act); 
 
               auto msg = std_msgs::msg::Float64();
               double pistonVolume = _VBS->get_piston_volume(); 

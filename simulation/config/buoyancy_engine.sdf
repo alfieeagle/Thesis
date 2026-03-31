@@ -153,7 +153,7 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
         <neutral_volume>0.0019704</neutral_volume>
         <default_volume>0.0019704</default_volume>
         <max_volume>0.0020909</max_volume>
-        <max_inflation_rate>0.0000058</max_inflation_rate>
+        <max_inflation_rate>0.0000052</max_inflation_rate>
         <fluid_density>1025</fluid_density>
         <surface>0</surface>
       </plugin>

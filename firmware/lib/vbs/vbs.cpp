@@ -12,7 +12,6 @@ Dependencies:	vbs.hpp
 **/
 
 #include "vbs.hpp"
-#include <iostream>
 
 // // Create static pointer for use with C style interrupts
 // static VBS* instance_ptr = nullptr;
@@ -77,16 +76,18 @@ void VBS::step(float dt) {
     int retract = -1;
     int hold = 0;
 
+    // Get control signal
     double controllerVolume = _controller.step(_referenceDepth, get_current_depth(), dt) * _maxPistonVolume;
     double requestedChange = controllerVolume - _pistonVolume;
     
+    // Find piston direction and caculate max slew rate from this
     int dir = (requestedChange > 0) ? extend : (requestedChange < 0 ? retract : hold);
     double depthForce = std::abs(get_current_depth()) * _g * _density * _actuator.get_piston_area();
     double maxSlewRate = _actuator.step((float)depthForce, dir);
-    std::cout << "Max Slew Rate: " << maxSlewRate << std::endl;
 
     double maxChangeInStep = maxSlewRate * dt;
 
+    // Clamp the slew  rate based on depth and motor torque curve
     double actualChange = std::clamp(requestedChange, -maxChangeInStep, maxChangeInStep);
 
     _prevPistonVolume = _pistonVolume;
