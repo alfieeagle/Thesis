@@ -54,16 +54,18 @@ class VBS
         );
 
         // Function to update the controller inputs and calculate output
-        void step(float dt);
+        void update_control(float dt);
 
         // Setters
         void update_depth(float depth);
+        void update_piston(float dt);
 
         // Getters
         double get_piston_volume();
         float get_vbs_volume();
         float get_reference_depth();
         float get_current_depth();
+        double get_control_volume();
 
     private:	
 
@@ -74,8 +76,8 @@ class VBS
         float _g;
 
         // Piston 
+        double _controlVolume;
         double _pistonVolume;
-        double _prevPistonVolume;
         double _maxPistonVolume;
 
         // Controller

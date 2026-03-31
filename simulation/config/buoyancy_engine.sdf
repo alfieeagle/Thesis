@@ -141,7 +141,7 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
         <publish_visual_pose>false</publish_visual_pose>
         <publish_nested_model_pose>true</publish_nested_model_pose>
         <use_pose_vector_msg>false</use_pose_vector_msg>
-        <update_frequency>50</update_frequency>
+        <update_frequency>100</update_frequency>
         <static>false</static>
       </plugin>
       <plugin

@@ -18,9 +18,9 @@ BuoyancyNode::BuoyancyNode()
 : Node("buoyancy_node")
 {
   // Controller params
-  float kp = 6.0f;
-  float kd = 1.0f;
-  float ki = 1.0f;
+  float kp = 1.5f;
+  float kd = 0.01f;
+  float ki = 6.0f;
 
   // VBS params
   float dt = 0.1f;
@@ -67,7 +67,8 @@ BuoyancyNode::BuoyancyNode()
 
   _pistonVolPub = this->create_publisher<std_msgs::msg::Float64>("/piston_volume", qos);
 
-  _lastStepTime = this->get_clock()->now();
+  _lastControlTime = this->get_clock()->now();
+  _lastActuatorTime = this->get_clock()->now();
 
   // Subscribers to robot sensor topics
   _depthSub = this->create_subscription<geometry_msgs::msg::Pose>(
@@ -77,59 +78,56 @@ BuoyancyNode::BuoyancyNode()
 
     // Control update timer
     #ifndef CORE_TEENSY
-        _simTimer = this->create_wall_timer(
+        _controlTimer = this->create_wall_timer(
           std::chrono::milliseconds(100),
           [this]()
           { 
-              auto currentTime = this->get_clock()->now();
+              // auto currentControlTime = this->get_clock()->now();
               
-              // Calculate actual dt in seconds
-              float dt = (float)(currentTime - _lastStepTime).seconds();
+              // // Calculate actual dt in seconds
+              // float dt_u = (float)(currentControlTime - _lastControlTime).seconds();
               
-              // Guard against the first step or a zero dt
-              if (_firstStep || dt <= 0.0) {
-                  dt = 0.1f;
-                  _firstStep = false;
-              }
+              // // Guard against the first step or a zero dt
+              // if (_firstControlStep || dt_u <= 0.0) {
+              //     dt_u = 0.1f;
+              //     _firstControlStep = false;
+              // }
 
-              _lastStepTime = currentTime;
+              // _lastControlTime = currentControlTime;
 
-              _VBS->step(dt); 
+              float dt_u = 0.1f;
 
-              auto msg = std_msgs::msg::Float64();
-              double pistonVolume = _VBS->get_piston_volume(); 
+              _VBS->update_control(dt_u); 
 
-              msg.data = _VBS->get_vbs_volume() + pistonVolume;
-              
-              // RCLCPP_INFO(this->get_logger(), 
-              //     "dt: %.3f | Piston: %.1f | Total: %.1f",  
-              //     dt, pistonVolume * 1000000, msg.data * 1000000);
-              
-              _pistonVolPub->publish(msg);
+              RCLCPP_INFO(this->get_logger(), 
+                  "Control Output: %.3f\nPiston Volume: %.3f\n",  
+                  _VBS->get_control_volume()*1000000, _VBS->get_piston_volume()*1000000);
           }
       );
     #endif
 
-    // Actuation update loop
+    // Actuation update timer
     #ifndef CORE_TEENSY
-        _simTimer = this->create_wall_timer(
+        _actuatorTimer = this->create_wall_timer(
           std::chrono::milliseconds(10),
           [this]()
           { 
-              auto currentTime = this->get_clock()->now();
+              // auto currentActuatorTime = this->get_clock()->now();
               
-              // Calculate actual dt in seconds
-              float dt_act = (float)(currentTime - _lastStepTime).seconds();
+              // // Calculate actual dt in seconds
+              // float dt_act = (float)(currentActuatorTime - _lastActuatorTime).seconds();
               
-              // Guard against the first step or a zero dt
-              if (_firstStep || dt <= 0.0) {
-                  dt_act = 0.01f;
-                  _firstStep = false;
-              }
+              // // Guard against the first step or a zero dt
+              // if (_firstActuatorStep || dt_act <= 0.0) {
+              //     dt_act = 0.01f;
+              //     _firstActuatorStep = false;
+              // }
 
-              _lastStepTime = currentTime;
+              // _lastActuatorTime = currentActuatorTime;
 
-              _VBS->step(dt_act); 
+              float dt_act = 0.01f;
+
+              _VBS->update_piston(dt_act);
 
               auto msg = std_msgs::msg::Float64();
               double pistonVolume = _VBS->get_piston_volume(); 
@@ -137,8 +135,8 @@ BuoyancyNode::BuoyancyNode()
               msg.data = _VBS->get_vbs_volume() + pistonVolume;
               
               // RCLCPP_INFO(this->get_logger(), 
-              //     "dt: %.3f | Piston: %.1f | Total: %.1f",  
-              //     dt, pistonVolume * 1000000, msg.data * 1000000);
+              //     "dt_act: %.3f | Piston: %.1f | Total: %.1f",  
+              //     dt_act, pistonVolume * 1000000, msg.data * 1000000);
               
               _pistonVolPub->publish(msg);
           }

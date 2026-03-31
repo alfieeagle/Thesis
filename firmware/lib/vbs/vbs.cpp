@@ -60,7 +60,6 @@ _radius(radius)
     _volume = (float)std::pow(radius,2) * (float)M_PI * _length;
     _maxPistonVolume = 0.00012053;
     _pistonVolume = 0.0;
-    _prevPistonVolume = 0.0;
 
     // Set PID saturation based on max volume
     _controller.set_saturation(1.0);
@@ -70,15 +69,18 @@ _radius(radius)
 
 }
 
-void VBS::step(float dt) {
+void VBS::update_control(float dt) {
+    // Get control signal
+    _controlVolume = _controller.step(_referenceDepth, get_current_depth(), dt) * _maxPistonVolume;
+}
+
+void VBS::update_piston(float dt) {
     // Setup directions
     int extend = 1;
     int retract = -1;
     int hold = 0;
 
-    // Get control signal
-    double controllerVolume = _controller.step(_referenceDepth, get_current_depth(), dt) * _maxPistonVolume;
-    double requestedChange = controllerVolume - _pistonVolume;
+    double requestedChange = _controlVolume - _pistonVolume;
     
     // Find piston direction and caculate max slew rate from this
     int dir = (requestedChange > 0) ? extend : (requestedChange < 0 ? retract : hold);
@@ -90,7 +92,6 @@ void VBS::step(float dt) {
     // Clamp the slew  rate based on depth and motor torque curve
     double actualChange = std::clamp(requestedChange, -maxChangeInStep, maxChangeInStep);
 
-    _prevPistonVolume = _pistonVolume;
     _pistonVolume += actualChange;
 }
 
@@ -119,4 +120,9 @@ float VBS::get_current_depth()
 float VBS::get_vbs_volume()
 {
     return _volume;
+}
+
+double VBS::get_control_volume()
+{
+    return _controlVolume;
 }

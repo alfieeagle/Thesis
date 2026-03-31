@@ -19,14 +19,14 @@ _kp(kp),
 _kd(kd),
 _ki(ki)
 {
-    _error = 0.0;
-    _prevError = 0.0;
-    _integralError = 0.0;
-    _derivativeError = 0.0;
-    _maxIntegralError = 0.0;
-    _saturation = 1.0;
+    _error = 0.0f;
+    _prevError = 0.0f;
+    _integralError = 0.0f;
+    _derivativeError = 0.0f;
+    _maxIntegralError = 0.05f;
+    _saturation = 1.0f;
     _elapsedTime = 0.0f;
-    _cutoffFrequency = 30.0;
+    _cutoffFrequency = 9.0f;
 
     // Calculate smoothing factor based on cutoff frequency
     float y = 1 - (float)std::cos(_cutoffFrequency);
@@ -74,5 +74,4 @@ double PID::step(float ref, float signal, float dt)
 void PID::set_saturation(float sat)
 {
     _saturation = sat;
-    _maxIntegralError = _saturation * 0.5f;
 }
