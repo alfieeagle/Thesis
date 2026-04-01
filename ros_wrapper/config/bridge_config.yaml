@@ -15,3 +15,9 @@
   publisher_queue: 6
   lazy: false
   direction: GZ_TO_ROS
+
+- ros_topic_name: "vbs_imu"
+  gz_topic_name: "vbs/imu"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  gz_type_name: "gz.msgs.IMU"
+  direction: GZ_TO_ROS

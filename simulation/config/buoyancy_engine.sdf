@@ -84,6 +84,10 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
       filename="gz-sim-contact-system"
       name="gz::sim::systems::Contact">
     </plugin>
+    <plugin
+      filename="gz-sim-imu-system"
+      name="gz::sim::systems::Imu">
+    </plugin>
 
     <plugin
       filename="gz-sim-buoyancy-system"
@@ -108,6 +112,12 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
     <model name="vbs">
       <pose>0 0 -1 0 0 0</pose>
       <link name='body'>
+      <sensor name="vbs_imu" type="imu">
+        <always_on>1</always_on>
+        <update_rate>100</update_rate>
+        <visualize>true</visualize>
+        <topic>vbs/imu</topic>
+      </sensor>
         <inertial>
           <mass>2.019667085</mass>
           <inertia>
@@ -136,7 +146,7 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
       <plugin
         filename="gz-sim-pose-publisher-system"
         name="gz::sim::systems::PosePublisher">
-        <publish_link_pose>false</publish_link_pose>
+        <publish_link_pose>true</publish_link_pose>
         <publish_collision_pose>false</publish_collision_pose>
         <publish_visual_pose>false</publish_visual_pose>
         <publish_nested_model_pose>true</publish_nested_model_pose>
@@ -161,24 +171,24 @@ gz topic -t  /model/buoyant_box/buoyancy_engine/current_volume -e
         filename="gz-sim-hydrodynamics-system"
         name="gz::sim::systems::Hydrodynamics">
         <link_name>body</link_name>
-        <xDotU>-0.7605</xDotU>
-        <yDotV>-0.7605</yDotV>
-        <zDotW>-0.39272</zDotW>
-        <kDotP>-0.0018</kDotP>
-        <mDotQ>-0.0018</mDotQ>
+        <xDotU>-0.0</xDotU>
+        <yDotV>-0.0</yDotV>
+        <zDotW>-0.3896</zDotW>
+        <kDotP>-0.0</kDotP>
+        <mDotQ>-0.0</mDotQ>
         <nDotR>-0.0</nDotR>
-        <xUabsU>-1</xUabsU>
-        <xU>-1</xU>
-        <yVabsV>-1</yVabsV>
-        <yV>-1</yV>
+        <xUabsU>-0.0</xUabsU>
+        <xU>-0.0</xU>
+        <yVabsV>-0.0</yVabsV>
+        <yV>-0.0</yV>
         <zWabsW>-5.6551</zWabsW>
         <zW>-10.585</zW>
-        <kPabsP>-1</kPabsP>
-        <kP>-1</kP>
-        <mQabsQ>-1</mQabsQ>
-        <mQ>-1</mQ>
-        <nRabsR>-1</nRabsR>
-        <nR>-1</nR>
+        <kPabsP>-0.0</kPabsP>
+        <kP>-0.0</kP>
+        <mQabsQ>-0.0</mQabsQ>
+        <mQ>-0.0</mQ>
+        <nRabsR>-0.0</nRabsR>
+        <nR>-0.0</nR>
       </plugin>
     </model>
   </world>

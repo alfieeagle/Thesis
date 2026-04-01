@@ -5,7 +5,7 @@ import xarray as xr
 ds = xr.open_dataset("capy_dataset.nc")
 
 # 2. Find the index for omega = 1.0 (or your target frequency)
-target_omega = 1.0
+target_omega = 1.0 / 2.37
 omegas = ds.omega.values
 idx = (np.abs(omegas - target_omega)).argmin()
 
