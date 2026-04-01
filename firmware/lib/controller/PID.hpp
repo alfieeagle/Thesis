@@ -1,3 +1,7 @@
+#ifndef PID_HPP
+
+#define PID_HPP
+
 /** ------------------------ PID.hpp ------------------------
 
 Author:			Alfie Eagleton
@@ -59,3 +63,4 @@ class PID
         double compute_control_signal();
 };
 
+#endif
