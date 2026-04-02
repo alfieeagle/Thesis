@@ -26,6 +26,7 @@ Dependencies:   PID.hpp, cmath
 #include "actuator.hpp"
 
 #include <cmath>
+#include <algorithm>
 
 class VBS
 {
