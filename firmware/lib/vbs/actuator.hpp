@@ -57,7 +57,7 @@ class Actuator
         // Step
         double step(float depth, int dir);
 
-        // getters
+        // Getters
         double get_piston_area();
         float get_motor_efficiency();
         float get_holding_torque();
