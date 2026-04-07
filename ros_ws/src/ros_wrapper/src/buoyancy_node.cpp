@@ -127,14 +127,13 @@ BuoyancyNode::BuoyancyNode()
 
               float dt_act = 0.01f;
 
-              // _VBS->update_piston(dt_act);
-              
+              _VBS->update_piston(dt_act);
 
               auto msg = std_msgs::msg::Float64();
               double pistonVolume = _VBS->get_piston_volume(); 
 
-              // msg.data = _VBS->get_vbs_volume() + pistonVolume;
-              msg.data = 0.0019704 - 0.00012053;
+              msg.data = pistonVolume;
+              // msg.data = 0.0019704 - 0.00012053;
               
               // RCLCPP_INFO(this->get_logger(), 
               //     "dt_act: %.3f | Piston: %.1f | Total: %.1f",  
