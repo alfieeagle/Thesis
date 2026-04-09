@@ -18,8 +18,8 @@ Dependencies:	rclcpp.hpp
 
 
 #include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/float64.hpp"
 #include "geometry_msgs/msg/pose.hpp"
+#include "geometry_msgs/msg/vector3.hpp"
 #include "vbs.hpp"
 
 class BuoyancyNode : public rclcpp::Node
@@ -30,7 +30,7 @@ class BuoyancyNode : public rclcpp::Node
 
     private:
         // Publishers
-        rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr _pistonVolPub;
+        rclcpp::Publisher<geometry_msgs::msg::Vector3>::SharedPtr _motorCmdPub;
 
         // Subscribers
         rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr _depthSub;

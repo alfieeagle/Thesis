@@ -39,7 +39,8 @@ class Actuator
             float torqueCurveInt,
             float maxMotorSpeed,
             float minMotorSpeed,
-            float pistonArea
+            float pistonArea,
+            int stepsPerRev
         );
         
         // Gearbox calcs
@@ -48,14 +49,11 @@ class Actuator
 
         // Motor calcs
         float calculate_motor_torque(float gearboxTorque);
-        float calculate_max_motor_speed(float motorTorque);
+        float calculate_max_motor_speed(float depth);
         float calculate_motor_power(float motorTorque,  float rotVel);
 
-        // Volume change
-        double calculate_slew(float maxSpeed);
-
         // Step
-        double step(float depth, int dir);
+        // double step(float depth, int dir);
 
         // Getters
         double get_piston_area();
@@ -71,6 +69,8 @@ class Actuator
         float get_screw_pitch_diam();
         float get_screw_friction();
         float get_factor_of_safety();
+        int get_steps_per_rev();
+        bool is_enabled();
         
 
     private:
@@ -81,6 +81,7 @@ class Actuator
         float _torqueCurveIntercept;
         float _maxSpeedRPM;
         float _minSpeedRPM;
+        int _stepsPerRev;
 
         // Gearbox parameters
         float _gearRatio;
@@ -93,6 +94,8 @@ class Actuator
 
         float _FS; // Factor of safety
         double _pistonArea;
+
+        bool _enabled;
         
 };
 

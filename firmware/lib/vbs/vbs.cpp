@@ -40,13 +40,15 @@ VBS::VBS(
     float torqueCurveInt,
     float maxMotorSpeed,
     float minMotorSpeed,
-    float pistonArea
+    float pistonArea,
+    int stepsPerRev
 ):
 _controller(kp, kd, ki),
-_actuator(e_g, e_m, GR, d_m, s_l, mu_s,T_hold, FS, torqueCurveGrad, torqueCurveInt, maxMotorSpeed, minMotorSpeed, pistonArea),
+_actuator(e_g, e_m, GR, d_m, s_l, mu_s,T_hold, FS, torqueCurveGrad, torqueCurveInt, maxMotorSpeed, minMotorSpeed, pistonArea, stepsPerRev),
 _dt(dt),
 _length(length),
-_radius(radius)
+_radius(radius),
+_motorCommand(3)
 {
     // #ifdef CORE_TEENSY
     //     instance_ptr = this;
@@ -67,6 +69,9 @@ _radius(radius)
     _g = 9.81f;
     _density = 1025.0f;
 
+    _motorCommand[0] = 0.0f;
+    _motorCommand[1] = 1.0f;
+    _motorCommand[2] = 0.0f;
 }
 
 void VBS::update_control(float dt) {
@@ -74,25 +79,32 @@ void VBS::update_control(float dt) {
     _controlVolume = _controller.step(_referenceDepth, get_current_depth(), dt) * _maxPistonVolume;
 }
 
-void VBS::update_piston(float dt) {
+void VBS::motor_command(double piston_volume) {
     // Setup directions
-    int extend = 1;
-    int retract = -1;
-    int hold = 0;
+    float extend = 1.0f;
+    float retract = -1.0f;
+    float hold = 0.0f;
 
-    double requestedChange = _controlVolume - _pistonVolume;
+    std::vector<float> motor_command;
+
+    // Check max speed
+    float maxSpeedRPM = _actuator.calculate_max_motor_speed(get_current_depth());
     
-    // Find piston direction and caculate max slew rate from this
-    int dir = (requestedChange > 0) ? extend : (requestedChange < 0 ? retract : hold);
-    double depthForce = std::abs(get_current_depth()) * _g * _density * _actuator.get_piston_area();
-    double maxSlewRate = _actuator.step((float)depthForce, dir);
+    // Determine frequency from max speed
+    float freq = (maxSpeedRPM/60) * _actuator.get_steps_per_rev();
+    motor_command.push_back(freq);
 
-    double maxChangeInStep = maxSlewRate * dt;
+    double requestedChange = _controlVolume - piston_volume;
+    
+    // Find piston direction 
+    float dir = (requestedChange > 0.0f) ? extend : (requestedChange < 0.0f ? retract : hold);
+    motor_command.push_back(dir);
 
-    // Clamp the slew  rate based on depth and motor torque curve
-    double actualChange = std::clamp(requestedChange, -maxChangeInStep, maxChangeInStep);
+    // Check if the motor is at an end stop
+    bool enable = _actuator.is_enabled();
+    motor_command.push_back(enable);
 
-    _pistonVolume += actualChange;
+    _motorCommand = motor_command;
 }
 
 // Update VBS depth
@@ -125,4 +137,9 @@ float VBS::get_vbs_volume()
 double VBS::get_control_volume()
 {
     return _controlVolume;
+}
+
+std::vector<float> VBS::get_motor_command()
+{
+    return _motorCommand;
 }

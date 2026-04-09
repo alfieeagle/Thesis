@@ -28,7 +28,8 @@ Actuator::Actuator(
     float torqueCurveInt,
     float maxMotorSpeed,
     float minMotorSpeed,
-    float pistonArea
+    float pistonArea,
+    int stepsPerRev
 ):
 _gearboxEfficiency(e_g),
 _motorEfficiency(e_m),
@@ -42,9 +43,10 @@ _torqueCurveGrad(torqueCuruveGrad),
 _torqueCurveIntercept(torqueCurveInt),
 _maxSpeedRPM(maxMotorSpeed),
 _minSpeedRPM(minMotorSpeed),
-_pistonArea(pistonArea)
+_pistonArea(pistonArea),
+_stepsPerRev(stepsPerRev)
 {
-    
+    _enabled = true;
 }
 
 float Actuator::calculate_gearbox_torque(float force, int dir)
@@ -82,22 +84,20 @@ float Actuator::calculate_motor_torque(float gearboxTorque)
     return motorTorque;
 }
 
-float Actuator::calculate_max_motor_speed(float motorTorque)
-{
-    // Calculate rpm based on linearised torque curve
-    float rpm = -_torqueCurveGrad * motorTorque + _torqueCurveIntercept;
-    rpm = std::clamp(rpm, _minSpeedRPM, _maxSpeedRPM);
+// float Actuator::calculate_max_motor_speed(float motorTorque)
+// {
+//     // Calculate rpm based on linearised torque curve
+//     float rpm = -_torqueCurveGrad * motorTorque + _torqueCurveIntercept;
+//     rpm = std::clamp(rpm, _minSpeedRPM, _maxSpeedRPM);
 
-    // Convert to rad/s
-    float omega = (rpm * 2.0f * (float)M_PI) / 60.0f;
-    return omega;
-}
+//     // Convert to rad/s
+//     float omega = (rpm * 2.0f * (float)M_PI) / 60.0f;
+//     return omega;
+// }
 
-double Actuator::calculate_slew(float speedRAD)
+float Actuator::calculate_max_motor_speed(float depth)
 {
-    double piston_linear_velocity = (speedRAD / _gearRatio) * (_screwLead / (2.0 * M_PI));
-    double slewRateVolume = piston_linear_velocity * _pistonArea; 
-    return slewRateVolume;
+    return (depth < 235) ? _maxSpeedRPM : _minSpeedRPM;
 }
 
 float Actuator::calculate_motor_power(float motorTorque,  float rotVel)
@@ -106,17 +106,17 @@ float Actuator::calculate_motor_power(float motorTorque,  float rotVel)
     return powerConsumption;
 }
 
-double Actuator::step(float force, int dir)
-{
-    float gearboxTorque = calculate_gearbox_torque(force, dir);
-    float maxGearboxTorque = calculate_max_gearbox_torque(force);
-    float maxMotorTorque = calculate_motor_torque(maxGearboxTorque);
-    float maxMotorSpeed = calculate_max_motor_speed(maxMotorTorque);
-    double maxSlew = calculate_slew(maxMotorSpeed);
+// double Actuator::step(float force, int dir)
+// {
+//     float gearboxTorque = calculate_gearbox_torque(force, dir);
+//     float maxGearboxTorque = calculate_max_gearbox_torque(force);
+//     float maxMotorTorque = calculate_motor_torque(maxGearboxTorque);
+//     float maxMotorSpeed = calculate_max_motor_speed(maxMotorTorque);
+//     double maxSlew = calculate_slew(maxMotorSpeed);
 
-    return maxSlew;
+//     return maxSlew;
 
-}
+// }
 
 double Actuator::get_piston_area()
 {
@@ -181,4 +181,14 @@ float Actuator::get_screw_friction()
 float Actuator::get_factor_of_safety()
 {
     return _FS;
+}
+
+bool Actuator::is_enabled()
+{
+    return _enabled;
+}
+
+int Actuator::get_steps_per_rev()
+{
+    return _stepsPerRev;
 }

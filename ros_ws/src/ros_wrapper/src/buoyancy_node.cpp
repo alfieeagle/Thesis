@@ -41,6 +41,7 @@ BuoyancyNode::BuoyancyNode()
   float maxMotorSpeedRPM = 600.0f;
   float minMotorSpeedRPM = 130.0f;
   float pistonArea = 0.0029f;
+  int stepsPerRev = 200;
 
   _VBS = std::make_unique<VBS>(
     kp, 
@@ -61,11 +62,13 @@ BuoyancyNode::BuoyancyNode()
     torqueCurveInt, 
     maxMotorSpeedRPM, 
     minMotorSpeedRPM, 
-    pistonArea);
+    pistonArea,
+    stepsPerRev
+  );
 
   auto qos = rclcpp::QoS(rclcpp::KeepLast(10)).reliable();
 
-  _pistonVolPub = this->create_publisher<std_msgs::msg::Float64>("/piston_volume", qos);
+  _motorCmdPub = this->create_publisher<geometry_msgs::msg::Vector3>("/motor_command", qos);
 
   _lastControlTime = this->get_clock()->now();
   _lastActuatorTime = this->get_clock()->now();
@@ -82,19 +85,6 @@ BuoyancyNode::BuoyancyNode()
           std::chrono::milliseconds(100),
           [this]()
           { 
-              // auto currentControlTime = this->get_clock()->now();
-              
-              // // Calculate actual dt in seconds
-              // float dt_u = (float)(currentControlTime - _lastControlTime).seconds();
-              
-              // // Guard against the first step or a zero dt
-              // if (_firstControlStep || dt_u <= 0.0) {
-              //     dt_u = 0.1f;
-              //     _firstControlStep = false;
-              // }
-
-              // _lastControlTime = currentControlTime;
-
               float dt_u = 0.1f;
 
               _VBS->update_control(dt_u); 
@@ -111,37 +101,17 @@ BuoyancyNode::BuoyancyNode()
         _actuatorTimer = this->create_wall_timer(
           std::chrono::milliseconds(10),
           [this]()
-          { 
-              // auto currentActuatorTime = this->get_clock()->now();
-              
-              // // Calculate actual dt in seconds
-              // float dt_act = (float)(currentActuatorTime - _lastActuatorTime).seconds();
-              
-              // // Guard against the first step or a zero dt
-              // if (_firstActuatorStep || dt_act <= 0.0) {
-              //     dt_act = 0.01f;
-              //     _firstActuatorStep = false;
-              // }
+          {
+              _VBS->motor_command(_VBS->get_piston_volume());
 
-              // _lastActuatorTime = currentActuatorTime;
+              auto msg = geometry_msgs::msg::Vector3();
+              std::vector<float> motor_command = _VBS->get_motor_command();
 
-              float dt_act = 0.01f;
+              msg.x = motor_command[0]; // freq
+              msg.y = motor_command[1]; // dir
+              msg.z = motor_command[2]; // enable
 
-              _VBS->update_piston(dt_act);
-
-              auto msg = std_msgs::msg::Float64();
-              double pistonVolume = _VBS->get_piston_volume(); 
-
-              msg.data = pistonVolume;
-              // msg.data = 0.0019704 - 0.00012053;
-              
-              // RCLCPP_INFO(this->get_logger(), 
-              //     "dt_act: %.3f | Piston: %.1f | Total: %.1f",  
-              //     dt_act, pistonVolume * 1000000, msg.data * 1000000);
-              
-              // _pistonVolPub->publish(msg);
-
-              _pistonVolPub->publish(msg);
+              _motorCmdPub->publish(msg);
           }
       );
     #endif

@@ -27,6 +27,7 @@ Dependencies:   PID.hpp, cmath
 
 #include <cmath>
 #include <algorithm>
+#include <vector>
 
 class VBS
 {
@@ -51,15 +52,14 @@ class VBS
             float torqueCurveInt,
             float maxMotorSpeed,
             float minMotorSpeed,
-            float pistonArea
-        );
-
-        // Function to update the controller inputs and calculate output
-        void update_control(float dt);
+            float pistonArea,
+            int stepsPerRev
+        );     
 
         // Setters
         void update_depth(float depth);
-        void update_piston(float dt);
+        void motor_command(double piston_volume);
+        void update_control(float dt);
 
         // Getters
         double get_piston_volume();
@@ -67,6 +67,7 @@ class VBS
         float get_reference_depth();
         float get_current_depth();
         double get_control_volume();
+        std::vector<float> get_motor_command();
 
     private:	
 
@@ -86,6 +87,7 @@ class VBS
 
         // Actuator
         Actuator _actuator;
+        std::vector<float> _motorCommand;
 
         // Time step
         float _dt;
