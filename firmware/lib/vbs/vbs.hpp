@@ -60,13 +60,16 @@ class VBS
         void update_depth(float depth);
         void motor_command(double piston_volume);
         void update_control(float dt);
+        void update_volume();
 
         // Getters
-        double get_piston_volume();
         float get_vbs_volume();
+        double get_control_volume();
+        double get_piston_volume();
+        
         float get_reference_depth();
         float get_current_depth();
-        double get_control_volume();
+        
         std::vector<float> get_motor_command();
 
     private:	
@@ -77,13 +80,9 @@ class VBS
         float _density;
         float _g;
 
-        // Piston 
-        double _controlVolume;
-        double _pistonVolume;
-        double _maxPistonVolume;
-
         // Controller
         PID _controller;
+        double _controlVolume;
 
         // Actuator
         Actuator _actuator;

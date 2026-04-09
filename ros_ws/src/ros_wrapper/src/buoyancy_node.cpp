@@ -74,10 +74,15 @@ BuoyancyNode::BuoyancyNode()
   _lastActuatorTime = this->get_clock()->now();
 
   // Subscribers to robot sensor topics
-  _depthSub = this->create_subscription<geometry_msgs::msg::Pose>(
+  _depthSub = this->create_subscription<std_msgs::msg::Float32>(
     "/depth",
     qos,
     std::bind(&BuoyancyNode::depth_callback, this, std::placeholders::_1));
+
+  _indexSub = this->create_subscription<std_msgs::msg::Int8>(
+    "/index",
+    qos,
+    std::bind(&BuoyancyNode::index_callback, this, std::placeholders::_1));
 
     // Control update timer
     #ifndef CORE_TEENSY
@@ -122,12 +127,14 @@ BuoyancyNode::~BuoyancyNode()
   RCLCPP_INFO(this->get_logger(), "Buoyancy Node Shutdown");
 }
 
-void BuoyancyNode::depth_callback(const geometry_msgs::msg::Pose::SharedPtr msg)
+void BuoyancyNode::depth_callback(const std_msgs::msg::Float32::SharedPtr msg)
 { 
-  _VBS->update_depth((float)msg->position.z);
-  // RCLCPP_INFO(this->get_logger(), 
-  //               "Depth: %.1f\n",  
-  //               msg->position.z);
+  _VBS->update_depth(msg->data);
+}
+
+void BuoyancyNode::index_callback(const std_msgs::msg::Int8::SharedPtr msg)
+{
+  _VBS->update_volume();
 }
 
 int main(int argc, char * argv[])

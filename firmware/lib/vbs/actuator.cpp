@@ -47,6 +47,10 @@ _pistonArea(pistonArea),
 _stepsPerRev(stepsPerRev)
 {
     _enabled = true;
+
+    _maxPistonVolume = 0.00012053;
+    _pistonVolume = 0.0;
+    _dir = 0;
 }
 
 float Actuator::calculate_gearbox_torque(float force, int dir)
@@ -106,6 +110,18 @@ float Actuator::calculate_motor_power(float motorTorque,  float rotVel)
     return powerConsumption;
 }
 
+void Actuator::increment_piston_volume()
+{
+    // Increment the piston volume by the amount moved in a single step
+    _pistonVolume = _dir ? (_pistonVolume + (_screwLead/_stepsPerRev)*_pistonArea) 
+                         : (_pistonVolume - (_screwLead/_stepsPerRev)*_pistonArea);
+}
+
+void Actuator::update_direction(int dir)
+{
+    _dir = dir;
+}
+
 // double Actuator::step(float force, int dir)
 // {
 //     float gearboxTorque = calculate_gearbox_torque(force, dir);
@@ -131,16 +147,6 @@ float Actuator::get_motor_efficiency()
 float Actuator::get_holding_torque()
 {
     return _holdingTorque;
-}
-
-float Actuator::get_torque_curve_grad()
-{
-    return _torqueCurveGrad;
-}
-
-float Actuator::get_torque_curve_int()
-{
-    return _torqueCurveIntercept;
 }
 
 float Actuator::get_max_speed_rpm()
@@ -191,4 +197,19 @@ bool Actuator::is_enabled()
 int Actuator::get_steps_per_rev()
 {
     return _stepsPerRev;
+}
+
+double Actuator::get_piston_volume()
+{
+    return _pistonVolume;
+}
+
+double Actuator::get_max_piston_volume()
+{
+    return _maxPistonVolume;
+}
+
+int Actuator::get_direction()
+{
+    return _dir;
 }

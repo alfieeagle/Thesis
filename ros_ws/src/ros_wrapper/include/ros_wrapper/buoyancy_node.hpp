@@ -18,7 +18,8 @@ Dependencies:	rclcpp.hpp
 
 
 #include "rclcpp/rclcpp.hpp"
-#include "geometry_msgs/msg/pose.hpp"
+#include "std_msgs/msg/float32.hpp"
+#include "std_msgs/msg/int8.hpp"
 #include "geometry_msgs/msg/vector3.hpp"
 #include "vbs.hpp"
 
@@ -33,10 +34,12 @@ class BuoyancyNode : public rclcpp::Node
         rclcpp::Publisher<geometry_msgs::msg::Vector3>::SharedPtr _motorCmdPub;
 
         // Subscribers
-        rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr _depthSub;
+        rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr _depthSub;
+        rclcpp::Subscription<std_msgs::msg::Int8>::SharedPtr _indexSub;
 
         // Callback
-        void depth_callback(const geometry_msgs::msg::Pose::SharedPtr msg);
+        void depth_callback(const std_msgs::msg::Float32::SharedPtr msg);
+        void index_callback(const std_msgs::msg::Int8::SharedPtr msg);
 
         // Node knows the VBS class
         std::unique_ptr<VBS> _VBS;

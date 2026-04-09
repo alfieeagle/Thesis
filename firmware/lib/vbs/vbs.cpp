@@ -60,8 +60,6 @@ _motorCommand(3)
 
     // Set volume
     _volume = (float)std::pow(radius,2) * (float)M_PI * _length;
-    _maxPistonVolume = 0.00012053;
-    _pistonVolume = 0.0;
 
     // Set PID saturation based on max volume
     _controller.set_saturation(1.0);
@@ -69,14 +67,14 @@ _motorCommand(3)
     _g = 9.81f;
     _density = 1025.0f;
 
-    _motorCommand[0] = 0.0f;
+    _motorCommand[0] = 2000.0f;
     _motorCommand[1] = 1.0f;
-    _motorCommand[2] = 0.0f;
+    _motorCommand[2] = 1.0f;
 }
 
 void VBS::update_control(float dt) {
     // Get control signal
-    _controlVolume = _controller.step(_referenceDepth, get_current_depth(), dt) * _maxPistonVolume;
+    _controlVolume = _controller.step(_referenceDepth, get_current_depth(), dt) * _actuator.get_max_piston_volume();
 }
 
 void VBS::motor_command(double piston_volume) {
@@ -94,11 +92,12 @@ void VBS::motor_command(double piston_volume) {
     float freq = (maxSpeedRPM/60) * _actuator.get_steps_per_rev();
     motor_command.push_back(freq);
 
-    double requestedChange = _controlVolume - piston_volume;
+    double requestedChange = _controlVolume - _actuator.get_piston_volume();
     
     // Find piston direction 
-    float dir = (requestedChange > 0.0f) ? extend : (requestedChange < 0.0f ? retract : hold);
-    motor_command.push_back(dir);
+    int dir  = (requestedChange > 0) ? extend : (requestedChange < 0 ? retract : hold);
+    _actuator.update_direction(dir);
+    motor_command.push_back((float)dir);
 
     // Check if the motor is at an end stop
     bool enable = _actuator.is_enabled();
@@ -113,10 +112,9 @@ void VBS::update_depth(float depth)
     _currentDepth = depth;
 }
 
-// Update VBS current volume
-double VBS::get_piston_volume()
+void VBS::update_volume()
 {
-    return _pistonVolume;
+    _actuator.increment_piston_volume();
 }
 
 float VBS::get_reference_depth()
@@ -137,6 +135,11 @@ float VBS::get_vbs_volume()
 double VBS::get_control_volume()
 {
     return _controlVolume;
+}
+
+double VBS::get_piston_volume()
+{
+    return _actuator.get_piston_volume();
 }
 
 std::vector<float> VBS::get_motor_command()

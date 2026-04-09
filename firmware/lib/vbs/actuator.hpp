@@ -56,22 +56,33 @@ class Actuator
         // double step(float depth, int dir);
 
         // Getters
+        // Piston
         double get_piston_area();
+        double get_piston_volume();
+        double get_max_piston_volume();
+        int get_direction();
+
+        // Motor
         float get_motor_efficiency();
         float get_holding_torque();
-        float get_torque_curve_grad();
-        float get_torque_curve_int();
         float get_max_speed_rpm();
         float get_min_speed_rpm();
+        int get_steps_per_rev();
+        bool is_enabled();
+
+        // Gear box
         float get_gear_ratio();
         float get_gearbox_efficiency();
+
+        // General
         float get_screw_lead();
         float get_screw_pitch_diam();
         float get_screw_friction();
         float get_factor_of_safety();
-        int get_steps_per_rev();
-        bool is_enabled();
-        
+
+        // Setters
+        void increment_piston_volume();
+        void update_direction(int dir);
 
     private:
         // Motor parameters
@@ -92,10 +103,15 @@ class Actuator
         float _screwPitchDiam;
         float _screwFriction;
 
-        float _FS; // Factor of safety
+        // Piston parameters
         double _pistonArea;
+        double _pistonVolume;
+        double _maxPistonVolume;
+        int _dir;
 
+        // General
         bool _enabled;
+        float _FS; // Factor of safety
         
 };
 
