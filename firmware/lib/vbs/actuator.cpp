@@ -9,7 +9,7 @@ This file contains the implementation of the motor class for the VBS.
 This class deals with the calculation and enforcement of the variable 
 slew rate for the motor
 
-Dependencies:	    
+Dependencies:	actuator.hpp   
 
 **/
 
@@ -112,14 +112,28 @@ float Actuator::calculate_motor_power(float motorTorque,  float rotVel)
 
 void Actuator::increment_piston_volume()
 {
+    double volumePerStep = (_screwLead / (_stepsPerRev * _gearRatio)) * _pistonArea;
+
     // Increment the piston volume by the amount moved in a single step
-    _pistonVolume = _dir ? (_pistonVolume + (_screwLead/_stepsPerRev)*_pistonArea) 
-                         : (_pistonVolume - (_screwLead/_stepsPerRev)*_pistonArea);
+    double pistonVolume = (_dir > 0) ? (_pistonVolume + volumePerStep) 
+                         : (_pistonVolume - volumePerStep);
+    
+    _pistonVolume = std::clamp(pistonVolume, -_maxPistonVolume, _maxPistonVolume);
 }
 
 void Actuator::update_direction(int dir)
 {
     _dir = dir;
+}
+
+void Actuator::enable()
+{
+    _enabled = true;
+}
+
+void Actuator::disable()
+{
+    _enabled = false;
 }
 
 // double Actuator::step(float force, int dir)

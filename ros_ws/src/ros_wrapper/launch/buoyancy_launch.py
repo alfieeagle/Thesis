@@ -7,7 +7,7 @@ from launch.substitutions import LaunchConfiguration
 def generate_launch_description():
     pkg_project = get_package_share_directory('ros_wrapper')
     # bridge_config_path = os.path.join(pkg_project, 'config', 'bridge_config.yaml')
-    # use_sim_time = LaunchConfiguration('use_sim_time')
+    use_sim_time = LaunchConfiguration('use_sim_time')
 
     return LaunchDescription([
         # Node(
@@ -25,6 +25,6 @@ def generate_launch_description():
             executable='buoyancy_node',
             name='buoyancy_node',
             output='screen',
-            # parameters=[{'use_sim_time': use_sim_time}]
+            parameters=[{'use_sim_time': use_sim_time}]
         )
     ])

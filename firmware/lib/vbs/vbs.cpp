@@ -77,7 +77,7 @@ void VBS::update_control(float dt) {
     _controlVolume = _controller.step(_referenceDepth, get_current_depth(), dt) * _actuator.get_max_piston_volume();
 }
 
-void VBS::motor_command(double piston_volume) {
+void VBS::update_motor_command() {
     // Setup directions
     float extend = 1.0f;
     float retract = -1.0f;
@@ -100,13 +100,16 @@ void VBS::motor_command(double piston_volume) {
     motor_command.push_back((float)dir);
 
     // Check if the motor is at an end stop
-    bool enable = _actuator.is_enabled();
-    motor_command.push_back(enable);
-
+    _actuator.is_enabled() ? motor_command.push_back(1.0f) : motor_command.push_back(0.0f);
+    
     _motorCommand = motor_command;
 }
 
-// Update VBS depth
+void VBS::limit_stop()
+{
+    _actuator.disable();
+}
+
 void VBS::update_depth(float depth)
 {
     _currentDepth = depth;

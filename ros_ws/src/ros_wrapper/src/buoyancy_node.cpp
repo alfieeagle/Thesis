@@ -19,8 +19,8 @@ BuoyancyNode::BuoyancyNode()
 {
   // Controller params
   float kp = 1.5f;
-  float kd = 0.01f;
-  float ki = 6.0f;
+  float kd = 6.0f;
+  float ki = 0.01f;
 
   // VBS params
   float dt = 0.1f;
@@ -66,60 +66,86 @@ BuoyancyNode::BuoyancyNode()
     stepsPerRev
   );
 
-  auto qos = rclcpp::QoS(rclcpp::KeepLast(10)).reliable();
+  // Reliable QOS
+  rclcpp::QoS qos_rel(10);
+  qos_rel.keep_last(10);
+  qos_rel.durability_volatile();
+  qos_rel.reliable();
 
-  _motorCmdPub = this->create_publisher<geometry_msgs::msg::Vector3>("/motor_command", qos);
+  // Best effort QOS
+  rclcpp::QoS qos_best(10);
+  qos_best.keep_last(10);
+  qos_best.best_effort();
+  qos_best.durability_volatile();
 
-  _lastControlTime = this->get_clock()->now();
-  _lastActuatorTime = this->get_clock()->now();
+  // Faster best effort QOS
+  rclcpp::QoS qos_index = qos_rel; 
+  qos_index.deadline(std::chrono::milliseconds(2)); 
+  qos_index.lifespan(std::chrono::milliseconds(2));
+
+  _motorCmdPub = this->create_publisher<geometry_msgs::msg::Vector3>("/motor_command", qos_best);
 
   // Subscribers to robot sensor topics
   _depthSub = this->create_subscription<std_msgs::msg::Float32>(
     "/depth",
-    qos,
+    qos_rel,
     std::bind(&BuoyancyNode::depth_callback, this, std::placeholders::_1));
 
   _indexSub = this->create_subscription<std_msgs::msg::Int8>(
     "/index",
-    qos,
+    qos_rel,
     std::bind(&BuoyancyNode::index_callback, this, std::placeholders::_1));
+
+    _lastControlTime = this->get_clock()->now();
 
     // Control update timer
     #ifndef CORE_TEENSY
-        _controlTimer = this->create_wall_timer(
-          std::chrono::milliseconds(100),
-          [this]()
-          { 
-              float dt_u = 0.1f;
-
-              _VBS->update_control(dt_u); 
-
-              RCLCPP_INFO(this->get_logger(), 
-                  "Control Output: %.3f\nPiston Volume: %.3f\n",  
-                  _VBS->get_control_volume()*1000000, _VBS->get_piston_volume()*1000000);
-          }
-      );
+      BuoyancyNode::setup_timers();
     #endif
 
-    // Actuation update timer
-    #ifndef CORE_TEENSY
-        _actuatorTimer = this->create_wall_timer(
-          std::chrono::milliseconds(10),
-          [this]()
-          {
-              _VBS->motor_command(_VBS->get_piston_volume());
+    RCLCPP_INFO(this->get_logger(), "Use Sim Time: %s", 
+            this->get_parameter("use_sim_time").as_bool() ? "True" : "False");
+}
 
-              auto msg = geometry_msgs::msg::Vector3();
-              std::vector<float> motor_command = _VBS->get_motor_command();
+void BuoyancyNode::setup_timers()
+{
+    // Control update timer (10Hz)
+    _controlTimer = this->create_timer(
+        std::chrono::milliseconds(100),
+        std::bind(&BuoyancyNode::control_callback, this)
+    );
 
-              msg.x = motor_command[0]; // freq
-              msg.y = motor_command[1]; // dir
-              msg.z = motor_command[2]; // enable
+    // Actuation update timer (100Hz)
+    _actuatorTimer = this->create_timer(
+        std::chrono::milliseconds(10),
+        std::bind(&BuoyancyNode::actuator_callback, this)
+    );
+}
 
-              _motorCmdPub->publish(msg);
-          }
-      );
-    #endif
+void BuoyancyNode::control_callback()
+{
+    auto currentControlTime = this->get_clock()->now();
+    float dt_u = (float)(currentControlTime - _lastControlTime).seconds();
+
+    if (dt_u <= 0.0) return;
+
+    _lastControlTime = currentControlTime;
+    _VBS->update_control(dt_u); 
+
+    RCLCPP_INFO(this->get_logger(), 
+        "Control Output: %.3f\nPiston Volume: %.3f\n",  
+        _VBS->get_control_volume()*1000000, _VBS->get_piston_volume()*1000000);
+  }
+
+void BuoyancyNode::actuator_callback()
+{
+    _VBS->update_motor_command();
+    
+    auto msg = geometry_msgs::msg::Vector3();
+    auto cmd = _VBS->get_motor_command();
+    msg.x = cmd[0]; msg.y = cmd[1]; msg.z = cmd[2];
+    
+    _motorCmdPub->publish(msg);
 }
 
 BuoyancyNode::~BuoyancyNode()

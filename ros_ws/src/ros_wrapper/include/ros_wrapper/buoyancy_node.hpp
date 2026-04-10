@@ -21,6 +21,7 @@ Dependencies:	rclcpp.hpp
 #include "std_msgs/msg/float32.hpp"
 #include "std_msgs/msg/int8.hpp"
 #include "geometry_msgs/msg/vector3.hpp"
+#include <chrono>
 #include "vbs.hpp"
 
 class BuoyancyNode : public rclcpp::Node
@@ -37,14 +38,17 @@ class BuoyancyNode : public rclcpp::Node
         rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr _depthSub;
         rclcpp::Subscription<std_msgs::msg::Int8>::SharedPtr _indexSub;
 
-        // Callback
+        // Callbacks
         void depth_callback(const std_msgs::msg::Float32::SharedPtr msg);
         void index_callback(const std_msgs::msg::Int8::SharedPtr msg);
+        void control_callback();
+        void actuator_callback();
 
         // Node knows the VBS class
         std::unique_ptr<VBS> _VBS;
 
         #ifndef CORE_TEENSY
+            void setup_timers();
             rclcpp::TimerBase::SharedPtr _controlTimer;
             rclcpp::TimerBase::SharedPtr _actuatorTimer;
         #endif

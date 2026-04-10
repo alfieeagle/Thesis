@@ -83,6 +83,8 @@ class Actuator
         // Setters
         void increment_piston_volume();
         void update_direction(int dir);
+        void enable();
+        void disable();
 
     private:
         // Motor parameters

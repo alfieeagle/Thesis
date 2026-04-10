@@ -58,19 +58,25 @@ class VBS
 
         // Setters
         void update_depth(float depth);
-        void motor_command(double piston_volume);
+        void update_motor_command();
         void update_control(float dt);
         void update_volume();
 
         // Getters
+        // Volumes 
         float get_vbs_volume();
         double get_control_volume();
         double get_piston_volume();
-        
+
+        // Depth
         float get_reference_depth();
         float get_current_depth();
         
+        // Command
         std::vector<float> get_motor_command();
+
+        // Emergency Stop
+        void limit_stop();
 
     private:	
 
