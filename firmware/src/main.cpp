@@ -33,14 +33,17 @@ void setup() {
 
   // Initialize pressure sensor
   // Returns true if initialization was successful
-  // Wire1 corresponds with PINS 16 (SCL) and 17 (SDA) on Teensy 4.1
-  while (!sensor.init(Wire1)) {
+  // Defaults to Wire which corresponds with 
+  // PINS 18 (SDA) and 19 (SCL) on Teensy 4.1
+  while (!sensor.init()) {
     Serial.println("Init failed!");
     Serial.println("Are SDA/SCL connected correctly?");
     Serial.println("Blue Robotics Bar30: White=SDA, Green=SCL");
     Serial.println("\n\n\n");
     delay(5000);
   }
+
+  Serial.println("Depth Sensor Found\n\n\n");
 
   // Select 30 bar model of depth sensor
   sensor.setModel(MS5837::MS5837_30BA);
@@ -76,10 +79,31 @@ void loop() {
 digitalWrite(DIR_PIN, HIGH);
 
   // Run 5000 steps and switch direction in software
-  for (uint16_t i = 5000; i>0; i--) {
-    digitalWrite(STEP_PIN, HIGH);
-    delayMicroseconds(500);
-    digitalWrite(STEP_PIN, LOW);
-    delayMicroseconds(500);
-  }
+  // for (uint16_t i = 5000; i>0; i--) {
+  //   digitalWrite(STEP_PIN, HIGH);
+  //   delayMicroseconds(500);
+  //   digitalWrite(STEP_PIN, LOW);
+  //   delayMicroseconds(500);
+  // }
+
+  // Update pressure and temperature readings
+  sensor.read();
+
+  Serial.print("Pressure: ");
+  Serial.print(sensor.pressure());
+  Serial.println(" mbar");
+
+  Serial.print("Temperature: ");
+  Serial.print(sensor.temperature());
+  Serial.println(" deg C");
+
+  Serial.print("Depth: ");
+  Serial.print(sensor.depth());
+  Serial.println(" m");
+
+  Serial.print("Altitude: ");
+  Serial.print(sensor.altitude());
+  Serial.println(" m above mean sea level");
+
+  delay(1000);
 }
