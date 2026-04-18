@@ -102,9 +102,6 @@ BuoyancyNode::BuoyancyNode()
     #ifndef CORE_TEENSY
       BuoyancyNode::setup_timers();
     #endif
-
-    RCLCPP_INFO(this->get_logger(), "Use Sim Time: %s", 
-            this->get_parameter("use_sim_time").as_bool() ? "True" : "False");
 }
 
 void BuoyancyNode::setup_timers()

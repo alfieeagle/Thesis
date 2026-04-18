@@ -53,7 +53,7 @@ class BuoyancyNode : public rclcpp::Node
             rclcpp::TimerBase::SharedPtr _actuatorTimer;
         #endif
 
-        // Create timer to align with gazebo time
+        // Create timer to align with simulink time
         rclcpp::Time _lastControlTime;
         rclcpp::Time _lastActuatorTime;
         bool _firstControlStep = true;
