@@ -48,8 +48,6 @@ class VBS
             float mu_s, 
             float T_hold, 
             float FS, 
-            float torqueCurveGrad, 
-            float torqueCurveInt,
             float maxMotorSpeed,
             float minMotorSpeed,
             float pistonArea,
@@ -61,6 +59,8 @@ class VBS
         void update_motor_command();
         void update_control(float dt);
         void update_volume();
+        void enable();
+        void disable();
 
         // Getters
         // Volumes 
@@ -74,9 +74,6 @@ class VBS
         
         // Command
         std::vector<float> get_motor_command();
-
-        // Emergency Stop
-        void limit_stop();
 
     private:	
 

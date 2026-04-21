@@ -35,8 +35,6 @@ class Actuator
             float mu_s, 
             float T_hold, 
             float FS, 
-            float torqueCurveGrad, 
-            float torqueCurveInt,
             float maxMotorSpeed,
             float minMotorSpeed,
             float pistonArea,
@@ -90,8 +88,6 @@ class Actuator
         // Motor parameters
         float _motorEfficiency;
         float _holdingTorque;
-        float _torqueCurveGrad;
-        float _torqueCurveIntercept;
         float _maxSpeedRPM;
         float _minSpeedRPM;
         int _stepsPerRev;

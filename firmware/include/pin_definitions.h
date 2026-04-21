@@ -12,11 +12,18 @@
 #define DRIVER_ADDRESS 0b00 // TMC2209 Driver address according to MS1 and MS2
 #define R_SENSE 0.11f // Internal resistance
 
+// Timing
 int const DEBOUNCE_TIME = 50;
-int const ACTUATOR_TIMER = 10;
+int const ACTUATOR_TIMER_INTERVAL_MILLIS = 10;
+int const CONTROL_TIMER_INTERVAL_MILLIS = 100;
+
+// Driver parameters
 const long SERIAL_BAUD_RATE = 500000;
 const int RUN_CURRENT_PERCENT = 50;
 const int HOLD_CURRENT_PERCENT = 50;
 const int STALL_GUARD_THRESHOLD = 10;
+
+// Logic parameters
+const float DEADZONE_THRESHOLD = 0.01f;
 
 #endif

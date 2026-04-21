@@ -36,15 +36,13 @@ VBS::VBS(
     float mu_s, 
     float T_hold, 
     float FS, 
-    float torqueCurveGrad, 
-    float torqueCurveInt,
     float maxMotorSpeed,
     float minMotorSpeed,
     float pistonArea,
     int stepsPerRev
 ):
 _controller(kp, kd, ki),
-_actuator(e_g, e_m, GR, d_m, s_l, mu_s,T_hold, FS, torqueCurveGrad, torqueCurveInt, maxMotorSpeed, minMotorSpeed, pistonArea, stepsPerRev),
+_actuator(e_g, e_m, GR, d_m, s_l, mu_s,T_hold, FS, maxMotorSpeed, minMotorSpeed, pistonArea, stepsPerRev),
 _dt(dt),
 _length(length),
 _radius(radius),
@@ -105,11 +103,6 @@ void VBS::update_motor_command() {
     _motorCommand = motor_command;
 }
 
-void VBS::limit_stop()
-{
-    _actuator.disable();
-}
-
 void VBS::update_depth(float depth)
 {
     _currentDepth = depth;
@@ -148,4 +141,14 @@ double VBS::get_piston_volume()
 std::vector<float> VBS::get_motor_command()
 {
     return _motorCommand;
+}
+
+void VBS::enable()
+{
+    _actuator.enable();
+}
+
+void VBS::disable()
+{
+    _actuator.disable();
 }

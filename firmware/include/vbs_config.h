@@ -1,4 +1,5 @@
 #ifndef VBS_CONFIG_H
+
 #define VBS_CONFIG_H
 
 // Controller params
@@ -20,8 +21,6 @@
 #define MU_S 0.007f
 #define T_HOLD 0.4f
 #define SAFETY_FACTOR 1.2f 
-#define TORQUE_CURVE_GRAD 5995.0f
-#define TORQUE_CURVE_INT 1978.0f
 #define MAX_MOTOR_SPEED_RPM 600.0f
 #define MIN_MOTOR_SPEED_RPM 130.0f
 #define MAX_STEPS_PER_PERIOD 2797
@@ -29,4 +28,6 @@
 #define PISTON_AREA 0.0029f
 #define STEPS_PER_REV 200
 
+
 #endif
+
