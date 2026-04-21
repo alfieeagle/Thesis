@@ -57,37 +57,27 @@ void setup() {
 	pinMode(DIR_PIN, OUTPUT);
 
 	// Setup input pins
-	pinMode(INDEX, INPUT);
-	pinMode(LIM_EXT, INPUT);
+	// pinMode(LIM_EXT, INPUT);
 	pinMode(LIM_RET, INPUT);
 
 	// Set the limit switches as debounce pins
-	debouncePins(LIM_EXT, LIM_RET, DEBOUNCE_TIME);
+	debouncePins(LIM_RET, LIM_RET, DEBOUNCE_TIME_MS);
 
 	// Setup interrup for limit switches
 	// attachInterrupt(LIM_EXT, handle_max_extension, LOW);
-	// attachInterrupt(LIM_RET, handle_max_retraction, LOW);
+	attachInterrupt(LIM_RET, handle_max_retraction, FALLING);
 
 	// Disable driver initially 
 	digitalWrite(EN_PIN, LOW);
-	digitalWrite(DIR_PIN, LOW);
 
-	// SERIAL_PORT.begin(115200);      // HW UART drivers
-
-	// Setup the driver
-	// Driver.setup(SERIAL_PORT);      // UART: Init SW UART with default 115200 baudrate
-	// Driver.setHardwareEnablePin(EN_PIN);				// Tie the software and hardware enable pins together
-	// Driver.enableAutomaticCurrentScaling();				// Put driver in current control mode
-	// Driver.enableAutomaticGradientAdaptation();			// Allow for automatic PID gradient adaption with changing loads
-	// Driver.setRunCurrent(RUN_CURRENT_PERCENT);			
-	// Driver.setStandstillMode(TMC2209::StandstillMode::STRONG_BRAKING);	// Have the motor brake hard when stopped
-	// Driver.setHoldCurrent(HOLD_CURRENT_PERCENT);
-	// Driver.enableStealthChop();								// Reduce driver noise 
-	// Driver.setStallGuardThreshold(STALL_GUARD_THRESHOLD);	// Set sensitivity to stalling (0..255), Sensitivity (Low..High)
-	// Driver.enableCoolStep();								// Cool step provides up 75% energy savings 
-	// Driver.enable();
-	// stealth_chop_automatic_tuning();						// Run the tuning sequency to allow driver to auto adjust PID accurately
-
+	// Setup the motor
+	motor.setMaxSpeed(MAX_MOTOR_STEPS_SEC);
+	motor.setAcceleration(2000);
+	motor.setMinPulseWidth(10);
+	homing_sequence();
+	delay(200);
+	neutral_point();
+				
 	// Set the initial depth
 	// _VBS.update_depth(DepthSensor.depth());
 
@@ -96,12 +86,19 @@ void setup() {
 
 void loop() 
 {
+	// digitalWrite(STEP_PIN, HIGH);
+	// delayMicroseconds(500);
+	// digitalWrite(STEP_PIN, LOW);
+	// delayMicroseconds(500);
+
 	// // Update and send the motor command at 100 Hz
 	// if(ActuatorTimer.check() == true)
 	// {
 	// 	_VBS.update_motor_command();
 	// 	std::vector<float> motorCommand = _VBS.get_motor_command();
 	// 	send_motor_command(motorCommand);
+
+		
 	// }
 
 	// // Read depth at 10 Hz and update control
@@ -122,9 +119,4 @@ void loop()
 	// 	Serial.print("Message recieved: ");
 	// 	Serial.println(incomingByte, DEC);
 	// }
-	
-	digitalWrite(STEP_PIN, HIGH);
-	delayMicroseconds(500);
-	digitalWrite(STEP_PIN, LOW);
-	delayMicroseconds(500);
 }

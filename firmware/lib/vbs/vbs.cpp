@@ -68,6 +68,8 @@ _motorCommand(3)
     _motorCommand[0] = 2000.0f;
     _motorCommand[1] = 1.0f;
     _motorCommand[2] = 1.0f;
+
+    _home = false;
 }
 
 void VBS::update_control(float dt) {
@@ -151,4 +153,14 @@ void VBS::enable()
 void VBS::disable()
 {
     _actuator.disable();
+}
+
+void VBS::set_home(bool flag)
+{
+    _home = flag;
+}
+
+bool VBS::get_home()
+{
+    return _home;
 }

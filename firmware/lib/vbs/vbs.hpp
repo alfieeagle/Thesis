@@ -61,6 +61,7 @@ class VBS
         void update_volume();
         void enable();
         void disable();
+        void set_home(bool flag);
 
         // Getters
         // Volumes 
@@ -71,6 +72,8 @@ class VBS
         // Depth
         float get_reference_depth();
         float get_current_depth();
+
+        bool get_home();
         
         // Command
         std::vector<float> get_motor_command();
@@ -90,6 +93,7 @@ class VBS
         // Actuator
         Actuator _actuator;
         std::vector<float> _motorCommand;
+        bool _home;
 
         // Time step
         float _dt;

@@ -11,6 +11,7 @@
 #define DT 0.1f
 #define VBS_LENGTH 0.2f
 #define VBS_RADIUS 0.056f
+#define VBS_HALF_STROKE 0.043f
 
 // Actuator params
 #define E_G 0.9f
@@ -21,8 +22,10 @@
 #define MU_S 0.007f
 #define T_HOLD 0.4f
 #define SAFETY_FACTOR 1.2f 
-#define MAX_MOTOR_SPEED_RPM 600.0f
-#define MIN_MOTOR_SPEED_RPM 130.0f
+#define MAX_MOTOR_SPEED_RPM 600
+#define MIN_MOTOR_SPEED_RPM 130
+#define MAX_MOTOR_STEPS_SEC 2000
+#define MIN_MOTOR_STEPS_SEC 433
 #define MAX_STEPS_PER_PERIOD 2797
 #define MIN_STEPS_PER_PERIOD 606
 #define PISTON_AREA 0.0029f
