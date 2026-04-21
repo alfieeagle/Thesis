@@ -29,66 +29,69 @@ AccelStepper motor(1, STEP_PIN, DIR_PIN);
 void handle_max_extension()
 {
 	// Disable motor
-	digitalWrite(EN_PIN, HIGH);
+	motor.disableOutputs();
     _VBS.disable();
 }
 
 void handle_max_retraction()
 {
 	// Disable motor
-	digitalWrite(EN_PIN, HIGH);
+	motor.disableOutputs();
     _VBS.disable();
     _VBS.set_home(true);
 }
 
-// void send_motor_command(const std::vector<float>& motorCommand)
-// {
-//     float freq = motorCommand[0];
-//     int dir = (int)motorCommand[1];
-//     int enable = (int)motorCommand[2];
-//     float period = 1/freq;
+void send_motor_command(const std::vector<float>& motorCommand)
+{
+    // Define directions
+    float extend = 1.0f;
+    float retract = -1.0f;
+    float hold = 0.0f;
 
-// 	if(enable == 0)
-//     {
-//         digitalWrite(EN_PIN, HIGH);
-//     }
-//     else
-//     {
-//         digitalWrite(EN_PIN, LOW);
-//         if(dir > 0)
-//         {
-//             digitalWrite(DIR_PIN, HIGH);
-//             digital
-//         }
-//         else if (dir < 0)
-//         {
-//            Driver.moveAtVelocity(-stepsPerPeriod);
-//         }
-//         else
-//         {
-//             Driver.moveAtVelocity(0);
-//         }
-//     }
-// }
+    // Extract the frequency and direction from the command
+    float freq = motorCommand[0];
+    float dir = motorCommand[1];
 
-// void stealth_chop_automatic_tuning()
-// {
-//     // Keep the motor on and stationary for > 130 ms
-//     Driver.enable();
-//     Driver.moveAtVelocity(0);
-//     delay(200);
+    // Only enable the piston if it's outside the deadzone
+    int enable = std::abs(_VBS.get_piston_volume() - _VBS.get_control_volume()) < DEADZONE_THRESHOLD ? 0 : 1;
 
-//     // Move the motor at a mid RPM
-//     Driver.moveAtVelocity(MAX_STEPS_PER_PERIOD/2);
-//     delay(1000);
+	if(enable == 0)
+    {
+        motor.disableOutputs();
+    }
+    else
+    {
+        motor.enableOutputs();
+        if(dir == extend)
+        {
+            motor.setSpeed(-freq);
+        }
+        else if (dir == retract)
+        {
+           motor.setSpeed(-freq);
+        }
+        else
+        {
+            motor.setSpeed(0);
+        }
+    }
+}
 
-//     Driver.disable();
-//     Serial.println("Stealth chop automatic tuning complete.");
-// }
+void step()
+{
+    // Step the motor
+    motor.runSpeed();
 
+    // Update the VBS class to reflect new volume
+    _VBS.update_volume();
+}
+
+// Go to the fully retracted position
 void homing_sequence()
 {
-    digitalWrite(EN_PIN, LOW);
+    motor.enableOutputs();
+
+    // Ensure that the piston reaches the fully retracted position
     long steps = distance_to_steps(VBS_HALF_STROKE * 4);
     motor.move(steps);
 
@@ -102,14 +105,21 @@ void homing_sequence()
     motor.setCurrentPosition(0);
 }
 
+// Go to the neutrally buoyant point
 void neutral_point()
 {
-    digitalWrite(EN_PIN, LOW);
+    motor.enableOutputs();
+
+    // Neutrally buoyant point should be one half stroke from the 
+    // fully retracted position
     long steps = distance_to_steps(VBS_HALF_STROKE);
+    
+    // Negative steps equals extension
     motor.moveTo(-steps);
     motor.runToPosition();
 }
 
+// Convert a distance in meteres to the number of steps required by the motor
 long distance_to_steps(float distance_m)
 {
     long steps = (distance_m/S_L)*GEAR_RATIO*STEPS_PER_REV;

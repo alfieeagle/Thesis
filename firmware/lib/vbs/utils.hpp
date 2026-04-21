@@ -21,10 +21,9 @@ extern AccelStepper motor;
 void handle_max_extension();
 void handle_max_retraction();
 void send_motor_command(const std::vector<float>& motorCommand);
-void stealth_chop_automatic_tuning();
 void homing_sequence();
 void neutral_point();
-
+void step();
 long distance_to_steps(float distance_m);
 
 #endif
