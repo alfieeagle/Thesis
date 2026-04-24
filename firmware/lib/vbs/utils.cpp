@@ -31,6 +31,7 @@ void handle_max_extension()
 	// Disable motor
 	motor.disableOutputs();
     _VBS.disable();
+    Serial.println("Fully Extended");
 }
 
 void handle_max_retraction()
@@ -39,6 +40,7 @@ void handle_max_retraction()
 	motor.disableOutputs();
     _VBS.disable();
     _VBS.set_home(true);
+    Serial.println("Fully retracted");
 }
 
 void send_motor_command(const std::vector<float>& motorCommand)
@@ -46,7 +48,6 @@ void send_motor_command(const std::vector<float>& motorCommand)
     // Define directions
     float extend = 1.0f;
     float retract = -1.0f;
-    float hold = 0.0f;
 
     // Extract the frequency and direction from the command
     float freq = motorCommand[0];
@@ -103,6 +104,7 @@ void homing_sequence()
 
     // Set the home position
     motor.setCurrentPosition(0);
+    digitalWrite(RESET_PIN, LOW);
 }
 
 // Go to the neutrally buoyant point
