@@ -30,6 +30,7 @@ target_include_directories(app PRIVATE
 # 5. Linking (macOS specific)
 if(APPLE)
     target_link_libraries(app glfw "-framework Cocoa" "-framework OpenGL" "-framework IOKit")
+    add_definitions(-DGL_SILENCE_DEPRECATION)
 else()
     target_link_libraries(app glfw GL)
 endif()
