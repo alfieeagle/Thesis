@@ -26,12 +26,20 @@
 #define MIN_MOTOR_SPEED_RPM 130
 #define MAX_MOTOR_STEPS_SEC 2000
 #define MIN_MOTOR_STEPS_SEC 433
-// #define MAX_STEPS_PER_PERIOD 2797
-// #define MIN_STEPS_PER_PERIOD 606
 #define MAX_ACCELERATION 2000
 #define MIN_PULSE_WIDTH_MS 10
 #define PISTON_AREA 0.0029f
 #define STEPS_PER_REV 200
+
+// Timing
+const int DEBOUNCE_TIME_MS = 200;
+const int TIMER_INTERVAL_MILLIS = 100;
+
+// Driver parameters
+const long SERIAL_BAUD_RATE = 500000; 
+
+// Logic parameters
+const float DEADZONE_THRESHOLD = 0.01f;
 
 
 #endif

@@ -13,7 +13,6 @@
 #include "pin_definitions.h"
 
 extern MS5837 DepthSensor;  
-extern Metro ActuatorTimer;
 extern Metro ControlTimer;
 extern VBS _VBS;
 extern AccelStepper motor;  

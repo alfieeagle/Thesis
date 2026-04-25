@@ -1,8 +1,7 @@
 #include "utils.hpp"
 
 MS5837 DepthSensor; 
-Metro ActuatorTimer = Metro(ACTUATOR_TIMER_INTERVAL_MILLIS);
-Metro ControlTimer = Metro(CONTROL_TIMER_INTERVAL_MILLIS);
+Metro ControlTimer = Metro(TIMER_INTERVAL_MILLIS);
 VBS _VBS(
     KP,
     KD,

@@ -112,25 +112,20 @@ void setup() {
 
 void loop() 
 {
-	// Update and send the motor command at 100 Hz
-	// if(ActuatorTimer.check() == true)
-	// {
-	// 	_VBS.update_motor_command();
-	// 	std::vector<float> motorCommand = _VBS.get_motor_command();
-	// 	send_motor_command(motorCommand);
-	// }
-
-	// Read depth at 10 Hz and update control
+	// Read depth and update control at 10 Hz
 	// provided it's not within the 10 cm deadzone
-	// if(ControlTimer.check() == true)
-	// {
-	// 	float newDepth = DepthSensor.depth();
-	// 	if (std::abs(newDepth - _VBS.get_current_depth()) > DEADZONE_THRESHOLD)
-	// 	{
-	// 		_VBS.update_depth(newDepth);
-	// 		_VBS.update_control(CONTROL_TIMER_INTERVAL_MILLIS/1000);
-	// 	}
-	// }
+	if(ControlTimer.check() == true)
+	{
+		float newDepth = DepthSensor.depth();
+		if (std::abs(newDepth - _VBS.get_current_depth()) > DEADZONE_THRESHOLD)
+		{
+			_VBS.update_depth(newDepth);
+			_VBS.update_control(TIMER_INTERVAL_MILLIS/1000);
+			_VBS.update_motor_command();
+			std::vector<float> motorCommand = _VBS.get_motor_command();
+			send_motor_command(motorCommand);
+		}
+	}
 
 	// // Step the motor
 	// step();
