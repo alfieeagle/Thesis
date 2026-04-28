@@ -1,5 +1,7 @@
 #include "utils.hpp"
 
+static Command cmd;
+
 int main(int, char**) 
 {
     GLFWwindow* window = NULL;
@@ -19,6 +21,12 @@ int main(int, char**)
     // 3. Main Loop
     while (!glfwWindowShouldClose(window))
     {
+        // Read data
+        StatusMessage status_msg = decode_data_and_read(serialPort);
+        depth_history[offset] = status_msg.depth;
+        ref_history[offset] = status_msg.ref_depth;
+        offset = (offset + 1) % PLOT_HISTORY_SIZE;
+
         glfwPollEvents();
 
         // Start Frame
@@ -33,16 +41,7 @@ int main(int, char**)
 
         // --- Application Window ---
         ImGui::Begin("VBS Status", &my_window_active);
-        ImGui::Text("System: Online");
-        if (ImGui::Button("Disable"))
-        {
-            // Add your trigger logic here
-        }
-        if(ImGui::Button("Enable"))
-        {
-            
-        }
-
+        render_depth_plot();
         ImGui::End();
         // --------------------------
 

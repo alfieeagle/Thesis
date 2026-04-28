@@ -6,13 +6,19 @@ list(APPEND CMAKE_PREFIX_PATH "/opt/homebrew")
 
 find_package(glfw3 REQUIRED)
 
+set(NANOPB_SOURCES
+    "${CMAKE_CURRENT_SOURCE_DIR}/libs/nanopb/pb_encode.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/libs/nanopb/pb_decode.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/libs/nanopb/pb_common.c"
+)
 file(GLOB IMGUI_CORE_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/libs/imgui/*.cpp")
 file(GLOB BACKEND_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/backends/*.cpp")
 file(GLOB IMPLOT_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/libs/implot/*.cpp")
 file(GLOB UTILS_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/libs/utils/*.cpp")
 file(GLOB USER_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB MSG_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/messages/*.c")
 
-set(ALL_SOURCES ${IMGUI_CORE_SOURCES} ${USER_SOURCES} ${BACKEND_SOURCES} ${IMPLOT_SOURCES} ${UTILS_SOURCES})
+set(ALL_SOURCES ${IMGUI_CORE_SOURCES} ${USER_SOURCES} ${BACKEND_SOURCES} ${IMPLOT_SOURCES} ${UTILS_SOURCES} ${MSG_SOURCES} ${NANOPB_SOURCES})
 
 add_executable(app ${ALL_SOURCES})
 
@@ -20,6 +26,7 @@ target_include_directories(app PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
     "${CMAKE_CURRENT_SOURCE_DIR}/libs/imgui"    
     "${CMAKE_CURRENT_SOURCE_DIR}/libs/implot"
+    "${CMAKE_CURRENT_SOURCE_DIR}/libs/nanopb"
     "${CMAKE_CURRENT_SOURCE_DIR}/libs/utils"
     "${CMAKE_CURRENT_SOURCE_DIR}/messages"
     "${CMAKE_CURRENT_SOURCE_DIR}/backends"  

@@ -26,13 +26,13 @@ int init_ImGUI(GLFWwindow** window) {
     // 1. Setup GLFW
     if (!glfwInit())
     {
-        return -1;
+        return 1;
     }
 
     if (!window)
     {
         glfwTerminate();
-	    return -1;
+	    return 1;
     }
 
     // Apple-specific OpenGL requirements
@@ -43,7 +43,10 @@ int init_ImGUI(GLFWwindow** window) {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     *window = glfwCreateWindow(1280, 720, "VBS Control Dashboard", nullptr, nullptr);
-    if (window == nullptr) return 1;
+    if (window == nullptr)
+    {
+        return 1;
+    } 
     glfwMakeContextCurrent(*window);
     glfwSwapInterval(1); // VSync
 
@@ -59,10 +62,10 @@ int init_ImGUI(GLFWwindow** window) {
 
     if (!ImPlot::CreateContext())
     {
-        return -1;
+        return 1;
     }
 
-    return 1;
+    return 0;
 }
 
 int encode_data_and_send(int serialPort, Command msg)
@@ -83,7 +86,7 @@ int encode_data_and_send(int serialPort, Command msg)
     if (!status)
     {
         printf("Encoding failed: %s\n", PB_GET_ERROR(&stream));
-        return -1;
+        return 1;
     }
 
     // Write the start byte, length and encoded message to the serial port
@@ -100,7 +103,7 @@ int encode_data_and_send(int serialPort, Command msg)
     }
 }
 
-int decode_data_and_read(int serialPort, StatusMessage msg)
+StatusMessage decode_data_and_read(int serialPort)
 {
     // Only start decoding if at the start of the frame
     uint8_t startByte;
@@ -130,7 +133,6 @@ int decode_data_and_read(int serialPort, StatusMessage msg)
             if (!status)
             {
                 printf("Decoding failed: %s\n", PB_GET_ERROR(&stream));
-                return -1;
             }
 
             // If all went well, print the result
@@ -145,6 +147,16 @@ int decode_data_and_read(int serialPort, StatusMessage msg)
                 message.status ? "True" : "False",
                 message.piston_pos,
                 message.control_volume);
+
+            // Create status message struct to pass back
+            StatusMessage recieved_msg;
+            recieved_msg.depth = message.depth;
+            recieved_msg.ref_depth = message.ref_depth;
+            recieved_msg.status = message.status;
+            recieved_msg.piston_pos = message.piston_pos;
+            recieved_msg.control_volume = message.control_volume;
+
+            return recieved_msg;
         }
     }
 }
@@ -153,3 +165,37 @@ void clean_serial(int serialPort)
 {
     close(serialPort);
 }
+
+int render_depth_plot()
+    {
+        ImGui::SetNextWindowPos(ImVec2(0, 70), ImGuiCond_Always);
+        ImGui::SetNextWindowSize(ImVec2(
+                                        ImGui::GetIO().DisplaySize.x-0,
+                                        ImGui::GetIO().DisplaySize.y-70),
+                                        ImGuiCond_Always);
+        ImGui::Begin("plot_container", NULL,
+                    ImGuiWindowFlags_NoMove |
+                    ImGuiWindowFlags_NoCollapse |
+                    ImGuiWindowFlags_NoResize |
+                    ImGuiWindowFlags_NoTitleBar);
+
+        double y_min = -5;
+        double y_max = 5;
+
+        if (ImPlot::BeginPlot("Reference Tracking Performance", ImVec2(-1, ImGui::GetContentRegionAvail().y)))
+        {
+            ImPlot::SetupAxis(ImAxis_X1, "Samples");
+            ImPlot::SetupAxis(ImAxis_Y1, "Depth (m)");
+            ImPlot::SetupAxisLimits(ImAxis_Y1, y_min, y_max, ImGuiCond_Always);
+
+            // Plot the Target/Reference Depth 
+            ImPlot::PlotLine("Target", ref_history, PLOT_HISTORY_SIZE, offset);
+
+            // Plot the Actual Depth
+            ImPlot::PlotLine("Actual", depth_history, PLOT_HISTORY_SIZE, offset);
+            ImPlot::EndPlot();
+        }
+
+        ImGui::End();
+        return 1;
+    }
