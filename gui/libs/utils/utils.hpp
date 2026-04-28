@@ -25,9 +25,9 @@ extern "C" {
 #define PLOT_HISTORY_SIZE 500
 
 typedef uint8_t SerialBuffer[BUFFER_SIZE];
-static float depth_history[PLOT_HISTORY_SIZE] = {0};
-static float ref_history[PLOT_HISTORY_SIZE] = {0};
-static int offset = 0;
+extern float depth_history[PLOT_HISTORY_SIZE];
+extern float ref_history[PLOT_HISTORY_SIZE];
+extern int offset;
 
 typedef struct StatusMessage
 {

@@ -1,25 +1,47 @@
 #include "utils.hpp"
 
+float depth_history[PLOT_HISTORY_SIZE] = {0};
+float ref_history[PLOT_HISTORY_SIZE] = {0};
+int offset = 0;
+
 void configure_termios(int* serialPort) {
-
     struct termios options;
-    tcgetattr(*serialPort, &options);               // Get the current options
-    cfsetispeed(&options, B115200);                       // Set input baud rate to 9600
-    cfsetospeed(&options, B115200);                       // Set output baud rate to 9600
-    options.c_cflag &= ~PARENB;                         // Disable parity checking
-    options.c_cflag &= ~CSTOPB;                         // Use 1 stop bit
-    options.c_cflag &= ~CSIZE;                          // Mask the character size
-    options.c_cflag |= CS8;                             // Select 8-bit data size
-    options.c_cflag |= (CLOCAL | CREAD);                // Enable receiver and ignore modem control lines
-    options.c_cflag &= ~CRTSCTS;                        // Disable hardware flow control
-    options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG); // Disable canonical, echoing, signal generation (raw input)
-    options.c_iflag &= ~(IXON | IXOFF | IXANY);         // Disable software flow control
-    options.c_oflag &= ~OPOST;                          // Select raw output
-    options.c_cc[VMIN]  = 0;                            // Return immediately if data is available
-    options.c_cc[VTIME] = 10;                           // Return 0 if no data arrives within 1 second
-    tcsetattr(*serialPort, TCSANOW, &options);      // Set the new options
+    if (tcgetattr(*serialPort, &options) != 0) {
+        perror("Error from tcgetattr");
+        return;
+    }
 
-    return;
+    cfsetispeed(&options, B115200);
+    cfsetospeed(&options, B115200);
+
+    // 8N1 (8 bits, no parity, 1 stop bit)
+    options.c_cflag &= ~PARENB;
+    options.c_cflag &= ~CSTOPB;
+    options.c_cflag &= ~CSIZE;
+    options.c_cflag |= CS8;
+
+    // No Hardware Flow Control
+    options.c_cflag &= ~CRTSCTS;
+    options.c_cflag |= (CLOCAL | CREAD);
+
+    // --- THE FIXES ---
+
+    // 1. Fully Disable Canonical Input (Critical for Binary/Protobuf)
+    // This ensures every byte is treated as data, not a command.
+    options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+
+    // 2. Disable all special processing on input/output
+    options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+    options.c_oflag &= ~OPOST;
+
+    // 3. Set for Pure Non-Blocking
+    // VMIN=0, VTIME=0 means "Return immediately with whatever is in the buffer"
+    options.c_cc[VMIN]  = 0;
+    options.c_cc[VTIME] = 0;
+
+    if (tcsetattr(*serialPort, TCSANOW, &options) != 0) {
+        perror("Error from tcsetattr");
+    }
 }
 
 int init_ImGUI(GLFWwindow** window) {
@@ -166,35 +188,21 @@ void clean_serial(int serialPort)
 }
 
 int render_depth_plot()
+{
+    // Ensure we fill the available space in the parent window
+    if (ImPlot::BeginPlot("Reference Tracking Performance", ImVec2(-1, -1)))
     {
-        ImGui::SetNextWindowPos(ImVec2(0, 70), ImGuiCond_Always);
-        ImGui::SetNextWindowSize(ImVec2(
-                                        ImGui::GetIO().DisplaySize.x-0,
-                                        ImGui::GetIO().DisplaySize.y-70),
-                                        ImGuiCond_Always);
-        ImGui::Begin("plot_container", NULL,
-                    ImGuiWindowFlags_NoMove |
-                    ImGuiWindowFlags_NoCollapse |
-                    ImGuiWindowFlags_NoResize |
-                    ImGuiWindowFlags_NoTitleBar);
+        ImPlot::SetupAxis(ImAxis_X1, "Samples");
+        ImPlot::SetupAxis(ImAxis_Y1, "Depth (m)");
+        
+        // Lock Y-axis to 0-2m for the sine wave
+        ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0, 2.0, ImGuiCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_X1, 0, (double)PLOT_HISTORY_SIZE, ImGuiCond_Always);
 
-        double y_min = -5;
-        double y_max = 5;
-
-        if (ImPlot::BeginPlot("Reference Tracking Performance", ImVec2(-1, ImGui::GetContentRegionAvail().y)))
-        {
-            ImPlot::SetupAxis(ImAxis_X1, "Samples");
-            ImPlot::SetupAxis(ImAxis_Y1, "Depth (m)");
-            ImPlot::SetupAxisLimits(ImAxis_Y1, y_min, y_max, ImGuiCond_Always);
-
-            // Plot the Target/Reference Depth 
-            ImPlot::PlotLine("Target", ref_history, PLOT_HISTORY_SIZE, offset);
-
-            // Plot the Actual Depth
-            ImPlot::PlotLine("Actual", depth_history, PLOT_HISTORY_SIZE, offset);
-            ImPlot::EndPlot();
-        }
-
-        ImGui::End();
-        return 1;
+        ImPlot::PlotLine("Actual", depth_history, (int)PLOT_HISTORY_SIZE);
+        ImPlot::PlotLine("Target", ref_history, (int)PLOT_HISTORY_SIZE);        
+        
+        ImPlot::EndPlot();
     }
+    return 1;
+}
