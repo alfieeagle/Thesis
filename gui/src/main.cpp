@@ -1,43 +1,20 @@
-#include "imgui.h"
-#include "implot.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-
-#include <GLFW/glfw3.h>
-// #include <fcntl.h>
-// #include <termios.h>
+#include "utils.hpp"
 
 int main(int, char**) 
 {
-    // 1. Setup GLFW
-    if (!glfwInit()) return 1;
-
-    // Apple-specific OpenGL requirements
-    const char* glsl_version = "#version 150";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "VBS Control Dashboard", nullptr, nullptr);
-    if (window == nullptr) return 1;
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // VSync
-
-    // 2. Setup ImGui
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImPlot::CreateContext();
-    ImGui::StyleColorsDark();
-
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
+    GLFWwindow* window = NULL;
+    int init = init_ImGUI(&window);
 
     bool my_window_active;
 
     // Setup serial coms
-    // int fileDescriptor = open("/dev/tty.usbmodem157757901", O_RDWR | O_NOCTTY | O_NONBLOCK);
-    // configureTermios(&fileDescriptor);
+    int fileDescriptor = open("/dev/tty.usbmodem157757901", O_RDWR | O_NOCTTY | O_NONBLOCK);
+
+    // Check for errors
+    if (fileDescriptor < 0) {
+        printf("Error %i from open: %s\n", errno, strerror(errno));
+    }
+    configure_termios(&fileDescriptor);
 
     // 3. Main Loop
     while (!glfwWindowShouldClose(window))
