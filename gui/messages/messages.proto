@@ -2,7 +2,7 @@ syntax = "proto3";
 
 message system_status
 {
-    float dept = 1;
+    float depth = 1;
     float ref_depth = 2;
     bool status = 3;
     float piston_pos = 4;

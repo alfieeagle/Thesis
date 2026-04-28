@@ -19,15 +19,37 @@
 
 #define BUFFER_SIZE 1000
 
-typedef char SerialBuffer[BUFFER_SIZE];
+typedef uint8_t SerialBuffer[BUFFER_SIZE];
 
-void configure_termios(int* fileDescriptor);
+typedef struct StatusMessage
+{
+    float depth; 
+    float ref_depth;
+    bool status;
+    float piston_pos;
+    float control_volume;
+
+    // Number of bytes in a status message
+    int len = 17;
+}StatusMessage;
+
+typedef struct Command
+{
+    float target_depth;
+    bool enable;
+
+    // Number of bytes in a command msg
+    int len = 5;
+}Command;
+
+void configure_termios(int* serialport);
 
 int init_ImGUI(GLFWwindow** window);
 
-void read_from_teensy(int fileDescriptor);
+int encode_data_and_send(Command msg);
+int decode_data_and_read(StatusMessage msg);
 
-void write_to_teensy(int fileDescriptor, void* buffer, size_t count);
+void clean_serial(int serialPort);
 
 #endif
 

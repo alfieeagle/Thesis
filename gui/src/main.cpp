@@ -8,13 +8,13 @@ int main(int, char**)
     bool my_window_active;
 
     // Setup serial coms
-    int fileDescriptor = open("/dev/tty.usbmodem157757901", O_RDWR | O_NOCTTY | O_NONBLOCK);
+    int serialPort = open("/dev/tty.usbmodem157757901", O_RDWR | O_NOCTTY | O_NONBLOCK);
 
     // Check for errors
-    if (fileDescriptor < 0) {
+    if (serialPort < 0) {
         printf("Error %i from open: %s\n", errno, strerror(errno));
     }
-    configure_termios(&fileDescriptor);
+    configure_termios(&serialPort);
 
     // 3. Main Loop
     while (!glfwWindowShouldClose(window))

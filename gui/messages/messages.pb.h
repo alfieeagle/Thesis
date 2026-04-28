@@ -11,7 +11,7 @@
 
 /* Struct definitions */
 typedef struct _system_status {
-    float dept;
+    float depth;
     float ref_depth;
     bool status;
     float piston_pos;
@@ -35,7 +35,7 @@ extern "C" {
 #define command_init_zero                        {0, 0}
 
 /* Field tags (for use in manual encoding/decoding) */
-#define system_status_dept_tag                   1
+#define system_status_depth_tag                  1
 #define system_status_ref_depth_tag              2
 #define system_status_status_tag                 3
 #define system_status_piston_pos_tag             4
@@ -45,7 +45,7 @@ extern "C" {
 
 /* Struct field encoding specification for nanopb */
 #define system_status_FIELDLIST(X, a) \
-X(a, STATIC,   SINGULAR, FLOAT,    dept,              1) \
+X(a, STATIC,   SINGULAR, FLOAT,    depth,             1) \
 X(a, STATIC,   SINGULAR, FLOAT,    ref_depth,         2) \
 X(a, STATIC,   SINGULAR, BOOL,     status,            3) \
 X(a, STATIC,   SINGULAR, FLOAT,    piston_pos,        4) \
