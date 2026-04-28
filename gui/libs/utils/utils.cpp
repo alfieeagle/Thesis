@@ -129,52 +129,39 @@ int encode_data_and_send(int serialPort, Command msg)
 
 StatusMessage decode_data_and_read(int serialPort)
 {
-    uint8_t byte;
+    uint8_t startbyte;
     
-    // 1. HUNT for the start sequence (0xAA followed by 0xBB)
-    // We loop to discard any "junk" bytes until we find our header
-    while (read(serialPort, &byte, 1) > 0) 
+    while (read(serialPort, &startbyte, 1) > 0) 
     {
-        if (byte == 0xAA) 
+        // Wait for the correct start byte
+        if (startbyte == 0xAA) 
         {
-            // Peek at the next byte
-            uint8_t nextByte;
-            if (read(serialPort, &nextByte, 1) > 0) 
+            // Read the length
+            uint8_t len;
+            if (read(serialPort, &len, 1) > 0) 
             {
-                if (nextByte == 0xBB) 
+                // Create the buffer
+                SerialBuffer buffer;
+            
+                // Decode the message
+                int n = read(serialPort, buffer, len);
+                _system_status message = system_status_init_zero;
+                pb_istream_t stream = pb_istream_from_buffer(buffer, len);
+                
+                if (pb_decode(&stream, system_status_fields, &message))
                 {
-                    // Success! Found 0xAABB. Now read the length.
-                    uint8_t len;
-                    if (read(serialPort, &len, 1) > 0) 
-                    {
-                        SerialBuffer buffer;
-                        int total_read = 0;
-                        
-                        // 2. Safety Read Loop for Payload
-                        while (total_read < len) {
-                            int n = read(serialPort, buffer + total_read, len - total_read);
-                            if (n > 0) total_read += n;
-                            else if (n < 0 && errno != EAGAIN) break;
-                        }
-
-                        if (total_read == len) {
-                            _system_status message = system_status_init_zero;
-                            pb_istream_t stream = pb_istream_from_buffer(buffer, len);
-                            
-                            if (pb_decode(&stream, system_status_fields, &message)) {
-                                // SUCCESS - Populate and return
-                                StatusMessage msg;
-                                msg.depth = message.depth;
-                                msg.ref_depth = message.ref_depth;
-                                msg.status = message.status;
-                                msg.piston_pos = message.piston_pos;
-                                msg.control_volume = message.control_volume;
-                                return msg;
-                            } else {
-                                printf("Protobuf Decode Error: %s\n", PB_GET_ERROR(&stream));
-                            }
-                        }
-                    }
+                    // Populate the received message
+                    StatusMessage msg;
+                    msg.depth = message.depth;
+                    msg.ref_depth = message.ref_depth;
+                    msg.status = message.status;
+                    msg.piston_pos = message.piston_pos;
+                    msg.control_volume = message.control_volume;
+                    return msg;
+                } 
+                else 
+                {
+                    printf("Protobuf Decode Error: %s\n", PB_GET_ERROR(&stream));
                 }
             }
         }
@@ -190,17 +177,17 @@ void clean_serial(int serialPort)
 int render_depth_plot()
 {
     // Ensure we fill the available space in the parent window
-    if (ImPlot::BeginPlot("Reference Tracking Performance", ImVec2(-1, -1)))
+    if (ImPlot::BeginPlot("Reference Tracking Performance", ImVec2(500, 500)))
     {
         ImPlot::SetupAxis(ImAxis_X1, "Samples");
         ImPlot::SetupAxis(ImAxis_Y1, "Depth (m)");
         
         // Lock Y-axis to 0-2m for the sine wave
         ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0, 2.0, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_X1, 0, (double)PLOT_HISTORY_SIZE, ImGuiCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_X1, 0, PLOT_HISTORY_SIZE, ImGuiCond_Always);
 
-        ImPlot::PlotLine("Actual", depth_history, (int)PLOT_HISTORY_SIZE);
-        ImPlot::PlotLine("Target", ref_history, (int)PLOT_HISTORY_SIZE);        
+        ImPlot::PlotLine("Actual", depth_history, PLOT_HISTORY_SIZE);
+        ImPlot::PlotLine("Target", ref_history, PLOT_HISTORY_SIZE);        
         
         ImPlot::EndPlot();
     }

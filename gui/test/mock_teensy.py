@@ -8,7 +8,7 @@ import math
 sys.path.append(os.path.abspath("../messages"))
 
 try:
-    import messages_pb2 
+    import messages_pb2  # pyright: ignore[reportMissingImports]
 except ImportError:
     print("Error: Could not find messages_pb2.py. Did you run 'protoc'?")
     sys.exit(1)
@@ -34,13 +34,12 @@ def mock_teensy():
         length = len(payload)
         
         # 3. Frame it: [Start Byte 0xAA] [Length] [Payload]
-        header = struct.pack('BBB', 0xAA, 0xBB, length) 
-        packet = header + payload
+        packet = struct.pack('BB', 0xAA, length) + payload
         
         os.write(master, packet)
         
         t += 0.1
-        time.sleep(0.2) # 10Hz update rate
+        time.sleep(0.1) # 10Hz update rate
 
 if __name__ == "__main__":
     import math
