@@ -10,19 +10,34 @@ int main(int, char**)
     bool my_window_active;
 
     // Setup serial coms
-    int serialPort = open("/dev/tty.usbmodem157757901", O_RDWR | O_NOCTTY | O_NONBLOCK);
+    int serialPort = open("/dev/ttys001", O_RDWR | O_NOCTTY | O_NONBLOCK);
 
     // Check for errors
     if (serialPort < 0) {
         printf("Error %i from open: %s\n", errno, strerror(errno));
     }
-    configure_termios(&serialPort);
+    if (serialPort >= 0) {
+        errno = 0;
+        configure_termios(&serialPort);
+        tcflush(serialPort, TCIOFLUSH); // Clear everything!
+    }   
 
     // 3. Main Loop
     while (!glfwWindowShouldClose(window))
     {
         // Read data
         StatusMessage status_msg = decode_data_and_read(serialPort);
+
+        // If the read fails with a terminal error, we need to reset
+        if (errno == ESRCH || errno == EBADF || errno == ENXIO) {
+            printf("Port connection lost. Re-opening...\n");
+            close(serialPort);
+            // Add a small delay so we don't spam the CPU
+            usleep(500000); 
+            serialPort = open("/dev/tty001", O_RDWR | O_NOCTTY | O_NONBLOCK);
+            if (serialPort >= 0) configure_termios(&serialPort);
+        }
+
         depth_history[offset] = status_msg.depth;
         ref_history[offset] = status_msg.ref_depth;
         offset = (offset + 1) % PLOT_HISTORY_SIZE;

@@ -101,64 +101,63 @@ int encode_data_and_send(int serialPort, Command msg)
     {
         printf("Error writing to device: %s", strerror(errno));
     }
+
+    return 0;
 }
 
 StatusMessage decode_data_and_read(int serialPort)
 {
-    // Only start decoding if at the start of the frame
-    uint8_t startByte;
-    if(read(serialPort, &startByte, 1) > 0 && startByte == 0xAA)
+    uint8_t byte;
+    
+    // 1. HUNT for the start sequence (0xAA followed by 0xBB)
+    // We loop to discard any "junk" bytes until we find our header
+    while (read(serialPort, &byte, 1) > 0) 
     {
-        // Get the length of the message
-        uint8_t len;
-        if(read(serialPort, &len, 1) > 0)
+        if (byte == 0xAA) 
         {
-            // Read in the message
-            SerialBuffer buffer;
-            bool status;
-            int num_bytes = read(serialPort, buffer, len);
-
-            // Check if there was an error reading
-            if(num_bytes < 0)
+            // Peek at the next byte
+            uint8_t nextByte;
+            if (read(serialPort, &nextByte, 1) > 0) 
             {
-                printf("Error reading: %s", strerror(errno));
+                if (nextByte == 0xBB) 
+                {
+                    // Success! Found 0xAABB. Now read the length.
+                    uint8_t len;
+                    if (read(serialPort, &len, 1) > 0) 
+                    {
+                        SerialBuffer buffer;
+                        int total_read = 0;
+                        
+                        // 2. Safety Read Loop for Payload
+                        while (total_read < len) {
+                            int n = read(serialPort, buffer + total_read, len - total_read);
+                            if (n > 0) total_read += n;
+                            else if (n < 0 && errno != EAGAIN) break;
+                        }
+
+                        if (total_read == len) {
+                            _system_status message = system_status_init_zero;
+                            pb_istream_t stream = pb_istream_from_buffer(buffer, len);
+                            
+                            if (pb_decode(&stream, system_status_fields, &message)) {
+                                // SUCCESS - Populate and return
+                                StatusMessage msg;
+                                msg.depth = message.depth;
+                                msg.ref_depth = message.ref_depth;
+                                msg.status = message.status;
+                                msg.piston_pos = message.piston_pos;
+                                msg.control_volume = message.control_volume;
+                                return msg;
+                            } else {
+                                printf("Protobuf Decode Error: %s\n", PB_GET_ERROR(&stream));
+                            }
+                        }
+                    }
+                }
             }
-
-            // Setup the protobuf stream and decode
-            _system_status message = system_status_init_zero;
-            pb_istream_t stream = pb_istream_from_buffer(buffer, len);
-            status = pb_decode(&stream, system_status_fields, &message);
-
-            // Check the status of decoding
-            if (!status)
-            {
-                printf("Decoding failed: %s\n", PB_GET_ERROR(&stream));
-            }
-
-            // If all went well, print the result
-            printf("System status:\r\n \\
-                Depth: %.2f\r\n \\
-                Reference Depth: %.2f\r\n \\
-                Enabled: %s\r\n \\
-                Piston Position: %.2f\r\n \\
-                Control Volume: %.2f\r\n",
-                message.depth,
-                message.ref_depth,
-                message.status ? "True" : "False",
-                message.piston_pos,
-                message.control_volume);
-
-            // Create status message struct to pass back
-            StatusMessage recieved_msg;
-            recieved_msg.depth = message.depth;
-            recieved_msg.ref_depth = message.ref_depth;
-            recieved_msg.status = message.status;
-            recieved_msg.piston_pos = message.piston_pos;
-            recieved_msg.control_volume = message.control_volume;
-
-            return recieved_msg;
         }
     }
+    return (StatusMessage){0};
 }
 
 void clean_serial(int serialPort)
