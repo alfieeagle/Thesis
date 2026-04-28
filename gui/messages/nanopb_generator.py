@@ -1,0 +1,1 @@
+/opt/homebrew/Cellar/nanopb/0.4.9.1_6/bin/nanopb_generator.py

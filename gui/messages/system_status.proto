@@ -1,0 +1,8 @@
+message system_status
+{
+    required float dept = 1;
+    required float ref_depth = 2;
+    required bool status = 3;
+    required float piston_pos = 4;
+    required float control_volume = 5;
+}
