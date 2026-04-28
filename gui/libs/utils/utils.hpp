@@ -28,26 +28,20 @@ typedef struct StatusMessage
     bool status;
     float piston_pos;
     float control_volume;
-
-    // Number of bytes in a status message
-    int len = 17;
 }StatusMessage;
 
 typedef struct Command
 {
     float target_depth;
     bool enable;
-
-    // Number of bytes in a command msg
-    int len = 5;
 }Command;
 
 void configure_termios(int* serialport);
 
 int init_ImGUI(GLFWwindow** window);
 
-int encode_data_and_send(Command msg);
-int decode_data_and_read(StatusMessage msg);
+int encode_data_and_send(int serialPort, Command msg);
+int decode_data_and_read(int serialPort, StatusMessage msg);
 
 void clean_serial(int serialPort);
 

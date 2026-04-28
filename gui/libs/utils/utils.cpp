@@ -67,12 +67,11 @@ int init_ImGUI(GLFWwindow** window) {
 
 int encode_data_and_send(int serialPort, Command msg)
 {
-    // Initialise a serial buffer
     SerialBuffer buffer;
 
     // Setup the protobuf stream
     _command message = command_init_zero;
-    pb_ostream_t stream = pb_ostream_from_buffer(buffer, msg.len);
+    pb_ostream_t stream = pb_ostream_from_buffer(buffer, sizeof(buffer));
 
     // Encode the message and get the length of encoded bytes
     message.enable = msg.enable;
@@ -87,7 +86,11 @@ int encode_data_and_send(int serialPort, Command msg)
         return -1;
     }
 
-    // Write the encoded message to the serial port
+    // Write the start byte, length and encoded message to the serial port
+    uint8_t startByte = 0xAA;
+    uint8_t len = (uint8_t)message_length;
+    write(serialPort, &startByte, 1);
+    write(serialPort, &len, 1);
     int num_bytes = write(serialPort, buffer, message_length);
 
     // Check for writing errors
@@ -99,43 +102,51 @@ int encode_data_and_send(int serialPort, Command msg)
 
 int decode_data_and_read(int serialPort, StatusMessage msg)
 {
-    // Initialise a serial buffer
-    SerialBuffer buffer;
-    bool status;
-
-    // Read data from the serial port into the buffer
-    int num_bytes = read(serialPort, buffer, msg.len);
-
-    // Check if there was an error reading
-    if(num_bytes < 0)
+    // Only start decoding if at the start of the frame
+    uint8_t startByte;
+    if(read(serialPort, &startByte, 1) > 0 && startByte == 0xAA)
     {
-        printf("Error reading: %s", strerror(errno));
+        // Get the length of the message
+        uint8_t len;
+        if(read(serialPort, &len, 1) > 0)
+        {
+            // Read in the message
+            SerialBuffer buffer;
+            bool status;
+            int num_bytes = read(serialPort, buffer, len);
+
+            // Check if there was an error reading
+            if(num_bytes < 0)
+            {
+                printf("Error reading: %s", strerror(errno));
+            }
+
+            // Setup the protobuf stream and decode
+            _system_status message = system_status_init_zero;
+            pb_istream_t stream = pb_istream_from_buffer(buffer, len);
+            status = pb_decode(&stream, system_status_fields, &message);
+
+            // Check the status of decoding
+            if (!status)
+            {
+                printf("Decoding failed: %s\n", PB_GET_ERROR(&stream));
+                return -1;
+            }
+
+            // If all went well, print the result
+            printf("System status:\r\n \\
+                Depth: %.2f\r\n \\
+                Reference Depth: %.2f\r\n \\
+                Enabled: %s\r\n \\
+                Piston Position: %.2f\r\n \\
+                Control Volume: %.2f\r\n",
+                message.depth,
+                message.ref_depth,
+                message.status ? "True" : "False",
+                message.piston_pos,
+                message.control_volume);
+        }
     }
-
-    // Setup the protobuf stream and decode
-    _system_status message = system_status_init_zero;
-    pb_istream_t stream = pb_istream_from_buffer(buffer, msg.len);
-    status = pb_decode(&stream, system_status_fields, &message);
-
-    // Check the status of decoding
-    if (!status)
-    {
-        printf("Decoding failed: %s\n", PB_GET_ERROR(&stream));
-        return -1;
-    }
-
-    // If all went well, print the result
-    printf("System status:\r\n \\
-        Depth: %.2f\r\n \\
-        Reference Depth: %.2f\r\n \\
-        Enabled: %s\r\n \\
-        Piston Position: %.2f\r\n \\
-        Control Volume: %.2f\r\n",
-        message.depth,
-        message.ref_depth,
-        message.status ? "True" : "False",
-        message.piston_pos,
-        message.control_volume);
 }
 
 void clean_serial(int serialPort)

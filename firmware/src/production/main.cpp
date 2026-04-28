@@ -24,7 +24,7 @@ int incomingByte = 0;
 
 void setup() {
 	// Start USB coms
-	Serial.begin(9600);
+	Serial.begin(115200);
 	Serial.println("Starting");
 
 	Wire.begin();
