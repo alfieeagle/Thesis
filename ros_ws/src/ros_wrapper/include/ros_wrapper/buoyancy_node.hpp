@@ -55,10 +55,7 @@ class BuoyancyNode : public rclcpp::Node
 
         // Create timer to align with simulink time
         rclcpp::Time _lastControlTime;
-        rclcpp::Time _lastActuatorTime;
         bool _firstControlStep = true;
-        bool _firstActuatorStep = true;
-
 };
 
 #endif

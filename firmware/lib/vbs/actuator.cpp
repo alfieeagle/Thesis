@@ -84,17 +84,6 @@ float Actuator::calculate_motor_torque(float gearboxTorque)
     return motorTorque;
 }
 
-// float Actuator::calculate_max_motor_speed(float motorTorque)
-// {
-//     // Calculate rpm based on linearised torque curve
-//     float rpm = -_torqueCurveGrad * motorTorque + _torqueCurveIntercept;
-//     rpm = std::clamp(rpm, _minSpeedRPM, _maxSpeedRPM);
-
-//     // Convert to rad/s
-//     float omega = (rpm * 2.0f * (float)M_PI) / 60.0f;
-//     return omega;
-// }
-
 float Actuator::calculate_max_motor_speed(float depth)
 {
     return (depth < 235) ? _maxSpeedRPM : _minSpeedRPM;
