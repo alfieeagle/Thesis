@@ -15,18 +15,13 @@ int setup_serial(std::string ttyPort)
 {
     int filedesc = open(ttyPort.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
 
-    // Keep trying to open the port 
-    while(filedesc < 0)
+    if (filedesc>= 0)
     {
-        printf("Error %i from open: %s\n", errno, strerror(errno));
-        filedesc = open(ttyPort.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
-    }
-
-    if (filedesc>= 0) {
         errno = 0;
         configure_termios(&filedesc);
         tcflush(filedesc, TCIOFLUSH);
     }   
+
     return filedesc;
 }
 

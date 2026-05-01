@@ -1,19 +1,13 @@
 #include "ui_utils.hpp"
 
+int filedesc = -1;
+
 int main(int, char**) 
 {
     GLFWwindow* window = NULL;
     int init = init_ImGUI(&window);
 
     bool my_window_active;
-
-    // Setup serial coms
-    std::string ttyPort = "/dev/tty.usbmodem167597201";
-    int filedesc = setup_serial(ttyPort);
-
-    // Setup serial thread to run in the background
-    std::thread s_thread(read_serial, filedesc);
-    s_thread.detach();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -29,6 +23,17 @@ int main(int, char**)
         ImGui::SetNextWindowPos(ImVec2(0,0));
         ImGui::GetStyle().WindowRounding = 0.0f;
 
+        // Check that the serial port is open
+        std::string ttyPort = "/dev/tty.usbmodem167597201";
+        filedesc = setup_serial(ttyPort);
+
+        if(filedesc >= 0)
+        {
+        // Setup serial thread to run in the background
+        std::thread s_thread(read_serial, filedesc);
+        s_thread.detach();
+        }
+
         // --- Application Window ---
         // Create a copy of the data to render
         data_mutex.lock();
@@ -37,6 +42,10 @@ int main(int, char**)
 
         ImGui::Begin("VBS Status", &my_window_active);
         render_depth_plot();
+        if(filedesc < 0)
+        {
+            ImGui::Text("Serial port not available. Is the device plugged in and switched on?\n");
+        }
 
         ImGui::End();
         // --------------------------
