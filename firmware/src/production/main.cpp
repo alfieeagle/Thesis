@@ -19,9 +19,6 @@ Dependencies:	TMCStepper.h, Arduino.h, vbs.hpp, pin_definitions.h
 
 #include "utils.hpp"
 
-// Used to store incoming messages
-int incomingByte = 0;
-
 void setup() {
 	// Start USB coms
 	Serial.begin(115200);
@@ -101,11 +98,11 @@ void setup() {
 	motor.setMinPulseWidth(MIN_PULSE_WIDTH_MS);
 	motor.setEnablePin(EN_PIN);
 	motor.disableOutputs();
-	homing_sequence();
-	Serial.println("Homing Finished");
-	delay(200);
-	Serial.println("Moving to neutral point");
-	neutral_point();
+	// homing_sequence();
+	// Serial.println("Homing Finished");
+	// delay(200);
+	// Serial.println("Moving to neutral point");
+	// neutral_point();
 
 	Serial.println("Finished Setup");
 }
@@ -125,17 +122,18 @@ void loop()
 			std::vector<float> motorCommand = _VBS.get_motor_command();
 			send_motor_command(motorCommand);
 		}
+		
+		// Encode the current system telemetry
+		encode_data_and_send();
 	}
 
-	// // Step the motor
-	// step();
+	// Step the motor
+	step();
 
-	// if(Serial.available() > 0)
-	// {
-	// 	incomingByte = Serial.read();
-	// 	Serial.print("Message recieved: ");
-	// 	Serial.println(incomingByte, DEC);
-	// }
-
-	
+	if(Serial.available() > 0)
+	{
+		decode_data_and_read(&latest_command);
+    }
 }
+
+

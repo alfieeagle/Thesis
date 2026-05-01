@@ -31,6 +31,9 @@
 #define PISTON_AREA 0.0029f
 #define STEPS_PER_REV 200
 
+// Buffer setup
+#define BUFFER_SIZE = 2048
+
 // Timing
 const int DEBOUNCE_TIME_MS = 200;
 const int TIMER_INTERVAL_MILLIS = 100;

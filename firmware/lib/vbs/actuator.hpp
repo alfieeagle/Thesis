@@ -77,6 +77,7 @@ class Actuator
         float get_screw_pitch_diam();
         float get_screw_friction();
         float get_factor_of_safety();
+        bool get_status();
 
         // Setters
         void increment_piston_volume();

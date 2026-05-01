@@ -11,11 +11,18 @@
 #include "vbs.hpp"
 #include "vbs_config.h"
 #include "pin_definitions.h"
+#include "messages.pb.h"
+#include "pb.h"
+#include "pb_decode.h"
+#include "pb_encode.h"
 
 extern MS5837 DepthSensor;  
 extern Metro ControlTimer;
 extern VBS _VBS;
 extern AccelStepper motor;  
+
+// Global variable to store latest command
+extern Command latest_command;
 
 void handle_max_extension();
 void handle_max_retraction();
@@ -24,5 +31,8 @@ void homing_sequence();
 void neutral_point();
 void step();
 long distance_to_steps(float distance_m);
+
+int encode_data_and_send();
+int decode_data_and_read(Command* telemetry);
 
 #endif

@@ -164,3 +164,8 @@ bool VBS::get_home()
 {
     return _home;
 }
+
+bool VBS::get_status()
+{
+    return _actuator.get_status();
+}

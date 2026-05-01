@@ -1,19 +1,17 @@
 import "nanopb.proto";
 
-// syntax = "proto3";
-
 message SystemStatus
 {
-    required float depth = 1;
-    required float ref_depth = 2;
-    required bool status = 3;
-    required float piston_pos = 4;
-    required float control_volume = 5;
+    optional float depth = 1;
+    optional float ref_depth = 2;
+    optional bool status = 3;
+    optional float piston_pos = 4;
+    optional float control_volume = 5;
     optional string message = 6 [(nanopb).max_size = 500];
 }
 
 message Command
 {
-  required float target_depth = 1;
-  required bool enable = 2;
+  optional float target_depth = 1;
+  optional bool enable = 2;
 }

@@ -212,3 +212,8 @@ int Actuator::get_direction()
 {
     return _dir;
 }
+
+bool Actuator::get_status()
+{
+    return _enabled;
+}

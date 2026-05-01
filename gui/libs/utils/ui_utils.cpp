@@ -25,23 +25,26 @@ int setup_serial(std::string ttyPort)
     return filedesc;
 }
 
-void read_serial(int filedesc)
-{
-    // Lock the telemetry so only UI or serial can access
-    data_mutex.lock();
-
-    decode_data_and_read(filedesc, &latest_telemetry);
-
-    // Update the depth plot data if valid data is available
-    if (latest_telemetry.depth != 0.0f || latest_telemetry.ref_depth != 0.0f)
-    {
-            depth_history[offset] = latest_telemetry.depth;
-            ref_history[offset] = latest_telemetry.ref_depth;
+void read_serial(int fd) {
+    is_connected = true;
+    while (is_connected) {
+        SystemStatus incoming;
+        // If read fails or port is closed, decode_data_and_read should return error
+        if (decode_data_and_read(fd, &incoming) == 0) {
+            std::lock_guard<std::mutex> lock(data_mutex);
+            latest_telemetry = incoming;
+            depth_history[offset] = incoming.depth;
+            ref_history[offset] = incoming.ref_depth;
             offset = (offset + 1) % PLOT_HISTORY_SIZE;
+        } else {
+            // Check if the port actually closed (errno 5 is EIO - Input/output error)
+            if (errno == EIO || errno == EBADF) {
+                is_connected = false; 
+            }
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
-
-    // Release for other threads to access
-    data_mutex.unlock();
+    close(fd); // Clean up the stale file descriptor
 }
 
 void configure_termios(int* filedesc) {
@@ -144,7 +147,7 @@ int encode_data_and_send(int filedesc, float target_depth, bool enable)
     // Check for encoding errors
     if (!status)
     {
-        printf("Encoding failed: %s\n", PB_GET_ERROR(&stream));
+        printf("Encoding failed from mac: %s\n", PB_GET_ERROR(&stream));
         return 1;
     }
 
@@ -158,7 +161,7 @@ int encode_data_and_send(int filedesc, float target_depth, bool enable)
     // Check for writing errors
     if(num_bytes < 0)
     {
-        printf("Error writing to device: %s", strerror(errno));
+        printf("Error writing to device from mac: %s", strerror(errno));
     }
 
     return 0;
@@ -168,43 +171,84 @@ int decode_data_and_read(int filedesc, SystemStatus* telemetry)
 {
     uint8_t startbyte;
     
+    // 1. Search for the Start Byte
+    // We use a loop to clear any leading garbage bytes
     while (read(filedesc, &startbyte, 1) > 0) 
     {
-        // Wait for the correct start byte
         if (startbyte == 0xAA) 
         {
-            // Read the length
-            uint8_t len;
-            if (read(filedesc, &len, 1) > 0) 
-            {
-                // Create the buffer
-                SerialBuffer buffer;
-            
-                // Decode the message
-                int n = read(filedesc, buffer, len);
-                SystemStatus message = SystemStatus_init_zero;
-                pb_istream_t stream = pb_istream_from_buffer(buffer, len);
-                
-                bool status = pb_decode(&stream, SystemStatus_fields, &message);
+            uint8_t len = 0;
+            int attempts = 0;
 
-                // Check for decode error
-                if(!status)
+            // 2. WAIT for the Length Byte
+            // USB is fast, but code is faster. We need to wait for the byte to arrive.
+            while (read(filedesc, &len, 1) != 1) 
+            {
+                std::this_thread::sleep_for(std::chrono::microseconds(100));
+                if (++attempts > 100) return 1; // Timeout (10ms)
+            }
+
+            if (len == 0) 
+            {
+                printf("Warning: Received packet with 0 length byte\n");
+                return 1;
+            }
+
+            // 3. WAIT and COLLECT exactly 'len' bytes
+            uint8_t buffer[256]; 
+            int bytes_received = 0;
+            attempts = 0;
+
+            while (bytes_received < len) 
+            {
+                int n = read(filedesc, buffer + bytes_received, len - bytes_received);
+                if (n > 0) 
                 {
-                    printf("Decoding failed: %s\n", PB_GET_ERROR(&stream));
-                    telemetry = NULL; // Returning empty message
-                    return 1;
+                    bytes_received += n;
+                } 
+                else 
+                {
+                    std::this_thread::sleep_for(std::chrono::microseconds(100));
+                    if (++attempts > 1000) // 100ms timeout for the body
+                    {
+                        printf("Timed out waiting for packet body (Got %d/%d)\n", bytes_received, len);
+                        return 1;
+                    }
                 }
-                 *telemetry = message;
+            }
+
+            // 4. Debug Hex Dump (Useful for verifying your 1.0f, 2.0f hardcoded values)
+            // printf("Packet Received! Len: %d | Data: ", len);
+            // for(int i = 0; i < len; i++) printf("%02X ", buffer[i]);
+            // printf("\n");
+
+            // 5. Decode the complete buffer
+            SystemStatus message = SystemStatus_init_zero;
+            pb_istream_t stream = pb_istream_from_buffer(buffer, len);
+            
+            if (pb_decode(&stream, SystemStatus_fields, &message)) 
+            {
+                *telemetry = message;
+                return 0; // Success
+            } 
+            else 
+            {
+                printf("Protobuf Decode Failed: %s\n", PB_GET_ERROR(&stream));
+                // If decoding fails, the stream is likely out of sync. Flush.
+                tcflush(filedesc, TCIFLUSH);
+                return 1;
             }
         }
     }
-    return 0;
+    return 1; // No start byte found in this call
 }
 
 int render_depth_plot()
 {
     // Get maximum y axis value
-    float ymax = *std::max_element(depth_history.begin(), depth_history.end()) + 1.0f;
+    float ymax = 0.0f;
+    float ymin = *std::min_element(depth_history.begin(), depth_history.end()) - 1.0f;
+    printf("ymin: %.2f\n", ymin);
 
     // Ensure we fill the available space in the parent window
     if (ImPlot::BeginPlot("Reference Tracking Performance", ImVec2(500, 500)))
@@ -213,7 +257,7 @@ int render_depth_plot()
         ImPlot::SetupAxis(ImAxis_Y1, "Depth (m)");
         
         // Set axes limits 
-        ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0, ymax, ImGuiCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0, ymin, ImGuiCond_Always);
         ImPlot::SetupAxisLimits(ImAxis_X1, 0, PLOT_HISTORY_SIZE, ImGuiCond_Always);
 
         ImPlot::PlotLine("Actual", depth_history.data(), PLOT_HISTORY_SIZE);

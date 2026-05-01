@@ -1,6 +1,6 @@
-#ifndef UTILS_HPP
+#ifndef UI_UTILS_HPP
 
-#define UTILS_HPP
+#define UI_UTILS_HPP
 
 #include "imgui.h"
 #include "implot.h"
@@ -27,7 +27,7 @@ extern "C" {
 #include <errno.h>
 #include <unistd.h>
 
-#define BUFFER_SIZE 1000
+#define BUFFER_SIZE 2048
 #define PLOT_HISTORY_SIZE 500
 
 typedef uint8_t SerialBuffer[BUFFER_SIZE];
@@ -42,6 +42,8 @@ extern std::mutex data_mutex;
 
 // Global telemetry
 extern SystemStatus latest_telemetry;
+
+extern bool is_connected;
 
 // UI functions
 int init_ImGUI(GLFWwindow** window);

@@ -1,6 +1,7 @@
 #include "ui_utils.hpp"
 
 int filedesc = -1;
+bool is_connected = false;
 
 int main(int, char**) 
 {
@@ -8,6 +9,9 @@ int main(int, char**)
     int init = init_ImGUI(&window);
 
     bool my_window_active;
+
+    // Check that the serial port is open
+    std::string ttyPort = "/dev/tty.usbmodem167597201";
 
     while (!glfwWindowShouldClose(window))
     {
@@ -23,15 +27,18 @@ int main(int, char**)
         ImGui::SetNextWindowPos(ImVec2(0,0));
         ImGui::GetStyle().WindowRounding = 0.0f;
 
-        // Check that the serial port is open
-        std::string ttyPort = "/dev/tty.usbmodem167597201";
-        filedesc = setup_serial(ttyPort);
-
-        if(filedesc >= 0)
+        if (!is_connected)
         {
-        // Setup serial thread to run in the background
-        std::thread s_thread(read_serial, filedesc);
-        s_thread.detach();
+            // Try to open the port. setup_serial uses O_NONBLOCK so it won't hang the UI.
+            filedesc = setup_serial(ttyPort);
+            
+            if (filedesc >= 0)
+            {
+                // We found it! Start ONE thread.
+                std::thread s_thread(read_serial, filedesc);
+                s_thread.detach();
+                is_connected = true; 
+            }
         }
 
         // --- Application Window ---
@@ -46,6 +53,12 @@ int main(int, char**)
         {
             ImGui::Text("Serial port not available. Is the device plugged in and switched on?\n");
         }
+
+        ImGui::Text("Depth: %.2f\n", toPlot.depth);
+        ImGui::Text("Ref Depth: %.2f\n", toPlot.ref_depth);
+        ImGui::Text("Control Vol: %.2f\n", toPlot.control_volume);
+        ImGui::Text("Piston Vol: %.2f\n", toPlot.piston_pos);
+        ImGui::Text("Status: %s\n", toPlot.status ? "Enabled" : "Disabled");
 
         ImGui::End();
         // --------------------------
