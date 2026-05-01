@@ -16,6 +16,7 @@ typedef struct _system_status {
     bool status;
     float piston_pos;
     float control_volume;
+    pb_callback_t message;
 } system_status;
 
 typedef struct _command {
@@ -29,9 +30,9 @@ extern "C" {
 #endif
 
 /* Initializer values for message structs */
-#define system_status_init_default               {0, 0, 0, 0, 0}
+#define system_status_init_default               {0, 0, 0, 0, 0, {{NULL}, NULL}}
 #define command_init_default                     {0, 0}
-#define system_status_init_zero                  {0, 0, 0, 0, 0}
+#define system_status_init_zero                  {0, 0, 0, 0, 0, {{NULL}, NULL}}
 #define command_init_zero                        {0, 0}
 
 /* Field tags (for use in manual encoding/decoding) */
@@ -40,6 +41,7 @@ extern "C" {
 #define system_status_status_tag                 3
 #define system_status_piston_pos_tag             4
 #define system_status_control_volume_tag         5
+#define system_status_message_tag                6
 #define command_target_depth_tag                 1
 #define command_enable_tag                       2
 
@@ -49,8 +51,9 @@ X(a, STATIC,   SINGULAR, FLOAT,    depth,             1) \
 X(a, STATIC,   SINGULAR, FLOAT,    ref_depth,         2) \
 X(a, STATIC,   SINGULAR, BOOL,     status,            3) \
 X(a, STATIC,   SINGULAR, FLOAT,    piston_pos,        4) \
-X(a, STATIC,   SINGULAR, FLOAT,    control_volume,    5)
-#define system_status_CALLBACK NULL
+X(a, STATIC,   SINGULAR, FLOAT,    control_volume,    5) \
+X(a, CALLBACK, SINGULAR, STRING,   message,           6)
+#define system_status_CALLBACK pb_default_field_callback
 #define system_status_DEFAULT NULL
 
 #define command_FIELDLIST(X, a) \
@@ -67,9 +70,9 @@ extern const pb_msgdesc_t command_msg;
 #define command_fields &command_msg
 
 /* Maximum encoded size of messages (where known) */
-#define MESSAGES_PB_H_MAX_SIZE                   system_status_size
+/* system_status_size depends on runtime parameters */
+#define MESSAGES_PB_H_MAX_SIZE                   command_size
 #define command_size                             7
-#define system_status_size                       22
 
 #ifdef __cplusplus
 } /* extern "C" */

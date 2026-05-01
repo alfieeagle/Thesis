@@ -7,6 +7,7 @@ message system_status
     bool status = 3;
     float piston_pos = 4;
     float control_volume = 5;
+    string message = 6;
 }
 
 message command

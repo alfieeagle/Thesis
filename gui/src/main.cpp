@@ -1,4 +1,4 @@
-#include "utils.hpp"
+#include "ui_utils.hpp"
 
 static Command cmd;
 
@@ -10,7 +10,7 @@ int main(int, char**)
     bool my_window_active;
 
     // Setup serial coms
-    int serialPort = open("/dev/ttys000", O_RDWR | O_NOCTTY | O_NONBLOCK);
+    int serialPort = open("/dev/tty.usbmodem167597201 ", O_RDWR | O_NOCTTY | O_NONBLOCK);
 
     // Check for errors
     if (serialPort < 0) {
@@ -40,7 +40,7 @@ int main(int, char**)
         } else {
             // PORT IS CLOSED: Try to reconnect
             // CHANGE THIS PATH to the one currently printed by your python script!
-            serialPort = open("/dev/ttys000", O_RDWR | O_NOCTTY | O_NONBLOCK);
+            serialPort = open("/dev/tty.usbmodem167597201 ", O_RDWR | O_NOCTTY | O_NONBLOCK);
             
             if (serialPort >= 0) {
                 printf("Reconnected successfully!\n");
