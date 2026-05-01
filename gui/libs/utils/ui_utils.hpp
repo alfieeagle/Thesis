@@ -7,7 +7,14 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "messages.pb.h"
+
 #include <GLFW/glfw3.h>
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <string>
+#include <cstring>
+#include <algorithm>
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,44 +24,35 @@ extern "C" {
 #include <termios.h>
 #include <pb_encode.h>
 #include <pb_decode.h>
-#include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
-#include <iostream>
 
 #define BUFFER_SIZE 1000
 #define PLOT_HISTORY_SIZE 500
 
 typedef uint8_t SerialBuffer[BUFFER_SIZE];
-extern float depth_history[PLOT_HISTORY_SIZE];
-extern float ref_history[PLOT_HISTORY_SIZE];
+
+// Create plotting buffers intialised to 0
+extern std::vector<float> depth_history;
+extern std::vector<float> ref_history;
 extern int offset;
 
-typedef struct StatusMessage
-{
-    float depth; 
-    float ref_depth;
-    bool status;
-    float piston_pos;
-    float control_volume;
-    char message[BUFFER_SIZE];
-} StatusMessage;
+// Create mutex object for threading
+extern std::mutex data_mutex;
 
-typedef struct Command
-{
-    float target_depth;
-    bool enable;
-} Command;
+// Global telemetry
+extern SystemStatus latest_telemetry;
 
 // UI functions
 int init_ImGUI(GLFWwindow** window);
 int render_depth_plot();
 
 // Serial functions
-void configure_termios(int* serialport);
-int encode_data_and_send(int serialPort, Command msg);
-StatusMessage decode_data_and_read(int serialPort);
-void clean_serial(int serialPort);
+int setup_serial(std::string ttyPort);
+void read_serial(int filedesc);
+void configure_termios(int* filedesc);
+int encode_data_and_send(int filedesc, Command msg);
+int decode_data_and_read(int filedesc, SystemStatus* telemetry);
 
 #ifdef __cplusplus
 }
