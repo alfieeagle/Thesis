@@ -30,7 +30,6 @@ void handle_max_extension()
 	// Disable motor
 	motor.disableOutputs();
     _VBS.disable();
-    Serial.println("Fully Extended");
 }
 
 void handle_max_retraction()
@@ -38,8 +37,10 @@ void handle_max_retraction()
 	// Disable motor
 	motor.disableOutputs();
     _VBS.disable();
+
+    // Set the home position and trigger the reset pin
     _VBS.set_home(true);
-    Serial.println("Fully retracted");
+    digitalWrite(RESET_PIN, LOW);
 }
 
 void send_motor_command(const std::vector<float>& motorCommand)
@@ -103,7 +104,6 @@ void homing_sequence()
 
     // Set the home position
     motor.setCurrentPosition(0);
-    digitalWrite(RESET_PIN, LOW);
 }
 
 // Go to the neutrally buoyant point
