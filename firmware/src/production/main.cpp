@@ -33,34 +33,34 @@ void setup() {
 	// Returns true if initialization was successful
 	// Defaults to Wire which corresponds with 
 	// PINS 18 (SDA) and 19 (SCL) on Teensy 4.0
-	// for(int i = 0; i < 5; i++)
-	// {
-	// 	if(!DepthSensor.init()) 
-	// 	{
-	// 		Serial.println("Init failed!");
-	// 		Serial.println("Are SDA/SCL connected correctly?");
-	// 		Serial.println("Blue Robotics Bar30: White=SDA, Green=SCL");
-	// 		Serial.println("\n\n\n");
-	// 		delay(3000);
-	// 		continue;
-	// 	}
-	// 	else
-	// 	{
-	// 		Serial.println("Depth Sensor Found\n\n\n");
+	for(int i = 0; i < 5; i++)
+	{
+		if(!DepthSensor.init()) 
+		{
+			Serial.println("Init failed!");
+			Serial.println("Are SDA/SCL connected correctly?");
+			Serial.println("Blue Robotics Bar30: White=SDA, Green=SCL");
+			Serial.println("\n\n\n");
+			delay(3000);
+			continue;
+		}
+		else
+		{
+			Serial.println("Depth Sensor Found\n\n\n");
 
-	// 		// Select 30 bar model of depth sensor
-	// 		DepthSensor.setModel(MS5837::MS5837_30BA);
+			// Select 30 bar model of depth sensor
+			DepthSensor.setModel(MS5837::MS5837_30BA);
 
-	// 		// freshwater
-	// 		// depth_sensor.setFluidDensity(997);
-	// 		// salt water
-	// 		DepthSensor.setFluidDensity(1025);
+			// freshwater
+			// depth_sensor.setFluidDensity(997);
+			// salt water
+			DepthSensor.setFluidDensity(1025);
 
-	// 		// Set the initial depth
-	// 		_VBS.update_depth(DepthSensor.depth());
-	// 		break;
-	// 	}
-	// }
+			// Set the initial depth
+			_VBS.update_depth(DepthSensor.depth());
+			break;
+		}
+	}
 	
 	// Setup output pins
 	pinMode(EN_PIN, OUTPUT);
@@ -73,15 +73,15 @@ void setup() {
 	pinMode(AGC_PIN, OUTPUT);
 
 	// Setup input pins
-	// pinMode(LIM_EXT, INPUT);
-	// pinMode(LIM_RET, INPUT);
+	pinMode(LIM_EXT, INPUT);
+	pinMode(LIM_RET, INPUT);
 
-	// // Set the limit switches as debounce pins
-	// debouncePins(LIM_EXT, LIM_RET, DEBOUNCE_TIME_MS);
+	// Set the limit switches as debounce pins
+	debouncePins(LIM_EXT, LIM_RET, DEBOUNCE_TIME_MS);
 
-	// // Setup interrup for limit switches
-	// attachInterrupt(LIM_EXT, handle_max_extension, FALLING);
-	// attachInterrupt(LIM_RET, handle_max_retraction, FALLING);
+	// Setup interrup for limit switches
+	attachInterrupt(LIM_EXT, handle_max_extension, FALLING);
+	attachInterrupt(LIM_RET, handle_max_retraction, FALLING);
 
 	// Full step mode
 	digitalWrite(DM0, LOW);
@@ -100,13 +100,13 @@ void setup() {
 	motor.setAcceleration(MAX_ACCELERATION);
 	motor.setMinPulseWidth(MIN_PULSE_WIDTH_MS);
 	motor.setEnablePin(EN_PIN);
-	motor.disableOutputs();
+	// motor.disableOutputs();
 	// homing_sequence();
 	// Serial.println("Homing Finished");
 	// delay(200);
 	// Serial.println("Moving to neutral point");
 	// neutral_point();
-
+	motor.enableOutputs();
 	Serial.println("Finished Setup");
 }
 
@@ -137,12 +137,4 @@ void loop()
 	// 	Serial.println(incomingByte, DEC);
 	// }
 
-	digitalWrite(DIR_PIN, HIGH);
-	digitalWrite(STEP_PIN, HIGH);
-	delayMicroseconds(500);
-	digitalWrite(DIR_PIN, LOW);
-	digitalWrite(STEP_PIN, LOW);
-	delayMicroseconds(500);
-
-	
 }
