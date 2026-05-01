@@ -20,6 +20,7 @@ extern "C" {
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
+#include <iostream>
 
 #define BUFFER_SIZE 1000
 #define PLOT_HISTORY_SIZE 500
@@ -36,13 +37,14 @@ typedef struct StatusMessage
     bool status;
     float piston_pos;
     float control_volume;
-}StatusMessage;
+    char message[BUFFER_SIZE];
+} StatusMessage;
 
 typedef struct Command
 {
     float target_depth;
     bool enable;
-}Command;
+} Command;
 
 // UI functions
 int init_ImGUI(GLFWwindow** window);

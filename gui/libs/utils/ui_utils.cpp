@@ -24,18 +24,14 @@ void configure_termios(int* serialPort) {
     options.c_cflag &= ~CRTSCTS;
     options.c_cflag |= (CLOCAL | CREAD);
 
-    // --- THE FIXES ---
-
-    // 1. Fully Disable Canonical Input (Critical for Binary/Protobuf)
-    // This ensures every byte is treated as data, not a command.
+    // Fully Disable Canonical Input 
     options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
 
-    // 2. Disable all special processing on input/output
+    // Disable all special processing on input/output
     options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
     options.c_oflag &= ~OPOST;
 
-    // 3. Set for Pure Non-Blocking
-    // VMIN=0, VTIME=0 means "Return immediately with whatever is in the buffer"
+    // Set for Pure Non-Blocking
     options.c_cc[VMIN]  = 0;
     options.c_cc[VTIME] = 0;
 
@@ -45,7 +41,7 @@ void configure_termios(int* serialPort) {
 }
 
 int init_ImGUI(GLFWwindow** window) {
-    // 1. Setup GLFW
+    // Setup GLFW
     if (!glfwInit())
     {
         return 1;
@@ -70,10 +66,12 @@ int init_ImGUI(GLFWwindow** window) {
         return 1;
     } 
     glfwMakeContextCurrent(*window);
-    glfwSwapInterval(1); // VSync
+
+    // VSync
+    glfwSwapInterval(1);
 
 
-    // 2. Setup ImGui
+    // Setup ImGui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImPlot::CreateContext();
@@ -95,13 +93,13 @@ int encode_data_and_send(int serialPort, Command msg)
     SerialBuffer buffer;
 
     // Setup the protobuf stream
-    _command message = command_init_zero;
+    _Command message = Command_init_zero;
     pb_ostream_t stream = pb_ostream_from_buffer(buffer, sizeof(buffer));
 
     // Encode the message and get the length of encoded bytes
     message.enable = msg.enable;
     message.target_depth = msg.target_depth;
-    bool status = pb_encode(&stream, command_fields, &message);
+    bool status = pb_encode(&stream, Command_fields, &message);
     size_t message_length = stream.bytes_written;
         
     // Check for encoding errors
@@ -145,10 +143,10 @@ StatusMessage decode_data_and_read(int serialPort)
             
                 // Decode the message
                 int n = read(serialPort, buffer, len);
-                _system_status message = system_status_init_zero;
+                _SystemStatus message = SystemStatus_init_zero;
                 pb_istream_t stream = pb_istream_from_buffer(buffer, len);
                 
-                if (pb_decode(&stream, system_status_fields, &message))
+                if (pb_decode(&stream, SystemStatus_fields, &message))
                 {
                     // Populate the received message
                     StatusMessage msg;
@@ -157,6 +155,7 @@ StatusMessage decode_data_and_read(int serialPort)
                     msg.status = message.status;
                     msg.piston_pos = message.piston_pos;
                     msg.control_volume = message.control_volume;
+                    std::strcpy(msg.message, message.message);
                     return msg;
                 } 
                 else 

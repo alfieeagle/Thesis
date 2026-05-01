@@ -10,19 +10,20 @@
 #endif
 
 /* Struct definitions */
-typedef struct _system_status {
+typedef struct _SystemStatus {
     float depth;
     float ref_depth;
     bool status;
     float piston_pos;
     float control_volume;
-    pb_callback_t message;
-} system_status;
+    bool has_message;
+    char message[500];
+} SystemStatus;
 
-typedef struct _command {
+typedef struct _Command {
     float target_depth;
     bool enable;
-} command;
+} Command;
 
 
 #ifdef __cplusplus
@@ -30,49 +31,49 @@ extern "C" {
 #endif
 
 /* Initializer values for message structs */
-#define system_status_init_default               {0, 0, 0, 0, 0, {{NULL}, NULL}}
-#define command_init_default                     {0, 0}
-#define system_status_init_zero                  {0, 0, 0, 0, 0, {{NULL}, NULL}}
-#define command_init_zero                        {0, 0}
+#define SystemStatus_init_default                {0, 0, 0, 0, 0, false, ""}
+#define Command_init_default                     {0, 0}
+#define SystemStatus_init_zero                   {0, 0, 0, 0, 0, false, ""}
+#define Command_init_zero                        {0, 0}
 
 /* Field tags (for use in manual encoding/decoding) */
-#define system_status_depth_tag                  1
-#define system_status_ref_depth_tag              2
-#define system_status_status_tag                 3
-#define system_status_piston_pos_tag             4
-#define system_status_control_volume_tag         5
-#define system_status_message_tag                6
-#define command_target_depth_tag                 1
-#define command_enable_tag                       2
+#define SystemStatus_depth_tag                   1
+#define SystemStatus_ref_depth_tag               2
+#define SystemStatus_status_tag                  3
+#define SystemStatus_piston_pos_tag              4
+#define SystemStatus_control_volume_tag          5
+#define SystemStatus_message_tag                 6
+#define Command_target_depth_tag                 1
+#define Command_enable_tag                       2
 
 /* Struct field encoding specification for nanopb */
-#define system_status_FIELDLIST(X, a) \
-X(a, STATIC,   SINGULAR, FLOAT,    depth,             1) \
-X(a, STATIC,   SINGULAR, FLOAT,    ref_depth,         2) \
-X(a, STATIC,   SINGULAR, BOOL,     status,            3) \
-X(a, STATIC,   SINGULAR, FLOAT,    piston_pos,        4) \
-X(a, STATIC,   SINGULAR, FLOAT,    control_volume,    5) \
-X(a, CALLBACK, SINGULAR, STRING,   message,           6)
-#define system_status_CALLBACK pb_default_field_callback
-#define system_status_DEFAULT NULL
+#define SystemStatus_FIELDLIST(X, a) \
+X(a, STATIC,   REQUIRED, FLOAT,    depth,             1) \
+X(a, STATIC,   REQUIRED, FLOAT,    ref_depth,         2) \
+X(a, STATIC,   REQUIRED, BOOL,     status,            3) \
+X(a, STATIC,   REQUIRED, FLOAT,    piston_pos,        4) \
+X(a, STATIC,   REQUIRED, FLOAT,    control_volume,    5) \
+X(a, STATIC,   OPTIONAL, STRING,   message,           6)
+#define SystemStatus_CALLBACK NULL
+#define SystemStatus_DEFAULT NULL
 
-#define command_FIELDLIST(X, a) \
-X(a, STATIC,   SINGULAR, FLOAT,    target_depth,      1) \
-X(a, STATIC,   SINGULAR, BOOL,     enable,            2)
-#define command_CALLBACK NULL
-#define command_DEFAULT NULL
+#define Command_FIELDLIST(X, a) \
+X(a, STATIC,   REQUIRED, FLOAT,    target_depth,      1) \
+X(a, STATIC,   REQUIRED, BOOL,     enable,            2)
+#define Command_CALLBACK NULL
+#define Command_DEFAULT NULL
 
-extern const pb_msgdesc_t system_status_msg;
-extern const pb_msgdesc_t command_msg;
+extern const pb_msgdesc_t SystemStatus_msg;
+extern const pb_msgdesc_t Command_msg;
 
 /* Defines for backwards compatibility with code written before nanopb-0.4.0 */
-#define system_status_fields &system_status_msg
-#define command_fields &command_msg
+#define SystemStatus_fields &SystemStatus_msg
+#define Command_fields &Command_msg
 
 /* Maximum encoded size of messages (where known) */
-/* system_status_size depends on runtime parameters */
-#define MESSAGES_PB_H_MAX_SIZE                   command_size
-#define command_size                             7
+#define Command_size                             7
+#define MESSAGES_PB_H_MAX_SIZE                   SystemStatus_size
+#define SystemStatus_size                        524
 
 #ifdef __cplusplus
 } /* extern "C" */

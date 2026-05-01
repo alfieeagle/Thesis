@@ -6,10 +6,10 @@
 #error Regenerate this file with the current version of nanopb generator.
 #endif
 
-PB_BIND(system_status, system_status, AUTO)
+PB_BIND(SystemStatus, SystemStatus, 2)
 
 
-PB_BIND(command, command, AUTO)
+PB_BIND(Command, Command, AUTO)
 
 
 
