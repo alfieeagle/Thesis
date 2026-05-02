@@ -100,7 +100,7 @@ void VBS::update_motor_command() {
     motor_command.push_back((float)dir);
 
     // Check if the motor is at an end stop
-    _actuator.is_enabled() ? motor_command.push_back(1.0f) : motor_command.push_back(0.0f);
+    // _actuator.is_enabled() ? motor_command.push_back(1.0f) : motor_command.push_back(0.0f);
     
     _motorCommand = motor_command;
 }

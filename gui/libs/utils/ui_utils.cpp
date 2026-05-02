@@ -1,8 +1,14 @@
 #include "ui_utils.hpp"
 
+int total_packets_received = 0;
+double last_packet_time = 0;
+
 // Create plotting buffers intialised to 0
 std::vector<float> depth_history(PLOT_HISTORY_SIZE, 0);
 std::vector<float> ref_history(PLOT_HISTORY_SIZE, 0);
+std::vector<float> time_history(PLOT_HISTORY_SIZE, 0);
+std::vector<float> control_vol_history(PLOT_HISTORY_SIZE, 0);
+std::vector<float> piston_history(PLOT_HISTORY_SIZE, 0);
 int offset = 0;
 
 // Create mutex object for threading
@@ -10,6 +16,11 @@ std::mutex data_mutex;
 
 // Global telemetry
 SystemStatus latest_telemetry = SystemStatus_init_zero;
+
+ImGuiTextFilter       Filter;
+bool                  AutoScroll = true;
+bool                  ScrollToBottom = false;
+ImVector<char*>       Items;
 
 int setup_serial(std::string ttyPort)
 {
@@ -25,26 +36,50 @@ int setup_serial(std::string ttyPort)
     return filedesc;
 }
 
-void read_serial(int fd) {
+void read_serial(int filedesc) {
     is_connected = true;
-    while (is_connected) {
+    while (is_connected)
+    {
         SystemStatus incoming;
-        // If read fails or port is closed, decode_data_and_read should return error
-        if (decode_data_and_read(fd, &incoming) == 0) {
-            std::lock_guard<std::mutex> lock(data_mutex);
+        // Check if the serial port is open
+        int result = decode_data_and_read(filedesc, &incoming);
+        if (result == 0)
+        {
+            // Lock the data so only this thread can access
+            data_mutex.lock();
+
+            // Update the global telemetry
             latest_telemetry = incoming;
+
+            // Update connection details
+            total_packets_received++;
+            last_packet_time = glfwGetTime();
+
+            // Update the plot buffers
             depth_history[offset] = incoming.depth;
             ref_history[offset] = incoming.ref_depth;
+            control_vol_history[offset] = incoming.control_volume;
+            piston_history[offset] = incoming.piston_pos;
+            time_history[offset] = (float)last_packet_time;
             offset = (offset + 1) % PLOT_HISTORY_SIZE;
-        } else {
-            // Check if the port actually closed (errno 5 is EIO - Input/output error)
-            if (errno == EIO || errno == EBADF) {
-                is_connected = false; 
-            }
+
+            // Unlock for other threads
+            data_mutex.unlock();
+        } 
+        else if(result == -1)
+        {
+            // Try to reconnect if there is a fatal issue
+            is_connected = false;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        else
+        {
+            continue;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
-    close(fd); // Clean up the stale file descriptor
+
+    // Clean up the stale file descriptor
+    close(filedesc);
 }
 
 void configure_termios(int* filedesc) {
@@ -70,7 +105,7 @@ void configure_termios(int* filedesc) {
     // Fully Disable Canonical Input 
     options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
 
-    // Disable all special processing on input/output
+    // Disable all depth_special processing on input/output
     options.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
     options.c_oflag &= ~OPOST;
 
@@ -96,7 +131,7 @@ int init_ImGUI(GLFWwindow** window) {
 	    return 1;
     }
 
-    // Apple-specific OpenGL requirements
+    // Apple-depth_specific OpenGL requirements
     const char* glsl_version = "#version 150";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
@@ -245,25 +280,173 @@ int decode_data_and_read(int filedesc, SystemStatus* telemetry)
 
 int render_depth_plot()
 {
+    data_mutex.lock();
+
     // Get maximum y axis value
-    float ymax = 0.0f;
+    float ymax = 1.0f;
     float ymin = *std::min_element(depth_history.begin(), depth_history.end()) - 1.0f;
-    printf("ymin: %.2f\n", ymin);
+
+    // Show the last 30 seconds of depth data
+    float current_time = (float)glfwGetTime();
+    float xmin = current_time - 30.0f; 
+    float xmax = current_time;
 
     // Ensure we fill the available space in the parent window
-    if (ImPlot::BeginPlot("Reference Tracking Performance", ImVec2(500, 500)))
+    if (ImPlot::BeginPlot("Reference Tracking Performance", ImVec2(500, 300)))
     {
-        ImPlot::SetupAxis(ImAxis_X1, "Samples");
+        ImPlot::SetupAxis(ImAxis_X1, "Time (s)");
         ImPlot::SetupAxis(ImAxis_Y1, "Depth (m)");
         
         // Set axes limits 
-        ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0, ymin, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_X1, 0, PLOT_HISTORY_SIZE, ImGuiCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, ymin, ymax, ImGuiCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_X1, xmin, xmax, ImGuiCond_Always);
 
-        ImPlot::PlotLine("Actual", depth_history.data(), PLOT_HISTORY_SIZE);
-        ImPlot::PlotLine("Target", ref_history.data(), PLOT_HISTORY_SIZE);        
+        // Customise Plotting for each line
+        ImPlotSpec depth_spec;
+        // depth_spec.LineColor = ImVec4(0.14,0.53,0.94,0.8f);
+        depth_spec.LineColor = ImVec4(0.19,0.76,0.27,0.8f);
+        depth_spec.LineWeight = 1.5f;
+
+        ImPlotSpec ref_spec;
+        ref_spec.LineColor = ImVec4(0.9,0.63,0.04,0.8f);
+        ref_spec.LineWeight = 1.5f;
+
+        ImPlot::PlotLine("Depth", time_history.data(), depth_history.data(), offset, depth_spec);
+        ImPlot::PlotLine("Reference Depth", time_history.data(), ref_history.data(), offset, ref_spec);     
         
         ImPlot::EndPlot();
     }
+    data_mutex.unlock();
     return 1;
+}
+
+int render_piston_plot()
+{
+    data_mutex.lock();
+
+    // Get maximum y axis value
+    float ymax = 1.0f;
+    float ymin = *std::max_element(control_vol_history.begin(), control_vol_history.end()) + 15.0f;
+
+    // Show the last 30 seconds of depth data
+    float current_time = (float)glfwGetTime();
+    float xmin = current_time - 30.0f; 
+    float xmax = current_time;
+
+    // Ensure we fill the available space in the parent window
+    if (ImPlot::BeginPlot("Control Signal and Piston Volume", ImVec2(500,300)))
+    {
+        ImPlot::SetupAxis(ImAxis_X1, "Time (s)");
+        ImPlot::SetupAxis(ImAxis_Y1, "Piston Volume (mL)");
+        
+        // Set axes limits 
+        ImPlot::SetupAxisLimits(ImAxis_Y1, ymin, ymax, ImGuiCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_X1, xmin, xmax, ImGuiCond_Always);
+
+        // Customise Plotting for each line
+        ImPlotSpec control_spec;
+        control_spec.LineColor = ImVec4(0.19,0.71,0.76,0.8f);
+        control_spec.LineWeight = 1.5f;
+
+        ImPlotSpec piston_spec;
+        piston_spec.LineColor = ImVec4(0.52,0.19,0.76,0.8f);
+        piston_spec.LineWeight = 1.5f;
+
+        ImPlot::PlotLine("Control Volume", time_history.data(), control_vol_history.data(), offset, control_spec);
+        ImPlot::PlotLine("Piston Volume", time_history.data(), piston_history.data(), offset, piston_spec);     
+        
+        ImPlot::EndPlot();
+    }
+    data_mutex.unlock();
+    return 1;
+}
+
+void ClearLog()
+{
+        for (int i = 0; i < Items.Size; i++)
+            ImGui::MemFree(Items[i]);
+        Items.clear();
+}
+
+void AddLog(const char* fmt, ...)
+{
+        // FIXME-OPT
+        char buf[1024];
+        va_list args;
+        va_start(args, fmt);
+        vsnprintf(buf, IM_COUNTOF(buf), fmt, args);
+        buf[IM_COUNTOF(buf)-1] = 0;
+        va_end(args);
+        Items.push_back(strdup(buf));
+}
+
+int render_messages(bool has_message, char* msg)
+{
+    // Options menu
+        if (ImGui::BeginPopup("Options"))
+        {
+            ImGui::Checkbox("Auto-scroll", &AutoScroll);
+            ImGui::EndPopup();
+        }
+        
+
+    // Options, Filter
+        ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_O, ImGuiInputFlags_Tooltip);
+        if (ImGui::Button("Options"))
+            ImGui::OpenPopup("Options");
+        ImGui::SameLine();
+        if(ImGui::Button("Clear"))
+        {
+            ClearLog();
+        }
+        ImGui::SameLine();
+        Filter.Draw("Filter Messages: [DEBUG] [INFO] [ERROR]", 180);
+        ImGui::Separator();
+
+        // Reserve enough left-over height for 1 separator + 1 input text
+        ImGuiStyle& style = ImGui::GetStyle();
+        const float footer_height_to_reserve = style.SeparatorSize + style.ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+        if (ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), ImGuiChildFlags_NavFlattened, ImGuiWindowFlags_HorizontalScrollbar))
+        {
+            if (ImGui::BeginPopupContextWindow())
+            {
+                if (ImGui::Selectable("Clear")) ClearLog();
+                ImGui::EndPopup();
+            }
+    
+            ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1)); // Tighten spacing
+            for (const char* item : Items)
+            {
+                if (!Filter.PassFilter(item))
+                    continue;
+
+                // Normally you would store more information in your item than just a string.
+                // (e.g. make Items[] an array of structure, store color/type etc.)
+                ImVec4 color;
+                bool has_color = false;
+                if (strstr(item, "[error]")) { color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f); has_color = true; }
+                else if (strncmp(item, "# ", 2) == 0) { color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f); has_color = true; }
+                if (has_color)
+                    ImGui::PushStyleColor(ImGuiCol_Text, color);
+                ImGui::TextUnformatted(item);
+                if (has_color)
+                    ImGui::PopStyleColor();
+            }
+
+            if(has_message)
+            {
+                AddLog("%s\n", msg);
+            }
+
+            // Keep up at the bottom of the scroll region if we were already at the bottom at the beginning of the frame.
+            // Using a scrollbar or mouse-wheel will take away from the bottom edge.
+            if (ScrollToBottom || (AutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()))
+                ImGui::SetScrollHereY(1.0f);
+            ScrollToBottom = false;
+
+            ImGui::PopStyleVar();
+        }
+        ImGui::EndChild();
+        ImGui::Separator();
+        return 0;
 }

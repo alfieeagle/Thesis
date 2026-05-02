@@ -48,17 +48,50 @@ int main(int, char**)
         data_mutex.unlock();
 
         ImGui::Begin("VBS Status", &my_window_active);
-        render_depth_plot();
-        if(filedesc < 0)
+        double currentTime = glfwGetTime();
+        bool is_stale = (currentTime - last_packet_time > 1.0);
+
+        // Connection status info
+        ImGui::SeparatorText("Connection Info");
         {
-            ImGui::Text("Serial port not available. Is the device plugged in and switched on?\n");
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_FrameBg));
+            if (ImGui::BeginChild("ResizableConnection", ImVec2(-FLT_MIN, ImGui::GetTextLineHeightWithSpacing() * 8), ImGuiChildFlags_Borders | ImGuiChildFlags_ResizeY))
+            {
+                if (is_connected && !is_stale)
+                {
+                    ImGui::TextColored(ImVec4(0, 1, 0, 1), "STATUS: ONLINE");
+                }
+                else
+                {
+                    ImGui::TextColored(ImVec4(1, 0, 0, 1), "STATUS: OFFLINE");
+                }
+                ImGui::Text("Packets Received: %d", total_packets_received);
+                ImGui::Text("Time since last packet: %.2f s", currentTime - last_packet_time);
+                if(filedesc < 0)
+                {
+                    ImGui::Text("Serial port not available. Is the device plugged in and switched on?\n");
+                }
+            }
+            ImGui::PopStyleColor();
+            ImGui::EndChild();
         }
 
-        ImGui::Text("Depth: %.2f\n", toPlot.depth);
-        ImGui::Text("Ref Depth: %.2f\n", toPlot.ref_depth);
-        ImGui::Text("Control Vol: %.2f\n", toPlot.control_volume);
-        ImGui::Text("Piston Vol: %.2f\n", toPlot.piston_pos);
-        ImGui::Text("Status: %s\n", toPlot.status ? "Enabled" : "Disabled");
+        ImGui::Separator();
+    
+        // Interactive Elements
+        static float f1 = 0.0f;
+        ImGui::PushItemWidth(200.0f);
+        ImGui::SliderFloat("Reference Depth", &f1, -10.0f, 0.0f, "Depth (m) = %.2f");
+        static int enable = 0;
+        ImGui::RadioButton("Enable", &enable, 0); ImGui::SameLine();
+        ImGui::RadioButton("Disable", &enable, 1);
+
+        // Plotting
+        render_depth_plot(); ImGui::SameLine(500, 30);
+        render_piston_plot();
+
+        // Messages
+        render_messages(toPlot.has_message, toPlot.message);
 
         ImGui::End();
         // --------------------------

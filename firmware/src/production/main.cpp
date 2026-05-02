@@ -97,7 +97,7 @@ void setup() {
 	motor.setAcceleration(MAX_ACCELERATION);
 	motor.setMinPulseWidth(MIN_PULSE_WIDTH_MS);
 	motor.setEnablePin(EN_PIN);
-	motor.disableOutputs();
+	// motor.disableOutputs();
 	// homing_sequence();
 	// Serial.println("Homing Finished");
 	// delay(200);
@@ -114,15 +114,15 @@ void loop()
 	if(ControlTimer.check() == true)
 	{
 		float newDepth = DepthSensor.depth();
-		if (std::abs(newDepth - _VBS.get_current_depth()) > DEADZONE_THRESHOLD)
-		{
-			_VBS.update_depth(newDepth);
-			_VBS.update_control(TIMER_INTERVAL_MILLIS/1000);
-			_VBS.update_motor_command();
-			std::vector<float> motorCommand = _VBS.get_motor_command();
-			send_motor_command(motorCommand);
-		}
-		
+		// if (std::abs(newDepth - _VBS.get_current_depth()) > DEADZONE_THRESHOLD)
+		// {
+		_VBS.update_depth(newDepth);
+		_VBS.update_control((float)TIMER_INTERVAL_MILLIS/1000.0f);
+		_VBS.update_motor_command();
+		std::vector<float> motorCommand = _VBS.get_motor_command();
+		send_motor_command(motorCommand);
+		// }
+
 		// Encode the current system telemetry
 		encode_data_and_send();
 	}
@@ -130,10 +130,10 @@ void loop()
 	// Step the motor
 	step();
 
-	if(Serial.available() > 0)
-	{
-		decode_data_and_read(&latest_command);
-    }
+	// if(Serial.available() > 0)
+	// {
+	// 	decode_data_and_read(&latest_command);
+    // }
 }
 
 

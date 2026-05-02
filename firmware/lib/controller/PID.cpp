@@ -46,6 +46,11 @@ void PID::calculate_integral_error(float dt)
 }
 
 void PID::calculate_derivative_error(float dt) {
+    if(dt == 0.0f)
+    {
+        _prevError = _prevError;
+        return;
+    }
     float raw_derivative = (_error - _prevError) / dt;
 
     _derivativeError = (1.0f - _alpha) * _derivativeError + _alpha * raw_derivative;
@@ -53,14 +58,14 @@ void PID::calculate_derivative_error(float dt) {
     _prevError = _error;
 }
 
-double PID::compute_control_signal()
+float PID::compute_control_signal()
 {
     float u = (_kp * _error) + (_kd * _derivativeError) + (_ki * _integralError);
 
-    return u = (float)std::clamp(u, -_saturation, _saturation);
+    return u = std::clamp(u, -_saturation, _saturation);
 }
 
-double PID::step(float ref, float signal, float dt)
+float PID::step(float ref, float signal, float dt)
 {
     _elapsedTime += dt;
 

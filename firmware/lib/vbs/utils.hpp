@@ -7,6 +7,8 @@
 #include <MS5837.h>
 #include <Wire.h>
 #include <AccelStepper.h>
+#include <string>
+#include <cstring>
 
 #include "vbs.hpp"
 #include "vbs_config.h"

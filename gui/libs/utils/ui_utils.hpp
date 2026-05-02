@@ -26,6 +26,7 @@ extern "C" {
 #include <pb_decode.h>
 #include <errno.h>
 #include <unistd.h>
+#include <string.h>
 
 #define BUFFER_SIZE 2048
 #define PLOT_HISTORY_SIZE 500
@@ -35,6 +36,9 @@ typedef uint8_t SerialBuffer[BUFFER_SIZE];
 // Create plotting buffers intialised to 0
 extern std::vector<float> depth_history;
 extern std::vector<float> ref_history;
+extern std::vector<float> control_vol_history;
+extern std::vector<float> piston_history;
+extern std::vector<float> time_history;
 extern int offset;
 
 // Create mutex object for threading
@@ -44,10 +48,16 @@ extern std::mutex data_mutex;
 extern SystemStatus latest_telemetry;
 
 extern bool is_connected;
+extern int total_packets_received;
+extern double last_packet_time;
 
 // UI functions
 int init_ImGUI(GLFWwindow** window);
 int render_depth_plot();
+int render_piston_plot();
+int render_messages(bool has_message, char* msg);
+void ClearLog();
+void AddLog(const char* fmt, ...);
 
 // Serial functions
 int setup_serial(std::string ttyPort);

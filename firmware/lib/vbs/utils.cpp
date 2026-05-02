@@ -27,6 +27,9 @@ AccelStepper motor(1, STEP_PIN, DIR_PIN);
 
 Command latest_command = Command_init_zero;
 
+
+int counter = 0;
+
 void handle_max_extension()
 {
 	// Disable motor
@@ -55,37 +58,32 @@ void send_motor_command(const std::vector<float>& motorCommand)
     float dir = motorCommand[1];
 
     // Only enable the piston if it's outside the deadzone
-    int enable = std::abs(_VBS.get_piston_volume() - _VBS.get_control_volume()) < DEADZONE_THRESHOLD ? 0 : 1;
+    // int enable = std::abs(_VBS.get_piston_volume() - _VBS.get_control_volume()) < DEADZONE_THRESHOLD ? 0 : 1;
 
-	if(enable == 0)
+    if(dir == extend)
     {
-        motor.disableOutputs();
+        motor.setSpeed(-freq);
+    }
+    else if (dir == retract)
+    {
+        motor.setSpeed(-freq);
     }
     else
     {
-        motor.enableOutputs();
-        if(dir == extend)
-        {
-            motor.setSpeed(-freq);
-        }
-        else if (dir == retract)
-        {
-           motor.setSpeed(-freq);
-        }
-        else
-        {
-            motor.setSpeed(0);
-        }
+        motor.setSpeed(0);
     }
 }
 
 void step()
 {
+    motor.enableOutputs();
     // Step the motor
-    motor.runSpeed();
-
-    // Update the VBS class to reflect new volume
-    _VBS.update_volume();
+    if(motor.runSpeed())
+    {
+        // Update the VBS class to reflect new volume each step
+        _VBS.update_volume();
+    };
+    
 }
 
 // Go to the fully retracted position
@@ -131,6 +129,8 @@ long distance_to_steps(float distance_m)
 
 int encode_data_and_send()
 {
+    counter += 1;
+
     // Create the buffer
     uint8_t local_buffer[256];
 
@@ -139,19 +139,21 @@ int encode_data_and_send()
     pb_ostream_t stream = pb_ostream_from_buffer(local_buffer, sizeof(local_buffer));
 
     // Encode the message and get the length of encoded bytes
-    message.control_volume = _VBS.get_control_volume(); 
+    message.control_volume = _VBS.get_control_volume() * 1000000;  // Convert m^3 to mL
     message.depth = _VBS.get_current_depth();
-    message.piston_pos = _VBS.get_piston_volume();
+    message.piston_pos = _VBS.get_piston_volume() * 1000000; // Convert m^3 to mL
     message.ref_depth = _VBS.get_reference_depth();
     message.status = _VBS.get_status();
+    std::string base = "[DEBUG] Test";
+    std::string final = base + std::to_string(counter);
+    std::strcpy(message.message, final.c_str());
 
     message.has_depth = true;
     message.has_ref_depth = true;
     message.has_piston_pos = true;
     message.has_control_volume = true;
     message.has_status = true;
-    message.has_message = false;
-    // strcpy(message.message, msg);
+    message.has_message = true;
 
     bool status = pb_encode(&stream, SystemStatus_fields, &message);
     size_t message_length = stream.bytes_written;

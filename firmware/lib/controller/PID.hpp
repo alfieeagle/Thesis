@@ -24,7 +24,7 @@ class PID
         // Constructor
         PID(float kp, float kd, float ki);
 
-        double step(float ref, float signal, float dt);
+        float step(float ref, float signal, float dt);
 
         void set_saturation(float sat);
 
@@ -60,7 +60,7 @@ class PID
         void calculate_derivative_error(float dt);
 
         // Compute the controller output
-        double compute_control_signal();
+        float compute_control_signal();
 };
 
 #endif
