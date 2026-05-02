@@ -3,6 +3,8 @@
 int filedesc = -1;
 bool is_connected = false;
 
+static ScrollingBuffer depth, ref_depth, control, piston;
+
 int main(int, char**) 
 {
     GLFWwindow* window = NULL;
@@ -35,7 +37,7 @@ int main(int, char**)
             if (filedesc >= 0)
             {
                 // We found it! Start ONE thread.
-                std::thread s_thread(read_serial, filedesc);
+                std::thread s_thread(read_serial, filedesc, &depth, &ref_depth, &control, &piston);
                 s_thread.detach();
                 is_connected = true; 
             }
@@ -47,7 +49,7 @@ int main(int, char**)
         SystemStatus toPlot = latest_telemetry;
         data_mutex.unlock();
 
-        ImGui::Begin("VBS Status", &my_window_active);
+        ImGui::Begin("VBS", &my_window_active);
         double currentTime = glfwGetTime();
         bool is_stale = (currentTime - last_packet_time > 1.0);
 
@@ -55,28 +57,32 @@ int main(int, char**)
         ImGui::SeparatorText("Connection Info");
         {
             ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_FrameBg));
-            if (ImGui::BeginChild("ResizableConnection", ImVec2(-FLT_MIN, ImGui::GetTextLineHeightWithSpacing() * 8), ImGuiChildFlags_Borders | ImGuiChildFlags_ResizeY))
+            
+            // Set height to 0.0f and add ImGuiChildFlags_AlwaysAutoResize
+            ImVec2 child_size = ImVec2(-FLT_MIN, 0.0f); 
+            ImGuiChildFlags child_flags = ImGuiChildFlags_Borders | ImGuiChildFlags_AlwaysAutoResize | ImGuiChildFlags_AutoResizeY;
+
+            if (ImGui::BeginChild("ResizableConnection", child_size, child_flags))
             {
                 if (is_connected && !is_stale)
-                {
                     ImGui::TextColored(ImVec4(0, 1, 0, 1), "STATUS: ONLINE");
-                }
                 else
-                {
                     ImGui::TextColored(ImVec4(1, 0, 0, 1), "STATUS: OFFLINE");
-                }
+
                 ImGui::Text("Packets Received: %d", total_packets_received);
                 ImGui::Text("Time since last packet: %.2f s", currentTime - last_packet_time);
+                
                 if(filedesc < 0)
-                {
-                    ImGui::Text("Serial port not available. Is the device plugged in and switched on?\n");
-                }
+                    ImGui::Text("Serial port not available. Is the device plugged in and switched on?");
             }
-            ImGui::PopStyleColor();
             ImGui::EndChild();
+            ImGui::PopStyleColor();
         }
 
         ImGui::Separator();
+        ImGui::PushFont(NULL, 15.0f);
+        ImGui::Text("Control Panel");
+        ImGui::PopFont();
     
         // Interactive Elements
         static float f1 = 0.0f;
@@ -86,14 +92,23 @@ int main(int, char**)
         ImGui::RadioButton("Enable", &enable, 0); ImGui::SameLine();
         ImGui::RadioButton("Disable", &enable, 1);
 
+        ImVec2 canvasSize = ImGui::GetContentRegionAvail();
+
         // Plotting
-        render_depth_plot(); ImGui::SameLine(500, 30);
-        render_piston_plot();
+        real_time_depth_plot(&depth, &ref_depth); 
+        ImGui::SameLine((canvasSize.x)/2, 10);
+        real_time_piston_plot(&control, &piston);
 
         // Messages
+        ImGui::Separator();
+        ImGui::PushFont(NULL, 15.0f);
+        ImGui::Text("Messages");
+        ImGui::PopFont();
         render_messages(toPlot.has_message, toPlot.message);
 
         ImGui::End();
+
+        // ImPlot::ShowDemoWindow();
         // --------------------------
 
         // Rendering

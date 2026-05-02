@@ -33,14 +33,6 @@ extern "C" {
 
 typedef uint8_t SerialBuffer[BUFFER_SIZE];
 
-// Create plotting buffers intialised to 0
-extern std::vector<float> depth_history;
-extern std::vector<float> ref_history;
-extern std::vector<float> control_vol_history;
-extern std::vector<float> piston_history;
-extern std::vector<float> time_history;
-extern int offset;
-
 // Create mutex object for threading
 extern std::mutex data_mutex;
 
@@ -51,17 +43,43 @@ extern bool is_connected;
 extern int total_packets_received;
 extern double last_packet_time;
 
+// utility structure for realtime plot
+struct ScrollingBuffer {
+    int MaxSize;
+    int Offset;
+    ImVector<ImVec2> Data;
+    ScrollingBuffer(int max_size = PLOT_HISTORY_SIZE) {
+        MaxSize = max_size;
+        Offset  = 0;
+        Data.reserve(MaxSize);
+    }
+    void AddPoint(float x, float y) {
+        if (Data.size() < MaxSize)
+            Data.push_back(ImVec2(x,y));
+        else {
+            Data[Offset] = ImVec2(x,y);
+            Offset =  (Offset + 1) % MaxSize;
+        }
+    }
+    void Erase() {
+        if (Data.size() > 0) {
+            Data.shrink(0);
+            Offset  = 0;
+        }
+    }
+};
+
 // UI functions
 int init_ImGUI(GLFWwindow** window);
-int render_depth_plot();
-int render_piston_plot();
 int render_messages(bool has_message, char* msg);
 void ClearLog();
 void AddLog(const char* fmt, ...);
+void real_time_depth_plot(struct ScrollingBuffer* depth, struct ScrollingBuffer* ref_depth);
+void real_time_piston_plot(struct ScrollingBuffer* control, struct ScrollingBuffer* piston);
 
 // Serial functions
 int setup_serial(std::string ttyPort);
-void read_serial(int filedesc);
+void read_serial(int filedesc, struct ScrollingBuffer* depth, struct ScrollingBuffer* ref_depth, struct ScrollingBuffer* control, struct ScrollingBuffer* piston);
 void configure_termios(int* filedesc);
 int encode_data_and_send(int filedesc, Command msg);
 int decode_data_and_read(int filedesc, SystemStatus* telemetry);

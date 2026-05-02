@@ -3,14 +3,6 @@
 int total_packets_received = 0;
 double last_packet_time = 0;
 
-// Create plotting buffers intialised to 0
-std::vector<float> depth_history(PLOT_HISTORY_SIZE, 0);
-std::vector<float> ref_history(PLOT_HISTORY_SIZE, 0);
-std::vector<float> time_history(PLOT_HISTORY_SIZE, 0);
-std::vector<float> control_vol_history(PLOT_HISTORY_SIZE, 0);
-std::vector<float> piston_history(PLOT_HISTORY_SIZE, 0);
-int offset = 0;
-
 // Create mutex object for threading
 std::mutex data_mutex;
 
@@ -36,7 +28,7 @@ int setup_serial(std::string ttyPort)
     return filedesc;
 }
 
-void read_serial(int filedesc) {
+void read_serial(int filedesc, struct ScrollingBuffer* depth, struct ScrollingBuffer* ref_depth, struct ScrollingBuffer* control, struct ScrollingBuffer* piston) {
     is_connected = true;
     while (is_connected)
     {
@@ -55,13 +47,10 @@ void read_serial(int filedesc) {
             total_packets_received++;
             last_packet_time = glfwGetTime();
 
-            // Update the plot buffers
-            depth_history[offset] = incoming.depth;
-            ref_history[offset] = incoming.ref_depth;
-            control_vol_history[offset] = incoming.control_volume;
-            piston_history[offset] = incoming.piston_pos;
-            time_history[offset] = (float)last_packet_time;
-            offset = (offset + 1) % PLOT_HISTORY_SIZE;
+            depth->AddPoint(glfwGetTime(), incoming.depth);
+            ref_depth->AddPoint(glfwGetTime(), incoming.ref_depth);
+            control->AddPoint(glfwGetTime(), incoming.control_volume);
+            piston->AddPoint(glfwGetTime(), incoming.piston_pos);
 
             // Unlock for other threads
             data_mutex.unlock();
@@ -278,89 +267,6 @@ int decode_data_and_read(int filedesc, SystemStatus* telemetry)
     return 1; // No start byte found in this call
 }
 
-int render_depth_plot()
-{
-    data_mutex.lock();
-
-    // Get maximum y axis value
-    float ymax = 1.0f;
-    float ymin = *std::min_element(depth_history.begin(), depth_history.end()) - 1.0f;
-
-    // Show the last 30 seconds of depth data
-    float current_time = (float)glfwGetTime();
-    float xmin = current_time - 30.0f; 
-    float xmax = current_time;
-
-    // Ensure we fill the available space in the parent window
-    if (ImPlot::BeginPlot("Reference Tracking Performance", ImVec2(500, 300)))
-    {
-        ImPlot::SetupAxis(ImAxis_X1, "Time (s)");
-        ImPlot::SetupAxis(ImAxis_Y1, "Depth (m)");
-        
-        // Set axes limits 
-        ImPlot::SetupAxisLimits(ImAxis_Y1, ymin, ymax, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_X1, xmin, xmax, ImGuiCond_Always);
-
-        // Customise Plotting for each line
-        ImPlotSpec depth_spec;
-        // depth_spec.LineColor = ImVec4(0.14,0.53,0.94,0.8f);
-        depth_spec.LineColor = ImVec4(0.19,0.76,0.27,0.8f);
-        depth_spec.LineWeight = 1.5f;
-
-        ImPlotSpec ref_spec;
-        ref_spec.LineColor = ImVec4(0.9,0.63,0.04,0.8f);
-        ref_spec.LineWeight = 1.5f;
-
-        ImPlot::PlotLine("Depth", time_history.data(), depth_history.data(), offset, depth_spec);
-        ImPlot::PlotLine("Reference Depth", time_history.data(), ref_history.data(), offset, ref_spec);     
-        
-        ImPlot::EndPlot();
-    }
-    data_mutex.unlock();
-    return 1;
-}
-
-int render_piston_plot()
-{
-    data_mutex.lock();
-
-    // Get maximum y axis value
-    float ymax = 1.0f;
-    float ymin = *std::max_element(control_vol_history.begin(), control_vol_history.end()) + 15.0f;
-
-    // Show the last 30 seconds of depth data
-    float current_time = (float)glfwGetTime();
-    float xmin = current_time - 30.0f; 
-    float xmax = current_time;
-
-    // Ensure we fill the available space in the parent window
-    if (ImPlot::BeginPlot("Control Signal and Piston Volume", ImVec2(500,300)))
-    {
-        ImPlot::SetupAxis(ImAxis_X1, "Time (s)");
-        ImPlot::SetupAxis(ImAxis_Y1, "Piston Volume (mL)");
-        
-        // Set axes limits 
-        ImPlot::SetupAxisLimits(ImAxis_Y1, ymin, ymax, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_X1, xmin, xmax, ImGuiCond_Always);
-
-        // Customise Plotting for each line
-        ImPlotSpec control_spec;
-        control_spec.LineColor = ImVec4(0.19,0.71,0.76,0.8f);
-        control_spec.LineWeight = 1.5f;
-
-        ImPlotSpec piston_spec;
-        piston_spec.LineColor = ImVec4(0.52,0.19,0.76,0.8f);
-        piston_spec.LineWeight = 1.5f;
-
-        ImPlot::PlotLine("Control Volume", time_history.data(), control_vol_history.data(), offset, control_spec);
-        ImPlot::PlotLine("Piston Volume", time_history.data(), piston_history.data(), offset, piston_spec);     
-        
-        ImPlot::EndPlot();
-    }
-    data_mutex.unlock();
-    return 1;
-}
-
 void ClearLog()
 {
         for (int i = 0; i < Items.Size; i++)
@@ -449,4 +355,122 @@ int render_messages(bool has_message, char* msg)
         ImGui::EndChild();
         ImGui::Separator();
         return 0;
+}
+
+void real_time_depth_plot(struct ScrollingBuffer* depth, struct ScrollingBuffer* ref_depth) {
+    data_mutex.lock();
+    
+    // Check if we have data to avoid the crash we saw earlier
+    if (depth->Data.empty()) {
+        data_mutex.unlock();
+        return; 
+    }
+
+    ImVec2 canvasSize = ImGui::GetContentRegionAvail();
+
+    static ImPlotAxisFlags flags = ImPlotAxisFlags_None; // Show labels for debugging
+    float history = 30.0f;
+    double now = glfwGetTime();
+
+    float ymax = 1.0f;
+    auto ymin_depth = std::min_element(depth->Data.begin(), depth->Data.end(), 
+    [](const ImVec2& a, const ImVec2& b) {
+        return a.y < b.y;
+    });
+    auto ymin_ref_depth = std::min_element(ref_depth->Data.begin(), ref_depth->Data.end(), 
+    [](const ImVec2& a, const ImVec2& b) {
+        return a.y < b.y;
+    });
+    float ymin = (ymin_depth->y < ymin_ref_depth->y) ? ymin_depth->y - 2.0f: ymin_ref_depth->y - 2.0f;
+
+    ImPlotSpec depth_spec;
+    depth_spec.LineColor = ImVec4(0.19,0.76,0.27,0.8f);
+    depth_spec.LineWeight = 1.5f;
+    depth_spec.Stride = 2 * sizeof(float);
+    depth_spec.Offset = depth->Offset;
+
+    ImPlotSpec ref_spec;
+        ref_spec.LineColor = ImVec4(0.9,0.63,0.04,0.8f);
+        ref_spec.LineWeight = 1.5f;
+        ref_spec.Stride = 2 * sizeof(float);
+        ref_spec.Offset = ref_depth->Offset;
+
+    // Use a fixed height so it doesn't collapse to 0 pixels
+    if (ImPlot::BeginPlot("Depth Tracking", ImVec2((canvasSize.x)/2, 400))) {
+        ImPlot::SetupAxes("Time (s)", "Depth (m)", flags, flags);
+        ImPlot::SetupAxisLimits(ImAxis_X1, now - history, now, ImGuiCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, ymin, ymax, ImGuiCond_Always); // Adjusted range
+
+        // Arguments: Label, x-ptr, y-ptr, count, flags, offset, stride
+        ImPlot::PlotLine("Depth", 
+                         &depth->Data[0].x, 
+                         &depth->Data[0].y, 
+                         depth->Data.size(), depth_spec);
+
+        if (!ref_depth->Data.empty()) {
+            ImPlot::PlotLine("Ref Depth", 
+                             &ref_depth->Data[0].x, 
+                             &ref_depth->Data[0].y, 
+                             ref_depth->Data.size(), ref_spec);
+        }
+            
+        ImPlot::EndPlot();
+    }
+    data_mutex.unlock();
+}
+
+void real_time_piston_plot(struct ScrollingBuffer* control, struct ScrollingBuffer* piston) {
+    data_mutex.lock();
+    
+    // Check if we have data to avoid the crash we saw earlier
+    if (control->Data.empty()) {
+        data_mutex.unlock();
+        return; 
+    }
+
+    ImVec2 canvasSize = ImGui::GetContentRegionAvail();
+
+    static ImPlotAxisFlags flags = ImPlotAxisFlags_None; // Show labels for debugging
+    float history = 30.0f;
+    double now = glfwGetTime();
+
+    float ymax = 130.0f;
+    float ymin = -ymax;
+
+    // Customise Plotting for each line
+    ImPlotSpec control_spec;
+    control_spec.LineColor = ImVec4(0.19,0.71,0.76,0.8f);
+    control_spec.LineWeight = 1.5f;
+    control_spec.Stride = 2 * sizeof(float);
+    control_spec.Offset = control->Offset;
+
+
+    ImPlotSpec piston_spec;
+    piston_spec.LineColor = ImVec4(0.52,0.19,0.76,0.8f);
+    piston_spec.LineWeight = 1.5f;
+    piston_spec.Stride = 2 * sizeof(float);
+    piston_spec.Offset = piston->Offset;
+
+    // Use a fixed height so it doesn't collapse to 0 pixels
+    if (ImPlot::BeginPlot("Control Signal and Piston Volume", ImVec2((canvasSize.x), 400))) {
+        ImPlot::SetupAxes("Time (s)", "Volume (mL)", flags, flags);
+        ImPlot::SetupAxisLimits(ImAxis_X1, now - history, now, ImGuiCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, ymin, ymax, ImGuiCond_Always); // Adjusted range
+
+        // Arguments: Label, x-ptr, y-ptr, count, flags, offset, stride
+        ImPlot::PlotLine("Control Volume", 
+                         &control->Data[0].x, 
+                         &control->Data[0].y, 
+                         control->Data.size(), control_spec);
+
+        if (!piston->Data.empty()) {
+            ImPlot::PlotLine("Piston Volume", 
+                             &piston->Data[0].x, 
+                             &piston->Data[0].y, 
+                             piston->Data.size(), piston_spec);
+        }
+            
+        ImPlot::EndPlot();
+    }
+    data_mutex.unlock();
 }
