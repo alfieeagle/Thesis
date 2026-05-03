@@ -2,6 +2,7 @@
 
 MS5837 DepthSensor; 
 Metro ControlTimer = Metro(TIMER_INTERVAL_MILLIS);
+IntervalTimer msgTimer;
 VBS _VBS(
     KP,
     KD,
@@ -27,24 +28,30 @@ AccelStepper motor(1, STEP_PIN, DIR_PIN);
 
 Command latest_command = Command_init_zero;
 
-
-int counter = 0;
-
 void handle_max_extension()
 {
 	// Disable motor
+    noInterrupts();
 	motor.disableOutputs();
     _VBS.disable();
-    Serial.println("Fully Extended");
+    interrupts();
+    encode_data_and_send("[INFO] Fully Extended");
 }
 
 void handle_max_retraction()
 {
 	// Disable motor
+    noInterrupts();
 	motor.disableOutputs();
     _VBS.disable();
     _VBS.set_home(true);
-    Serial.println("Fully retracted");
+    interrupts();
+    encode_data_and_send("[INFO] Fully retracted");
+}
+
+void timer_callback()
+{
+    encode_data_and_send(NULL);
 }
 
 void send_motor_command(const std::vector<float>& motorCommand)
@@ -90,6 +97,7 @@ void step()
 void homing_sequence()
 {
     motor.enableOutputs();
+    encode_data_and_send("[INFO] Performing homing sequence");
 
     // Ensure that the piston reaches the fully retracted position
     long steps = distance_to_steps(VBS_HALF_STROKE * 4);
@@ -109,6 +117,7 @@ void homing_sequence()
 // Go to the neutrally buoyant point
 void neutral_point()
 {
+    encode_data_and_send("[INFO] Moving to neutral position");
     motor.enableOutputs();
 
     // Neutrally buoyant point should be one half stroke from the 
@@ -118,6 +127,8 @@ void neutral_point()
     // Negative steps equals extension
     motor.moveTo(-steps);
     motor.runToPosition();
+
+    encode_data_and_send("[INFO] At neutral position");
 }
 
 // Convert a distance in meteres to the number of steps required by the motor
@@ -127,12 +138,15 @@ long distance_to_steps(float distance_m)
     return steps;
 }
 
-int encode_data_and_send()
+void encode_data_and_send(const char* msg)
 {
-    counter += 1;
+    // Create a clean buffer
+    uint8_t local_buffer[1000];
+    memset(local_buffer, 0, sizeof(local_buffer));
 
-    // Create the buffer
-    uint8_t local_buffer[256];
+    // static bool is_encoding = false;
+    // if (is_encoding) return;
+    // is_encoding = true;
 
     // Setup the protobuf stream
     SystemStatus message = SystemStatus_init_zero;
@@ -144,16 +158,23 @@ int encode_data_and_send()
     message.piston_pos = _VBS.get_piston_volume() * 1000000; // Convert m^3 to mL
     message.ref_depth = _VBS.get_reference_depth();
     message.status = _VBS.get_status();
-    std::string base = "[DEBUG] Test";
-    std::string final = base + std::to_string(counter);
-    std::strcpy(message.message, final.c_str());
-
+    if(msg != NULL)
+    {
+        message.has_message = true;
+        strncpy(message.message, msg, sizeof(message.message) - 1);
+        message.message[sizeof(message.message) - 1] = '\0';
+    }
+    else
+    {
+        message.has_message = false;
+    }
+    
     message.has_depth = true;
     message.has_ref_depth = true;
     message.has_piston_pos = true;
     message.has_control_volume = true;
     message.has_status = true;
-    message.has_message = true;
+    
 
     bool status = pb_encode(&stream, SystemStatus_fields, &message);
     size_t message_length = stream.bytes_written;
@@ -161,8 +182,10 @@ int encode_data_and_send()
     // Check for encoding errors
     if (!status)
     {
-        Serial.printf("Encoding failed on teensy: %s\n", PB_GET_ERROR(&stream));
-        return 1;
+        // std::string base = "[ERROR] Encoding failed:";
+        // std::string error = PB_GET_ERROR(&stream);
+        // std::string final = base + error;
+        // encode_data_and_send(final.c_str());
     }
 
     // Write the start byte, length and encoded message to the serial port
@@ -175,14 +198,13 @@ int encode_data_and_send()
     // Check for writing errors
     if(num_bytes < 0)
     {
-        Serial.println("Error writing to device from teensy.");
-        return 1;
+        // encode_data_and_send("[ERROR] Error encoding previous message");
     }
 
-    return 0;
+    // is_encoding = false;
 }
 
-int decode_data_and_read(Command* telemetry)
+void decode_data_and_read(Command* telemetry)
 {
     uint8_t startbyte;
     
@@ -208,13 +230,14 @@ int decode_data_and_read(Command* telemetry)
                 // Check for decode error
                 if(!status)
                 {
-                    Serial.printf("Decoding failed on teensy: %s\n", PB_GET_ERROR(&stream));
+                    std::string base = "[ERROR] Decoding failed:";
+                    std::string error = PB_GET_ERROR(&stream);
+                    std::string final = base + error;
+                    encode_data_and_send(final.c_str());
                     telemetry = NULL; // Returning empty message
-                    return 1;
                 }
                  *telemetry = message;
             }
         }
     }
-    return 0;
 }

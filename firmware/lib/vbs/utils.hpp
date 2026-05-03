@@ -9,6 +9,7 @@
 #include <AccelStepper.h>
 #include <string>
 #include <cstring>
+#include <IntervalTimer.h>
 
 #include "vbs.hpp"
 #include "vbs_config.h"
@@ -22,6 +23,7 @@ extern MS5837 DepthSensor;
 extern Metro ControlTimer;
 extern VBS _VBS;
 extern AccelStepper motor;  
+extern IntervalTimer msgTimer;
 
 // Global variable to store latest command
 extern Command latest_command;
@@ -34,7 +36,8 @@ void neutral_point();
 void step();
 long distance_to_steps(float distance_m);
 
-int encode_data_and_send();
-int decode_data_and_read(Command* telemetry);
+void encode_data_and_send(const char* msg);
+void decode_data_and_read(Command* telemetry);
+void timer_callback();
 
 #endif

@@ -35,7 +35,7 @@
 #define BUFFER_SIZE = 2048
 
 // Timing
-const int DEBOUNCE_TIME_MS = 200;
+const int DEBOUNCE_TIME_MS = 1000;
 const int TIMER_INTERVAL_MILLIS = 100;
 
 // Driver parameters
