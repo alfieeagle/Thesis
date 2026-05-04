@@ -82,6 +82,11 @@ void VBS::set_reference_depth(float ref_depth)
     _referenceDepth = ref_depth;
 }
 
+int VBS::get_direction()
+{
+    return _actuator.get_direction();
+}
+
 void VBS::update_motor_command() {
     std::vector<float> motor_command;
 
@@ -92,11 +97,11 @@ void VBS::update_motor_command() {
     float freq = (maxSpeedRPM/60) * _actuator.get_steps_per_rev();
     motor_command.push_back(freq);
 
-    double requestedChange = _controlVolume - _actuator.get_piston_volume();
+    double requestedChange = (_controlVolume - _actuator.get_piston_volume()) * 1000000;
     
     // Find piston direction 
-    int dir  = (requestedChange > 0) ? EXTEND : (requestedChange < 0 ? RETRACT : HOLD);
-    _actuator.update_direction(dir);
+    int dir  = (requestedChange > BUOYANCY_RESOLUTION_GRAMS) ? EXTEND : (requestedChange < -BUOYANCY_RESOLUTION_GRAMS ? RETRACT : HOLD);
+    // _actuator.update_direction(dir);
     motor_command.push_back((float)dir);
     
     _motorCommand = motor_command;

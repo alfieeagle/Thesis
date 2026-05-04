@@ -73,6 +73,7 @@ class VBS
         double get_control_volume();
         double get_piston_volume();
         bool get_status();
+        int get_direction();
 
         // Depth
         float get_reference_depth();

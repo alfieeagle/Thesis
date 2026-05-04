@@ -32,6 +32,7 @@ void handle_max_extension()
 {
 	// Disable motor
     noInterrupts();
+    motor.stop();
 	motor.disableOutputs();
     _VBS.disable();
     interrupts();
@@ -42,6 +43,7 @@ void handle_max_retraction()
 {
 	// Disable motor
     noInterrupts();
+    motor.stop();
 	motor.disableOutputs();
     _VBS.disable();
     _VBS.set_home(true);
@@ -60,6 +62,11 @@ void send_motor_command(const std::vector<float>& motorCommand)
     // Extract the frequency and direction from the command
     float freq = motorCommand[0];
     float dir = motorCommand[1];
+    if(dir != _VBS.get_direction())
+    {
+        motor.stop();
+        delay(100);
+    }
 
     // Only enable the piston if it's outside the deadzone
     int deadzone = std::abs(_VBS.get_current_depth() - _VBS.get_reference_depth()) < DEADZONE_THRESHOLD ? 1 : 0;
@@ -76,7 +83,7 @@ void send_motor_command(const std::vector<float>& motorCommand)
         {
             motor.enableOutputs();
             _VBS.update_direction(RETRACT);
-            motor.setSpeed(-freq);
+            motor.setSpeed(freq);
         }
         else
         {
