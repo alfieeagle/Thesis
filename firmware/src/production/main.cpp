@@ -19,6 +19,8 @@ Dependencies:	TMCStepper.h, Arduino.h, vbs.hpp, pin_definitions.h
 
 #include "utils.hpp"
 
+int startup = true;
+
 void setup() {
 	// Start USB coms
 	Serial.begin(SERIAL_BAUD_RATE);
@@ -97,9 +99,6 @@ void setup() {
 	motor.setEnablePin(EN_PIN);
 	motor.setPinsInverted(false, false, true);
 	_VBS.set_volume(0);
-	homing_sequence();
-	delay(200);
-	neutral_point();
 	stepTimer.begin(step, 200);
 	encode_data_and_send("[INFO] Step interrupt timer started");
 	encode_data_and_send("[INFO] Finished Setup");
@@ -107,6 +106,14 @@ void setup() {
 
 void loop() 
 {
+	if(startup && _VBS.get_status() == true)
+	{
+		homing_sequence();
+		delay(200);
+		// neutral_point();
+		startup = false;
+	}
+
 	// Read depth and update control at 10 Hz
 	// provided it's not within the 10 cm deadzone
 	if(ControlTimer.check() == true)

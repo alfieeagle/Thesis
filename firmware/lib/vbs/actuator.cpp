@@ -42,7 +42,7 @@ _minSpeedRPM(minMotorSpeed),
 _pistonArea(pistonArea),
 _stepsPerRev(stepsPerRev)
 {
-    _enabled = true;
+    _enabled = false;
 
     _maxPistonVolume = 0.00012053;
     _pistonVolume = 0.0;

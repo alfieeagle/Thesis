@@ -62,28 +62,40 @@ void send_motor_command(const std::vector<float>& motorCommand)
     float dir = motorCommand[1];
 
     // Only enable the piston if it's outside the deadzone
-    // int enable = std::abs(_VBS.get_piston_volume() - _VBS.get_control_volume()) < DEADZONE_THRESHOLD ? 0 : 1;
+    int deadzone = std::abs(_VBS.get_current_depth() - _VBS.get_reference_depth()) < DEADZONE_THRESHOLD ? 1 : 0;
 
-    if(dir == EXTEND)
+    if(!deadzone && _VBS.get_status() == true)
     {
-        _VBS.update_direction(EXTEND);
-        motor.setSpeed(-freq);
-    }
-    else if (dir == RETRACT)
-    {
-        _VBS.update_direction(RETRACT);
-        motor.setSpeed(-freq);
+        if(dir == EXTEND)
+        {
+            motor.enableOutputs();
+            _VBS.update_direction(EXTEND);
+            motor.setSpeed(-freq);
+        }
+        else if (dir == RETRACT)
+        {
+            motor.enableOutputs();
+            _VBS.update_direction(RETRACT);
+            motor.setSpeed(-freq);
+        }
+        else
+        {
+            motor.enableOutputs();
+            _VBS.update_direction(HOLD);
+            motor.setSpeed(0);
+        }
     }
     else
     {
         _VBS.update_direction(HOLD);
         motor.setSpeed(0);
+        _VBS.disable();
+        motor.disableOutputs();
     }
 }
 
 void step()
 {
-    motor.enableOutputs();
     // Step the motor
     if(motor.runSpeed())
     {
@@ -310,11 +322,11 @@ void read_serial()
             }
             _VBS.set_reference_depth(incoming.target_depth);
             
-            // Construct a single confirmation message
-            char msg_buffer[100];
-            snprintf(msg_buffer, sizeof(msg_buffer), "[CMD] Enable: %d, Depth: %.2f", 
-                     incoming.enable, incoming.target_depth);
-            encode_data_and_send(msg_buffer);
+            // // Construct a single confirmation message
+            // char msg_buffer[100];
+            // snprintf(msg_buffer, sizeof(msg_buffer), "[CMD] Enable: %d, Depth: %.2f", 
+            //          incoming.enable, incoming.target_depth);
+            // encode_data_and_send(msg_buffer);
         } 
         else
         {

@@ -65,10 +65,6 @@ void read_serial(int filedesc, struct ScrollingBuffer* depth, struct ScrollingBu
             // Unlock for other threads
             data_mutex.unlock();
         } 
-        else
-        {
-            AddLog("[ERROR] Issue reading serial sent from teensy");
-        }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
@@ -293,11 +289,6 @@ int decode_data_and_read(int filedesc, SystemStatus* telemetry)
                     }
                 }
             }
-
-            // 4. Debug Hex Dump (Useful for verifying your 1.0f, 2.0f hardcoded values)
-            // printf("Packet Received! Len: %d | Data: ", len);
-            // for(int i = 0; i < len; i++) printf("%02X ", buffer[i]);
-            // printf("\n");
 
             // 5. Decode the complete buffer
             SystemStatus message = SystemStatus_init_zero;
