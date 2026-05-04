@@ -21,12 +21,13 @@ Dependencies:	TMCStepper.h, Arduino.h, vbs.hpp, pin_definitions.h
 
 void setup() {
 	// Start USB coms
-	Serial.begin(115200);
+	Serial.begin(SERIAL_BAUD_RATE);
 	while(!Serial){};
 	encode_data_and_send("[INFO] Starting");
+	_VBS.update_direction(HOLD);
 
 	// Setup messaging interval timer to send message every 0.1 s
-	msgTimer.begin(timer_callback, 100000);
+	msgTimer.begin(msg_callback, 100000);
 
 	Wire.begin();
 
@@ -95,9 +96,12 @@ void setup() {
 	motor.setMinPulseWidth(MIN_PULSE_WIDTH_MS);
 	motor.setEnablePin(EN_PIN);
 	motor.setPinsInverted(false, false, true);
+	_VBS.set_volume(0);
 	homing_sequence();
 	delay(200);
 	neutral_point();
+	stepTimer.begin(step, 200);
+	encode_data_and_send("[INFO] Step interrupt timer started");
 	encode_data_and_send("[INFO] Finished Setup");
 }
 
@@ -105,29 +109,21 @@ void loop()
 {
 	// Read depth and update control at 10 Hz
 	// provided it's not within the 10 cm deadzone
-	// if(ControlTimer.check() == true)
-	// {
-	// 	float newDepth = DepthSensor.depth();
-	// 	// if (std::abs(newDepth - _VBS.get_current_depth()) > DEADZONE_THRESHOLD)
-	// 	// {
-	// 	_VBS.update_depth(newDepth);
-	// 	_VBS.update_control((float)TIMER_INTERVAL_MILLIS/1000.0f);
-	// 	_VBS.update_motor_command();
-	// 	std::vector<float> motorCommand = _VBS.get_motor_command();
-	// 	send_motor_command(motorCommand);
-	// 	// }
+	if(ControlTimer.check() == true)
+	{
+		float newDepth = DepthSensor.depth();
+		_VBS.update_depth(newDepth);
+		_VBS.update_control((float)TIMER_INTERVAL_MILLIS/1000.0f);
+		_VBS.update_motor_command();
+		std::vector<float> motorCommand = _VBS.get_motor_command();
+		send_motor_command(motorCommand);
+	}
 
-	// 	// Encode the current system telemetry
-	// 	// encode_data_and_send(NULL);
-	// }
+	if(Serial.available() > 0)
+	{
+		read_serial();
+    }
 
-	// // Step the motor
-	// step();
-
-	// if(Serial.available() > 0)
-	// {
-	// 	decode_data_and_read(&latest_command);
-    // }
 }
 
 

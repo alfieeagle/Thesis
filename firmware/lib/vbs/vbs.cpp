@@ -48,11 +48,6 @@ _length(length),
 _radius(radius),
 _motorCommand(3)
 {
-    // #ifdef CORE_TEENSY
-    //     instance_ptr = this;
-    //     _controllerTimer.begin(vbs_timer_isr, 100000); 
-    // #endif
-
     _referenceDepth = -2.0;
     _currentDepth = _referenceDepth;
 
@@ -77,12 +72,17 @@ void VBS::update_control(float dt) {
     _controlVolume = _controller.step(_referenceDepth, get_current_depth(), dt) * _actuator.get_max_piston_volume();
 }
 
-void VBS::update_motor_command() {
-    // Setup directions
-    float extend = 1.0f;
-    float retract = -1.0f;
-    float hold = 0.0f;
+void VBS::set_volume(int vol_mL)
+{
+    _actuator.set_volume(vol_mL);
+}
 
+void VBS::set_reference_depth(float ref_depth)
+{
+    _referenceDepth = ref_depth;
+}
+
+void VBS::update_motor_command() {
     std::vector<float> motor_command;
 
     // Check max speed
@@ -95,14 +95,16 @@ void VBS::update_motor_command() {
     double requestedChange = _controlVolume - _actuator.get_piston_volume();
     
     // Find piston direction 
-    int dir  = (requestedChange > 0) ? extend : (requestedChange < 0 ? retract : hold);
+    int dir  = (requestedChange > 0) ? EXTEND : (requestedChange < 0 ? RETRACT : HOLD);
     _actuator.update_direction(dir);
     motor_command.push_back((float)dir);
-
-    // Check if the motor is at an end stop
-    // _actuator.is_enabled() ? motor_command.push_back(1.0f) : motor_command.push_back(0.0f);
     
     _motorCommand = motor_command;
+}
+
+void VBS::update_direction(int dir)
+{
+    _actuator.update_direction(dir);
 }
 
 void VBS::update_depth(float depth)

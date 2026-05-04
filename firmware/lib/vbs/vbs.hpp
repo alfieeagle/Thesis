@@ -24,6 +24,7 @@ Dependencies:   PID.hpp, cmath
 **/
 #include "PID.hpp"
 #include "actuator.hpp"
+#include "vbs_config.h"
 
 #include <cmath>
 #include <algorithm>
@@ -62,6 +63,9 @@ class VBS
         void enable();
         void disable();
         void set_home(bool flag);
+        void update_direction(int dir);
+        void set_volume(int vol_mL);
+        void set_reference_depth(float ref_depth);
 
         // Getters
         // Volumes 

@@ -95,8 +95,16 @@ float Actuator::calculate_motor_power(float motorTorque,  float rotVel)
     return powerConsumption;
 }
 
+void Actuator::set_volume(int vol_mL)
+{
+    double vol_m3 = vol_mL/1000000;
+    _pistonVolume = vol_m3;
+}
+
 void Actuator::increment_piston_volume()
 {
+    if(_dir == 0) return;
+
     double volumePerStep = (_screwLead / (_stepsPerRev * _gearRatio)) * _pistonArea;
 
     // Increment the piston volume by the amount moved in a single step

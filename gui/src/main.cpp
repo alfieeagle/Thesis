@@ -3,6 +3,8 @@
 int filedesc = -1;
 
 static ScrollingBuffer depth, ref_depth, control, piston;
+static float target_depth = 0.0f;
+static int status = 0;
 
 int main(int, char**) 
 {
@@ -17,9 +19,11 @@ int main(int, char**)
     
     if (filedesc >= 0)
     {
-        // We found it! Start ONE thread.
-        std::thread s_thread(read_serial, filedesc, &depth, &ref_depth, &control, &piston);
-        s_thread.detach();
+        // Start a thread for reading and writing serial
+        std::thread read_thread(read_serial, filedesc, &depth, &ref_depth, &control, &piston);
+        std::thread write_thread(write_serial, filedesc, &target_depth, &status);
+        read_thread.detach();
+        write_thread.detach();
     }
 
     while (!glfwWindowShouldClose(window))
@@ -55,8 +59,10 @@ int main(int, char**)
                     filedesc = setup_serial(ttyPort);
                     if(filedesc >= 0)
                     {
-                        std::thread s_thread(read_serial, filedesc, &depth, &ref_depth, &control, &piston);
-                        s_thread.detach();
+                        std::thread read_thread(read_serial, filedesc, &depth, &ref_depth, &control, &piston);
+                        std::thread write_thread(write_serial, filedesc, &target_depth, &status);
+                        read_thread.detach();
+                        write_thread.detach();
                     }
                 }
                 if (ImGui::MenuItem("Disconnect Serial"))
@@ -98,12 +104,10 @@ int main(int, char**)
         ImGui::PopFont();
     
         // Interactive Elements
-        static float f1 = 0.0f;
         ImGui::PushItemWidth(200.0f);
-        ImGui::SliderFloat("Reference Depth", &f1, -10.0f, 0.0f, "Depth (m) = %.2f");
-        static int enable = 0;
-        ImGui::RadioButton("Enable", &enable, 0); ImGui::SameLine();
-        ImGui::RadioButton("Disable", &enable, 1);
+        ImGui::SliderFloat("Reference Depth", &target_depth, -10.0f, 0.0f, "Depth (m) = %.2f");
+        ImGui::RadioButton("Enable", &status, 1); ImGui::SameLine();
+        ImGui::RadioButton("Disable", &status, 0);
 
         ImVec2 canvasSize = ImGui::GetContentRegionAvail();
 

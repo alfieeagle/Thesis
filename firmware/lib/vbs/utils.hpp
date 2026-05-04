@@ -23,7 +23,7 @@ extern MS5837 DepthSensor;
 extern Metro ControlTimer;
 extern VBS _VBS;
 extern AccelStepper motor;  
-extern IntervalTimer msgTimer;
+extern IntervalTimer msgTimer, stepTimer;
 
 // Global variable to store latest command
 extern Command latest_command;
@@ -36,8 +36,9 @@ void neutral_point();
 void step();
 long distance_to_steps(float distance_m);
 
-void encode_data_and_send(const char* msg);
-void decode_data_and_read(Command* telemetry);
-void timer_callback();
+int encode_data_and_send(const char* msg);
+int decode_data_and_read(Command* cmd);
+void read_serial();
+void msg_callback();
 
 #endif

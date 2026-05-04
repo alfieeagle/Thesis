@@ -2,6 +2,11 @@
 
 #define VBS_CONFIG_H
 
+// Setup directions
+#define EXTEND 1
+#define RETRACT -1
+#define HOLD 0
+
 // Controller params
 #define KP 1.5f
 #define KD 6.0f
@@ -39,7 +44,7 @@ const int DEBOUNCE_TIME_MS = 1000;
 const int TIMER_INTERVAL_MILLIS = 100;
 
 // Driver parameters
-const long SERIAL_BAUD_RATE = 500000; 
+const long SERIAL_BAUD_RATE = 230400; 
 
 // Logic parameters
 const float DEADZONE_THRESHOLD = 0.01f;

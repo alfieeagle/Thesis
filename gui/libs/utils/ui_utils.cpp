@@ -47,6 +47,12 @@ void read_serial(int filedesc, struct ScrollingBuffer* depth, struct ScrollingBu
             // Update the global telemetry
             latest_telemetry = incoming;
 
+            // Log any message from the firmware
+            if (incoming.has_message && incoming.message[0] != '\0')
+            {
+                AddLog("%s", incoming.message);
+            }
+
             // Update connection details
             total_packets_received++;
             last_packet_time = glfwGetTime();
@@ -59,11 +65,49 @@ void read_serial(int filedesc, struct ScrollingBuffer* depth, struct ScrollingBu
             // Unlock for other threads
             data_mutex.unlock();
         } 
+        else
+        {
+            AddLog("[ERROR] Issue reading serial sent from teensy");
+        }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
     // Clean up the stale file descriptor
     close(filedesc);
+}
+
+void write_serial(int filedesc, float* target_depth, int* status)
+{
+    // Local storage for the last sent state
+    float last_sent_depth = -999.0f; // Initialize with impossible values
+    int last_sent_status = -1;
+
+    while(filedesc >= 0)
+    {
+        data_mutex.lock();
+        float current_depth = *target_depth;
+        int current_status = *status;
+        data_mutex.unlock();
+
+        // Check if anything has changed
+        bool depth_changed = std::abs(current_depth - last_sent_depth) > 0.001f;
+        bool status_changed = (current_status != last_sent_status);
+
+        if (depth_changed || status_changed)
+        {
+            // Only lock and send if there is new info
+            data_mutex.lock();
+            encode_data_and_send(filedesc, current_depth, current_status);
+            data_mutex.unlock();
+
+            // Update the "last known" state
+            last_sent_depth = current_depth;
+            last_sent_status = current_status;
+        }
+
+        // Still include a small sleep to prevent CPU pegging
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+    }
 }
 
 void configure_termios(int* filedesc) {
@@ -73,8 +117,8 @@ void configure_termios(int* filedesc) {
         return;
     }
 
-    cfsetispeed(&options, B115200);
-    cfsetospeed(&options, B115200);
+    cfsetispeed(&options, B230400);
+    cfsetospeed(&options, B230400);
 
     // 8N1 (8 bits, no parity, 1 stop bit)
     options.c_cflag &= ~PARENB;
@@ -149,40 +193,42 @@ int init_ImGUI(GLFWwindow** window) {
     return 0;
 }
 
-int encode_data_and_send(int filedesc, float target_depth, bool enable)
+int encode_data_and_send(int filedesc, float target_depth, int enable)
 {
-    SerialBuffer buffer;
+        SerialBuffer buffer;
 
-    // Setup the protobuf stream
-    Command message = Command_init_zero;
-    pb_ostream_t stream = pb_ostream_from_buffer(buffer, sizeof(buffer));
+        // Setup the protobuf stream
+        Command message = Command_init_zero;
+        pb_ostream_t stream = pb_ostream_from_buffer(buffer, sizeof(buffer));
 
-    // Encode the message and get the length of encoded bytes
-    message.enable = enable;
-    message.target_depth = target_depth;
-    bool status = pb_encode(&stream, Command_fields, &message);
-    size_t message_length = stream.bytes_written;
-        
-    // Check for encoding errors
-    if (!status)
-    {
-        printf("Encoding failed from mac: %s\n", PB_GET_ERROR(&stream));
-        return 1;
-    }
+        // Encode the message and get the length of encoded bytes
+        message.enable = enable;
+        message.target_depth = target_depth;
+        message.has_enable = true;
+        message.has_target_depth = true;
+        bool status = pb_encode(&stream, Command_fields, &message);
+        size_t message_length = stream.bytes_written;
+            
+        // Check for encoding errors
+        if (!status)
+        {
+            printf("Encoding failed from mac: %s\n", PB_GET_ERROR(&stream));
+            return 1;
+        }
 
-    // Write the start byte, length and encoded message to the serial port
-    uint8_t startByte = 0xAA;
-    uint8_t len = (uint8_t)message_length;
-    write(filedesc, &startByte, 1);
-    write(filedesc, &len, 1);
-    int num_bytes = write(filedesc, buffer, message_length);
+        // Write the start byte, length and encoded message to the serial port
+        uint8_t startByte = 0xAA;
+        uint8_t len = (uint8_t)message_length;
+        write(filedesc, &startByte, 1);
+        write(filedesc, &len, 1);
+        int num_bytes = write(filedesc, buffer, message_length);
 
-    // Check for writing errors
-    if(num_bytes < 0)
-    {
-        AddLog("[ERROR] Writing to device failed: %s", strerror(errno));
-    }
-
+        // Check for writing errors
+        if(num_bytes < 0)
+        {
+            AddLog("[ERROR] Writing to device failed: %s", strerror(errno));
+        }
+    
     return 0;
 }
 
@@ -271,7 +317,7 @@ int decode_data_and_read(int filedesc, SystemStatus* telemetry)
             }
         }
     }
-    return 1; // No start byte found in this call
+    return 0;
 }
 
 void ClearLog()

@@ -2,7 +2,7 @@
 
 MS5837 DepthSensor; 
 Metro ControlTimer = Metro(TIMER_INTERVAL_MILLIS);
-IntervalTimer msgTimer;
+IntervalTimer msgTimer, stepTimer;
 VBS _VBS(
     KP,
     KD,
@@ -49,16 +49,13 @@ void handle_max_retraction()
     encode_data_and_send("[INFO] Fully retracted");
 }
 
-void timer_callback()
+void msg_callback()
 {
     encode_data_and_send(NULL);
 }
 
 void send_motor_command(const std::vector<float>& motorCommand)
 {
-    // Define directions
-    float extend = 1.0f;
-    float retract = -1.0f;
 
     // Extract the frequency and direction from the command
     float freq = motorCommand[0];
@@ -67,16 +64,19 @@ void send_motor_command(const std::vector<float>& motorCommand)
     // Only enable the piston if it's outside the deadzone
     // int enable = std::abs(_VBS.get_piston_volume() - _VBS.get_control_volume()) < DEADZONE_THRESHOLD ? 0 : 1;
 
-    if(dir == extend)
+    if(dir == EXTEND)
     {
+        _VBS.update_direction(EXTEND);
         motor.setSpeed(-freq);
     }
-    else if (dir == retract)
+    else if (dir == RETRACT)
     {
+        _VBS.update_direction(RETRACT);
         motor.setSpeed(-freq);
     }
     else
     {
+        _VBS.update_direction(HOLD);
         motor.setSpeed(0);
     }
 }
@@ -103,6 +103,8 @@ void homing_sequence()
     long steps = distance_to_steps(VBS_HALF_STROKE * 4);
     motor.move(steps);
 
+    _VBS.update_direction(RETRACT);
+
     // Drive the motor to the most retracted position
     while(_VBS.get_home() == false)
     {
@@ -117,6 +119,7 @@ void homing_sequence()
     digitalWrite(RESET_PIN, LOW);
     delayMicroseconds(100);
     digitalWrite(RESET_PIN, HIGH);
+    encode_data_and_send("[INFO] homing sequence complete");
 }
 
 // Go to the neutrally buoyant point
@@ -128,6 +131,8 @@ void neutral_point()
     // Neutrally buoyant point should be one half stroke from the 
     // fully retracted position
     long steps = distance_to_steps(VBS_HALF_STROKE);
+
+    _VBS.update_direction(EXTEND);
     
     // Negative steps equals extension
     motor.moveTo(-steps);
@@ -135,6 +140,7 @@ void neutral_point()
     {
         if(motor.run())
         {
+
             _VBS.update_volume();
         }
     }
@@ -149,15 +155,15 @@ long distance_to_steps(float distance_m)
     return steps;
 }
 
-void encode_data_and_send(const char* msg)
+int encode_data_and_send(const char* msg)
 {
     // Create a clean buffer
     uint8_t local_buffer[1000];
     memset(local_buffer, 0, sizeof(local_buffer));
 
-    // static bool is_encoding = false;
-    // if (is_encoding) return;
-    // is_encoding = true;
+    static bool is_encoding = false;
+    if (is_encoding) return 1;
+    is_encoding = true;
 
     // Setup the protobuf stream
     SystemStatus message = SystemStatus_init_zero;
@@ -193,10 +199,11 @@ void encode_data_and_send(const char* msg)
     // Check for encoding errors
     if (!status)
     {
-        // std::string base = "[ERROR] Encoding failed:";
-        // std::string error = PB_GET_ERROR(&stream);
-        // std::string final = base + error;
-        // encode_data_and_send(final.c_str());
+        std::string base = "[ERROR] Encoding failed:";
+        std::string error = PB_GET_ERROR(&stream);
+        std::string final = base + error;
+        encode_data_and_send(final.c_str());
+        return 1;
     }
 
     // Write the start byte, length and encoded message to the serial port
@@ -209,30 +216,48 @@ void encode_data_and_send(const char* msg)
     // Check for writing errors
     if(num_bytes < 0)
     {
-        // encode_data_and_send("[ERROR] Error encoding previous message");
+        encode_data_and_send("[ERROR] Error encoding previous message");
+        return 1;
     }
 
-    // is_encoding = false;
+    is_encoding = false;
+    return 0;
 }
 
-void decode_data_and_read(Command* telemetry)
+int decode_data_and_read(Command* cmd)
 {
     uint8_t startbyte;
     
-    while (Serial.readBytes((char*)&startbyte, 1) > 0) 
+    // Only read one message per call
+    if (Serial.readBytes((char*)&startbyte, 1) > 0) 
     {
         // Wait for the correct start byte
         if (startbyte == 0xAA) 
         {
             // Read the length
-            char len;
-            if (Serial.readBytes(&len, 1) > 0) 
+            uint8_t len;
+            if (Serial.readBytes((char*)&len, 1) > 0) 
             {
+                // Validate length to prevent buffer overflow
+                if (len > 256)
+                {
+                    encode_data_and_send("[ERROR] Message length exceeds buffer size");
+                    return 1;
+                }
+
                 // Create the buffer
                 uint8_t local_buffer[256];
+                memset(local_buffer, 0, sizeof(local_buffer));
             
                 // Decode the message
-                Serial.readBytes((char*)local_buffer, len);
+                int bytes_read = Serial.readBytes((char*)local_buffer, len);
+                
+                if (bytes_read != len)
+                {
+                    encode_data_and_send("[ERROR] Incomplete message received");
+                    return 1;
+                }
+
                 Command message = Command_init_zero;
                 pb_istream_t stream = pb_istream_from_buffer(local_buffer, len);
                 
@@ -245,10 +270,54 @@ void decode_data_and_read(Command* telemetry)
                     std::string error = PB_GET_ERROR(&stream);
                     std::string final = base + error;
                     encode_data_and_send(final.c_str());
-                    telemetry = NULL; // Returning empty message
+                    return 1;
                 }
-                 *telemetry = message;
+                
+                *cmd = message;
+                return 0;  // Success
+            }
+            else
+            {
+                encode_data_and_send("[ERROR] Failed to read message length");
+                return 1;
             }
         }
+        else
+        {
+            // Invalid start byte - skip it
+            return 1;
+        }
     }
+    
+    // No data available
+    return 1;
+}
+
+void read_serial()
+{
+    Command incoming;
+        // Check if the serial port is open
+        int result = decode_data_and_read(&incoming);
+        if (result == 0)
+        {
+            if(incoming.enable == true)
+            {
+                _VBS.enable();
+            }
+            else
+            {
+                _VBS.disable();
+            }
+            _VBS.set_reference_depth(incoming.target_depth);
+            
+            // Construct a single confirmation message
+            char msg_buffer[100];
+            snprintf(msg_buffer, sizeof(msg_buffer), "[CMD] Enable: %d, Depth: %.2f", 
+                     incoming.enable, incoming.target_depth);
+            encode_data_and_send(msg_buffer);
+        } 
+        else
+        {
+            encode_data_and_send("[ERROR] Issue reading serial sent from PC");
+        }
 }
