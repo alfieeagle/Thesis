@@ -317,7 +317,7 @@ int decode_data_and_read(int filedesc, SystemStatus* telemetry)
             }
         }
     }
-    return 0;
+    return 1;
 }
 
 void ClearLog()
