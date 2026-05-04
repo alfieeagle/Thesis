@@ -23,14 +23,18 @@ int setup_serial(std::string ttyPort)
         errno = 0;
         configure_termios(&filedesc);
         tcflush(filedesc, TCIOFLUSH);
-    }   
+        AddLog("[INFO] Successfully opened serial port: %s", ttyPort.c_str());
+    } 
+    else
+    {
+        AddLog("[ERROR] Failed to open serial port: %s", strerror(errno));
+    }  
 
     return filedesc;
 }
 
 void read_serial(int filedesc, struct ScrollingBuffer* depth, struct ScrollingBuffer* ref_depth, struct ScrollingBuffer* control, struct ScrollingBuffer* piston) {
-    is_connected = true;
-    while (is_connected)
+    while (filedesc >= 0)
     {
         SystemStatus incoming;
         // Check if the serial port is open
@@ -55,15 +59,6 @@ void read_serial(int filedesc, struct ScrollingBuffer* depth, struct ScrollingBu
             // Unlock for other threads
             data_mutex.unlock();
         } 
-        else if(result == -1)
-        {
-            // Try to reconnect if there is a fatal issue
-            is_connected = false;
-        }
-        else
-        {
-            continue;
-        }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
@@ -185,10 +180,22 @@ int encode_data_and_send(int filedesc, float target_depth, bool enable)
     // Check for writing errors
     if(num_bytes < 0)
     {
-        printf("Error writing to device from mac: %s", strerror(errno));
+        AddLog("[ERROR] Writing to device failed: %s", strerror(errno));
     }
 
     return 0;
+}
+
+void disconnect_serial(int filedesc)
+{
+    if(close(filedesc) == 0)
+    {
+        AddLog("[INFO] Successfully closed serial port");
+    }
+    else
+    {
+        AddLog("[ERROR] Error closing serial port: %s", strerror(errno));
+    }
 }
 
 int decode_data_and_read(int filedesc, SystemStatus* telemetry)
@@ -214,7 +221,7 @@ int decode_data_and_read(int filedesc, SystemStatus* telemetry)
 
             if (len == 0) 
             {
-                printf("Warning: Received packet with 0 length byte\n");
+                AddLog("[DEBUG] Received packet with 0 length byte\n");
                 return 1;
             }
 
@@ -235,7 +242,7 @@ int decode_data_and_read(int filedesc, SystemStatus* telemetry)
                     std::this_thread::sleep_for(std::chrono::microseconds(100));
                     if (++attempts > 1000) // 100ms timeout for the body
                     {
-                        printf("Timed out waiting for packet body (Got %d/%d)\n", bytes_received, len);
+                        AddLog("[DEBUG] Timed out waiting for packet body (Got %d/%d)\n", bytes_received, len);
                         return 1;
                     }
                 }
@@ -257,7 +264,7 @@ int decode_data_and_read(int filedesc, SystemStatus* telemetry)
             } 
             else 
             {
-                printf("Protobuf Decode Failed: %s\n", PB_GET_ERROR(&stream));
+                AddLog("[ERROR] Protobuf Decode Failed: %s\n", PB_GET_ERROR(&stream));
                 // If decoding fails, the stream is likely out of sync. Flush.
                 tcflush(filedesc, TCIFLUSH);
                 return 1;

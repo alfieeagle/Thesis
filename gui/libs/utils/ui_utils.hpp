@@ -83,6 +83,7 @@ void read_serial(int filedesc, struct ScrollingBuffer* depth, struct ScrollingBu
 void configure_termios(int* filedesc);
 int encode_data_and_send(int filedesc, Command msg);
 int decode_data_and_read(int filedesc, SystemStatus* telemetry);
+void disconnect_serial(int filedesc);
 
 #ifdef __cplusplus
 }

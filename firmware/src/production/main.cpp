@@ -78,8 +78,8 @@ void setup() {
 	attachInterrupt(LIM_RET, handle_max_retraction, FALLING);
 
 	// // Full step mode
-	digitalWrite(DM0, HIGH);
-	digitalWrite(DM1, HIGH);
+	digitalWrite(DM0, LOW);
+	digitalWrite(DM1, LOW);
 	digitalWrite(DM2, HIGH);
 
 	// Enable active gain control to increase power savings 
@@ -94,6 +94,7 @@ void setup() {
 	motor.setAcceleration(MAX_ACCELERATION);
 	motor.setMinPulseWidth(MIN_PULSE_WIDTH_MS);
 	motor.setEnablePin(EN_PIN);
+	motor.setPinsInverted(false, false, true);
 	homing_sequence();
 	delay(200);
 	neutral_point();

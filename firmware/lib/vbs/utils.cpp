@@ -106,12 +106,17 @@ void homing_sequence()
     // Drive the motor to the most retracted position
     while(_VBS.get_home() == false)
     {
-        motor.run();
+        if(motor.run())
+        {
+            _VBS.update_volume();
+        }
     }
 
     // Set the home position
-    motor.setCurrentPosition(0);
+    motor.setCurrentPosition((long)0);
     digitalWrite(RESET_PIN, LOW);
+    delayMicroseconds(100);
+    digitalWrite(RESET_PIN, HIGH);
 }
 
 // Go to the neutrally buoyant point
@@ -126,7 +131,13 @@ void neutral_point()
     
     // Negative steps equals extension
     motor.moveTo(-steps);
-    motor.runToPosition();
+    while(motor.distanceToGo() != 0)
+    {
+        if(motor.run())
+        {
+            _VBS.update_volume();
+        }
+    }
 
     encode_data_and_send("[INFO] At neutral position");
 }
@@ -134,7 +145,7 @@ void neutral_point()
 // Convert a distance in meteres to the number of steps required by the motor
 long distance_to_steps(float distance_m)
 {
-    long steps = (distance_m/S_L)*GEAR_RATIO*STEPS_PER_REV;
+    long steps = (distance_m/S_L) * GEAR_RATIO * STEPS_PER_REV;
     return steps;
 }
 

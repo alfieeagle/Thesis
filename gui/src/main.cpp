@@ -1,7 +1,6 @@
 #include "ui_utils.hpp"
 
 int filedesc = -1;
-bool is_connected = false;
 
 static ScrollingBuffer depth, ref_depth, control, piston;
 
@@ -12,8 +11,16 @@ int main(int, char**)
 
     bool my_window_active;
 
-    // Check that the serial port is open
     std::string ttyPort = "/dev/tty.usbmodem167597201";
+    // Try to open the port. setup_serial uses O_NONBLOCK so it won't hang the UI.
+    filedesc = setup_serial(ttyPort);
+    
+    if (filedesc >= 0)
+    {
+        // We found it! Start ONE thread.
+        std::thread s_thread(read_serial, filedesc, &depth, &ref_depth, &control, &piston);
+        s_thread.detach();
+    }
 
     while (!glfwWindowShouldClose(window))
     {
@@ -29,20 +36,6 @@ int main(int, char**)
         ImGui::SetNextWindowPos(ImVec2(0,0));
         ImGui::GetStyle().WindowRounding = 0.0f;
 
-        if (!is_connected)
-        {
-            // Try to open the port. setup_serial uses O_NONBLOCK so it won't hang the UI.
-            filedesc = setup_serial(ttyPort);
-            
-            if (filedesc >= 0)
-            {
-                // We found it! Start ONE thread.
-                std::thread s_thread(read_serial, filedesc, &depth, &ref_depth, &control, &piston);
-                s_thread.detach();
-                is_connected = true; 
-            }
-        }
-
         // --- Application Window ---
         // Create a copy of the data to render
         data_mutex.lock();
@@ -52,6 +45,26 @@ int main(int, char**)
         ImGui::Begin("VBS", &my_window_active);
         double currentTime = glfwGetTime();
         bool is_stale = (currentTime - last_packet_time > 1.0);
+
+        ImGui::BeginMenuBar();
+            if (ImGui::BeginMenu("Menu"))
+            {
+                ImGui::MenuItem("Serial Connection", NULL, false, false);
+                if (ImGui::MenuItem("Reconnect Serial"))
+                {
+                    filedesc = setup_serial(ttyPort);
+                    if(filedesc >= 0)
+                    {
+                        std::thread s_thread(read_serial, filedesc, &depth, &ref_depth, &control, &piston);
+                        s_thread.detach();
+                    }
+                }
+                if (ImGui::MenuItem("Disconnect Serial"))
+                {
+                    disconnect_serial(filedesc);
+                }
+                ImGui::EndMenu();
+            }
 
         // Connection status info
         ImGui::SeparatorText("Connection Info");
@@ -64,7 +77,7 @@ int main(int, char**)
 
             if (ImGui::BeginChild("ResizableConnection", child_size, child_flags))
             {
-                if (is_connected && !is_stale)
+                if (filedesc >= 0 && !is_stale)
                     ImGui::TextColored(ImVec4(0, 1, 0, 1), "STATUS: ONLINE");
                 else
                     ImGui::TextColored(ImVec4(1, 0, 0, 1), "STATUS: OFFLINE");
