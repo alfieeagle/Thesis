@@ -8,9 +8,9 @@
 #define HOLD 0
 
 // Controller params
-#define KP 1.5f
-#define KD 1.0f
-#define KI 0.01f
+#define KP 1.0f
+#define KD 0.0f
+#define KI 0.0f
 
 // VBS Physical params
 #define DT 0.1f
@@ -35,6 +35,7 @@
 #define MIN_PULSE_WIDTH_MS 10
 #define PISTON_AREA 0.0029f
 #define STEPS_PER_REV 200
+#define MAX_VOLUME_ONE_WAY_ML 120.5f
 
 // Buffer setup
 #define BUFFER_SIZE = 2048

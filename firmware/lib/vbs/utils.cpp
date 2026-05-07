@@ -35,6 +35,7 @@ void handle_max_extension()
     motor.stop();
 	motor.disableOutputs();
     _VBS.disable();
+    _VBS.set_volume(MAX_VOLUME_ONE_WAY_ML);
     interrupts();
     encode_data_and_send("[INFO] Fully Extended");
 }
@@ -46,6 +47,7 @@ void handle_max_retraction()
     motor.stop();
 	motor.disableOutputs();
     _VBS.disable();
+    _VBS.set_volume(-MAX_VOLUME_ONE_WAY_ML);
     _VBS.set_home(true);
     interrupts();
     encode_data_and_send("[INFO] Fully retracted");
@@ -331,12 +333,7 @@ void read_serial()
             _VBS.disable();
         }
         _VBS.set_reference_depth(incoming.target_depth);
-        
-        // // Construct a single confirmation message
-        // char msg_buffer[100];
-        // snprintf(msg_buffer, sizeof(msg_buffer), "[CMD] Enable: %d, Depth: %.2f", 
-        //          incoming.enable, incoming.target_depth);
-        // encode_data_and_send(msg_buffer);
+
     } 
     else
     {

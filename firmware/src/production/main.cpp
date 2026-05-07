@@ -106,13 +106,13 @@ void setup() {
 
 void loop() 
 {
-	// if(startup && _VBS.get_status() == true)
-	// {
-	// 	homing_sequence();
-	// 	delay(200);
-	// 	// neutral_point();
-	// 	startup = false;
-	// }
+	if(startup && _VBS.get_status() == true)
+	{
+		homing_sequence();
+		delay(200);
+		// neutral_point();
+		startup = false;
+	}
 
 	// Read depth and update control at 10 Hz
 	// provided it's not within the 10 cm deadzone

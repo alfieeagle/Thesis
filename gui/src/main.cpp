@@ -3,7 +3,7 @@
 int filedesc = -1;
 
 static ScrollingBuffer depth, ref_depth, control, piston;
-static float target_depth = 0.0f;
+static float target_depth = -11.0f;
 static int status = 0;
 
 int main(int, char**) 

@@ -72,7 +72,7 @@ void VBS::update_control(float dt) {
     _controlVolume = _controller.step(_referenceDepth, get_current_depth(), dt) * _actuator.get_max_piston_volume();
 }
 
-void VBS::set_volume(int vol_mL)
+void VBS::set_volume(float vol_mL)
 {
     _actuator.set_volume(vol_mL);
 }

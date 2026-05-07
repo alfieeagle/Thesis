@@ -84,7 +84,7 @@ class Actuator
         void update_direction(int dir);
         void enable();
         void disable();
-        void set_volume(int vol_mL);
+        void set_volume(float vol_mL);
 
     private:
         // Motor parameters

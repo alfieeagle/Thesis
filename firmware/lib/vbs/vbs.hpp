@@ -64,7 +64,7 @@ class VBS
         void disable();
         void set_home(bool flag);
         void update_direction(int dir);
-        void set_volume(int vol_mL);
+        void set_volume(float vol_mL);
         void set_reference_depth(float ref_depth);
 
         // Getters

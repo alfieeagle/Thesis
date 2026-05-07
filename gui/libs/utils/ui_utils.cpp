@@ -67,9 +67,6 @@ void read_serial(int* filedesc, struct ScrollingBuffer* depth, struct ScrollingB
         } 
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
-
-    // // Clean up the stale file descriptor
-    // close(*filedesc);
 }
 
 void write_serial(int* filedesc, float* target_depth, int* status)
