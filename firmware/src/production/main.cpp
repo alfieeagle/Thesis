@@ -40,8 +40,8 @@ void setup() {
 	if(!DepthSensor.init()) 
 	{
 		encode_data_and_send("[ERROR] Depth sensor initialisation failed!\n\
-							[DEBUG] Are SDA/SCL connected correctly?\n\
-							[DEBUG] Blue Robotics Bar30: White=SDA, Green=SCL");
+							  [DEBUG] Are SDA/SCL connected correctly?\n\
+							  [DEBUG] Blue Robotics Bar30: White=SDA, Green=SCL");
 	}
 	else
 	{
@@ -106,13 +106,13 @@ void setup() {
 
 void loop() 
 {
-	if(startup && _VBS.get_status() == true)
-	{
-		homing_sequence();
-		delay(200);
-		// neutral_point();
-		startup = false;
-	}
+	// if(startup && _VBS.get_status() == true)
+	// {
+	// 	homing_sequence();
+	// 	delay(200);
+	// 	// neutral_point();
+	// 	startup = false;
+	// }
 
 	// Read depth and update control at 10 Hz
 	// provided it's not within the 10 cm deadzone

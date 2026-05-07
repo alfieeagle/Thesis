@@ -238,7 +238,6 @@ int encode_data_and_send(const char* msg)
         encode_data_and_send("[ERROR] Error encoding previous message");
         return 1;
     }
-
     is_encoding = false;
     return 0;
 }
@@ -315,28 +314,32 @@ int decode_data_and_read(Command* cmd)
 void read_serial()
 {
     Command incoming;
-        // Check if the serial port is open
-        int result = decode_data_and_read(&incoming);
-        if (result == 0)
+
+    // Check if the serial port is open
+    int result = decode_data_and_read(&incoming);
+    if (result == 0)
+    {
+        if(incoming.enable == true)
         {
-            if(incoming.enable == true)
-            {
-                _VBS.enable();
-            }
-            else
-            {
-                _VBS.disable();
-            }
-            _VBS.set_reference_depth(incoming.target_depth);
-            
-            // // Construct a single confirmation message
-            // char msg_buffer[100];
-            // snprintf(msg_buffer, sizeof(msg_buffer), "[CMD] Enable: %d, Depth: %.2f", 
-            //          incoming.enable, incoming.target_depth);
-            // encode_data_and_send(msg_buffer);
-        } 
+            motor.enableOutputs();
+            _VBS.enable();
+        }
         else
         {
-            encode_data_and_send("[ERROR] Issue reading serial sent from PC");
+            motor.stop();
+            motor.disableOutputs();
+            _VBS.disable();
         }
+        _VBS.set_reference_depth(incoming.target_depth);
+        
+        // // Construct a single confirmation message
+        // char msg_buffer[100];
+        // snprintf(msg_buffer, sizeof(msg_buffer), "[CMD] Enable: %d, Depth: %.2f", 
+        //          incoming.enable, incoming.target_depth);
+        // encode_data_and_send(msg_buffer);
+    } 
+    else
+    {
+        encode_data_and_send("[ERROR] Issue reading serial sent from PC");
+    }
 }

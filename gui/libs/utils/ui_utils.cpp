@@ -33,12 +33,12 @@ int setup_serial(std::string ttyPort)
     return filedesc;
 }
 
-void read_serial(int filedesc, struct ScrollingBuffer* depth, struct ScrollingBuffer* ref_depth, struct ScrollingBuffer* control, struct ScrollingBuffer* piston) {
-    while (filedesc >= 0)
+void read_serial(int* filedesc, struct ScrollingBuffer* depth, struct ScrollingBuffer* ref_depth, struct ScrollingBuffer* control, struct ScrollingBuffer* piston) {
+    while (*filedesc >= 0)
     {
         SystemStatus incoming;
         // Check if the serial port is open
-        int result = decode_data_and_read(filedesc, &incoming);
+        int result = decode_data_and_read(*filedesc, &incoming);
         if (result == 0)
         {
             // Lock the data so only this thread can access
@@ -68,17 +68,17 @@ void read_serial(int filedesc, struct ScrollingBuffer* depth, struct ScrollingBu
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
-    // Clean up the stale file descriptor
-    close(filedesc);
+    // // Clean up the stale file descriptor
+    // close(*filedesc);
 }
 
-void write_serial(int filedesc, float* target_depth, int* status)
+void write_serial(int* filedesc, float* target_depth, int* status)
 {
     // Local storage for the last sent state
     float last_sent_depth = -999.0f; // Initialize with impossible values
     int last_sent_status = -1;
 
-    while(filedesc >= 0)
+    while(*filedesc >= 0)
     {
         data_mutex.lock();
         float current_depth = *target_depth;
@@ -93,10 +93,10 @@ void write_serial(int filedesc, float* target_depth, int* status)
         {
             // Only lock and send if there is new info
             data_mutex.lock();
-            encode_data_and_send(filedesc, current_depth, current_status);
+            encode_data_and_send(*filedesc, current_depth, current_status);
             data_mutex.unlock();
 
-            // Update the "last known" state
+            // Update the last known state
             last_sent_depth = current_depth;
             last_sent_status = current_status;
         }

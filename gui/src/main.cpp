@@ -20,8 +20,8 @@ int main(int, char**)
     if (filedesc >= 0)
     {
         // Start a thread for reading and writing serial
-        std::thread read_thread(read_serial, filedesc, &depth, &ref_depth, &control, &piston);
-        std::thread write_thread(write_serial, filedesc, &target_depth, &status);
+        std::thread read_thread(read_serial, &filedesc, &depth, &ref_depth, &control, &piston);
+        std::thread write_thread(write_serial, &filedesc, &target_depth, &status);
         read_thread.detach();
         write_thread.detach();
     }
@@ -59,8 +59,8 @@ int main(int, char**)
                     filedesc = setup_serial(ttyPort);
                     if(filedesc >= 0)
                     {
-                        std::thread read_thread(read_serial, filedesc, &depth, &ref_depth, &control, &piston);
-                        std::thread write_thread(write_serial, filedesc, &target_depth, &status);
+                        std::thread read_thread(read_serial, &filedesc, &depth, &ref_depth, &control, &piston);
+                        std::thread write_thread(write_serial, &filedesc, &target_depth, &status);
                         read_thread.detach();
                         write_thread.detach();
                     }

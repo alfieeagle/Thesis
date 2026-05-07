@@ -9,7 +9,7 @@
 
 // Controller params
 #define KP 1.5f
-#define KD 6.0f
+#define KD 1.0f
 #define KI 0.01f
 
 // VBS Physical params
