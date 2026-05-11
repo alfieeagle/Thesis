@@ -241,7 +241,7 @@ int decode_data_and_read(int filedesc, SystemStatus* telemetry)
 {
     uint8_t startbyte;
     
-    // 1. Search for the Start Byte
+    // Search for the Start Byte
     // We use a loop to clear any leading garbage bytes
     while (read(filedesc, &startbyte, 1) > 0) 
     {
@@ -250,12 +250,11 @@ int decode_data_and_read(int filedesc, SystemStatus* telemetry)
             uint8_t len = 0;
             int attempts = 0;
 
-            // 2. WAIT for the Length Byte
-            // USB is fast, but code is faster. We need to wait for the byte to arrive.
+            // wait for the length byte
             while (read(filedesc, &len, 1) != 1) 
             {
                 std::this_thread::sleep_for(std::chrono::microseconds(100));
-                if (++attempts > 100) return 1; // Timeout (10ms)
+                if (++attempts > 100) return 1;
             }
 
             if (len == 0) 
@@ -264,7 +263,6 @@ int decode_data_and_read(int filedesc, SystemStatus* telemetry)
                 return 1;
             }
 
-            // 3. WAIT and COLLECT exactly 'len' bytes
             uint8_t buffer[256]; 
             int bytes_received = 0;
             attempts = 0;
@@ -279,7 +277,7 @@ int decode_data_and_read(int filedesc, SystemStatus* telemetry)
                 else 
                 {
                     std::this_thread::sleep_for(std::chrono::microseconds(100));
-                    if (++attempts > 1000) // 100ms timeout for the body
+                    if (++attempts > 1000)
                     {
                         AddLog("[DEBUG] Timed out waiting for packet body (Got %d/%d)\n", bytes_received, len);
                         return 1;
@@ -294,12 +292,11 @@ int decode_data_and_read(int filedesc, SystemStatus* telemetry)
             if (pb_decode(&stream, SystemStatus_fields, &message)) 
             {
                 *telemetry = message;
-                return 0; // Success
+                return 0;
             } 
             else 
             {
                 AddLog("[ERROR] Protobuf Decode Failed: %s\n", PB_GET_ERROR(&stream));
-                // If decoding fails, the stream is likely out of sync. Flush.
                 tcflush(filedesc, TCIFLUSH);
                 return 1;
             }
