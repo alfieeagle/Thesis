@@ -10,6 +10,7 @@
 
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <fstream>
 #include <thread>
 #include <mutex>
 #include <string>
@@ -27,6 +28,7 @@ extern "C" {
 #include <errno.h>
 #include <unistd.h>
 #include <string.h>
+#include <time.h>
 
 #define BUFFER_SIZE 2048
 #define PLOT_HISTORY_SIZE 500
@@ -79,7 +81,7 @@ void real_time_piston_plot(struct ScrollingBuffer* control, struct ScrollingBuff
 
 // Serial functions
 int setup_serial(std::string ttyPort);
-void read_serial(int* filedesc, struct ScrollingBuffer* depth, struct ScrollingBuffer* ref_depth, struct ScrollingBuffer* control, struct ScrollingBuffer* piston);
+void read_serial(int* filedesc, std::ofstream& PlotFile, std::ofstream& LogFile, ScrollingBuffer* depth, struct ScrollingBuffer* ref_depth, struct ScrollingBuffer* control, struct ScrollingBuffer* piston);
 void write_serial(int* filedesc, float* target_depth, int* status);
 void configure_termios(int* filedesc);
 int encode_data_and_send(int filedesc, float target_depth, int enable);

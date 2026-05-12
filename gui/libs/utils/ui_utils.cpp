@@ -33,7 +33,7 @@ int setup_serial(std::string ttyPort)
     return filedesc;
 }
 
-void read_serial(int* filedesc, struct ScrollingBuffer* depth, struct ScrollingBuffer* ref_depth, struct ScrollingBuffer* control, struct ScrollingBuffer* piston) {
+void read_serial(int* filedesc, std::ofstream& PlotFile, std::ofstream& LogFile, ScrollingBuffer* depth, struct ScrollingBuffer* ref_depth, struct ScrollingBuffer* control, struct ScrollingBuffer* piston) {
     while (*filedesc >= 0)
     {
         SystemStatus incoming;
@@ -51,6 +51,7 @@ void read_serial(int* filedesc, struct ScrollingBuffer* depth, struct ScrollingB
             if (incoming.has_message && incoming.message[0] != '\0')
             {
                 AddLog("%s", incoming.message);
+                LogFile << incoming.message << "\n\r";
             }
 
             // Update connection details
@@ -61,6 +62,13 @@ void read_serial(int* filedesc, struct ScrollingBuffer* depth, struct ScrollingB
             ref_depth->AddPoint(glfwGetTime(), incoming.ref_depth);
             control->AddPoint(glfwGetTime(), incoming.control_volume);
             piston->AddPoint(glfwGetTime(), incoming.piston_pos);
+
+            // Log the telemetry data
+            PlotFile << last_packet_time << "," 
+            << incoming.depth << "," 
+            <<  incoming.ref_depth << ","
+            << incoming.control_volume << "," 
+            << incoming.piston_pos << "\n";
 
             // Unlock for other threads
             data_mutex.unlock();

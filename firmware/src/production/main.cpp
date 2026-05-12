@@ -106,10 +106,10 @@ void setup() {
 
 void loop() 
 {
-	if(startup && _VBS.get_status() == true)
+	if(startup && _VBS.is_enabled() == true)
 	{
 		homing_sequence();
-		delay(200);
+		// delay(500);
 		// neutral_point();
 		startup = false;
 	}

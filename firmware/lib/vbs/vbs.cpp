@@ -172,7 +172,7 @@ bool VBS::get_home()
     return _home;
 }
 
-bool VBS::get_status()
+bool VBS::is_enabled()
 {
-    return _actuator.get_status();
+    return _actuator.is_enabled();
 }

@@ -73,7 +73,7 @@ void send_motor_command(const std::vector<float>& motorCommand)
     // Only enable the piston if it's outside the deadzone
     int deadzone = std::abs(_VBS.get_current_depth() - _VBS.get_reference_depth()) < DEADZONE_THRESHOLD ? 1 : 0;
 
-    if(!deadzone && _VBS.get_status() == true)
+    if(!deadzone && _VBS.is_enabled() == true)
     {
         if(dir == EXTEND)
         {
@@ -121,7 +121,7 @@ void homing_sequence()
     encode_data_and_send("[INFO] Performing homing sequence");
 
     // Ensure that the piston reaches the fully retracted position
-    long steps = distance_to_steps(VBS_HALF_STROKE * 4);
+    long steps = distance_to_steps(VBS_HALF_STROKE );
     motor.move(steps);
 
     _VBS.update_direction(RETRACT);
@@ -132,6 +132,11 @@ void homing_sequence()
         if(motor.run())
         {
             _VBS.update_volume();
+        }
+        if(motor.distanceToGo() == 0)
+        {
+            encode_data_and_send("[DEBUG] Tried to go home but limit was never reached");
+            break;
         }
     }
 
@@ -152,19 +157,22 @@ void neutral_point()
     // Neutrally buoyant point should be one half stroke from the 
     // fully retracted position
     long steps = distance_to_steps(VBS_HALF_STROKE);
+    motor.move(-steps);
 
     _VBS.update_direction(EXTEND);
     
     // Negative steps equals extension
-    motor.moveTo(-steps);
     while(motor.distanceToGo() != 0)
     {
         if(motor.run())
         {
-
             _VBS.update_volume();
         }
     }
+
+    motor.stop();
+    motor.disableOutputs();
+    _VBS.disable();
 
     encode_data_and_send("[INFO] At neutral position");
 }
@@ -195,7 +203,7 @@ int encode_data_and_send(const char* msg)
     message.depth = _VBS.get_current_depth();
     message.piston_pos = _VBS.get_piston_volume() * 1000000; // Convert m^3 to mL
     message.ref_depth = _VBS.get_reference_depth();
-    message.status = _VBS.get_status();
+    message.status = _VBS.is_enabled();
     if(msg != NULL)
     {
         message.has_message = true;

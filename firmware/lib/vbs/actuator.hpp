@@ -66,7 +66,6 @@ class Actuator
         float get_max_speed_rpm();
         float get_min_speed_rpm();
         int get_steps_per_rev();
-        bool is_enabled();
 
         // Gear box
         float get_gear_ratio();
@@ -77,7 +76,7 @@ class Actuator
         float get_screw_pitch_diam();
         float get_screw_friction();
         float get_factor_of_safety();
-        bool get_status();
+        bool is_enabled();
 
         // Setters
         void increment_piston_volume();

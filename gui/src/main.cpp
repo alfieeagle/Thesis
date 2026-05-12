@@ -8,6 +8,30 @@ static int status = 0;
 
 int main(int, char**) 
 {
+    // Get current time
+    time_t rawtime;
+    struct tm * timeinfo;
+    char buffer [80];
+
+    time (&rawtime);
+    timeinfo = localtime (&rawtime);
+
+    strftime (buffer,80,"telemetry_log_%d-%m-%Y_%H:%M:%S",timeinfo);
+
+    std::string plotName(buffer);
+    std::string telDir = "../logs/telemetry/";
+
+    // Create telemetry log file stream
+    std::ofstream PlotFile(telDir + plotName + ".csv");
+
+    // Clear the buffer and create debug file stream
+    memset(buffer, 0, sizeof(buffer));
+    strftime (buffer,80,"debug_log_%d-%m-%Y_%H:%M:%S",timeinfo);
+    std::string logName(buffer);
+    std::string debugDir = "../logs/debug/";
+    std::ofstream LogFile(debugDir + logName + ".csv");
+
+
     GLFWwindow* window = NULL;
     int init = init_ImGUI(&window);
 
@@ -20,7 +44,7 @@ int main(int, char**)
     if (filedesc >= 0)
     {
         // Start a thread for reading and writing serial
-        std::thread read_thread(read_serial, &filedesc, &depth, &ref_depth, &control, &piston);
+        std::thread read_thread(read_serial, &filedesc, std::ref(PlotFile), std::ref(LogFile), &depth, &ref_depth, &control, &piston);
         std::thread write_thread(write_serial, &filedesc, &target_depth, &status);
         read_thread.detach();
         write_thread.detach();
@@ -59,7 +83,7 @@ int main(int, char**)
                     filedesc = setup_serial(ttyPort);
                     if(filedesc >= 0)
                     {
-                        std::thread read_thread(read_serial, &filedesc, &depth, &ref_depth, &control, &piston);
+                        std::thread read_thread(read_serial, &filedesc, std::ref(PlotFile), std::ref(LogFile), &depth, &ref_depth, &control, &piston);
                         std::thread write_thread(write_serial, &filedesc, &target_depth, &status);
                         read_thread.detach();
                         write_thread.detach();
@@ -147,6 +171,8 @@ int main(int, char**)
     ImGui::DestroyContext();
     glfwDestroyWindow(window);
     glfwTerminate();
+    PlotFile.close();
+    LogFile.close();
 
     return 0;
 }
