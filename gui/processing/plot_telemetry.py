@@ -10,9 +10,11 @@ ref_depth = []
 control_vol = []
 piston_vol = []
 
-list_of_files = glob.glob("/Users/alfieeagleton/Desktop/Uni/Thesis/Code/gui/logs/telemetry/*.csv") 
+# Get the latest file
+list_of_files = glob.glob("../logs/telemetry/*.csv") 
 latest_file = max(list_of_files, key=os.path.getctime)
 
+# Extract the data
 with open(latest_file ,'r') as csvfile:
     plots = csv.reader(csvfile, delimiter = ',')
     
@@ -23,6 +25,7 @@ with open(latest_file ,'r') as csvfile:
         control_vol.append(float(row[3]))
         piston_vol.append(float(row[4]))
 
+# Plot the depth
 plt.figure()
 plt.plot(time, depth, color = 'c', label = "Depth",)
 plt.plot(time, ref_depth, color = 'k', label = "Reference Depth",)
@@ -32,6 +35,7 @@ plt.title('Reference Tracking')
 plt.legend()
 plt.show()
 
+# Plot the piston
 plt.figure()
 plt.plot(time, control_vol, color = 'b', label = "Control Volume")
 plt.plot(time, piston_vol, color = 'r', label = "Piston Volume")
