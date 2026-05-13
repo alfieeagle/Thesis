@@ -58,7 +58,7 @@ void read_serial(int* filedesc, std::ofstream& PlotFile, std::ofstream& LogFile,
             total_packets_received++;
             last_packet_time = glfwGetTime();
 
-            depth->AddPoint(glfwGetTime(), incoming.depth);
+            depth->AddPoint(glfwGetTime(), -incoming.depth);
             ref_depth->AddPoint(glfwGetTime(), incoming.ref_depth);
             control->AddPoint(glfwGetTime(), incoming.control_volume);
             piston->AddPoint(glfwGetTime(), incoming.piston_pos);

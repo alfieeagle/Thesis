@@ -8,9 +8,9 @@
 #define HOLD 0
 
 // Controller params
-#define KP 1.0f
-#define KD 0.0f
-#define KI 0.0f
+#define KP 0.5f
+#define KD 0.1f
+#define KI 0.001f
 
 // VBS Physical params
 #define DT 0.1f
@@ -49,7 +49,7 @@ const long SERIAL_BAUD_RATE = 230400;
 
 // Logic parameters
 const float DEADZONE_THRESHOLD = 0.01f;
-const float BUOYANCY_RESOLUTION_GRAMS = 1.0f;
+const float BUOYANCY_RESOLUTION_GRAMS = 5.0f;
 
 
 #endif

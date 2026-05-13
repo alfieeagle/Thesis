@@ -51,11 +51,12 @@ void setup() {
 		DepthSensor.setModel(MS5837::MS5837_30BA);
 
 		// freshwater
-		// depth_sensor.setFluidDensity(997);
+		DepthSensor.setFluidDensity(997);
 		// salt water
-		DepthSensor.setFluidDensity(1025);
+		// DepthSensor.setFluidDensity(1025);
 
 		// Set the initial depth
+		DepthSensor.read();
 		_VBS.update_depth(DepthSensor.depth());
 	}
 	
@@ -118,6 +119,7 @@ void loop()
 	// provided it's not within the 10 cm deadzone
 	if(ControlTimer.check() == true)
 	{
+		DepthSensor.read();
 		float newDepth = DepthSensor.depth();
 		_VBS.update_depth(newDepth);
 		_VBS.update_control((float)TIMER_INTERVAL_MILLIS/1000.0f);

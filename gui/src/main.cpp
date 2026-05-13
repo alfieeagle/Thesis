@@ -3,7 +3,7 @@
 int filedesc = -1;
 
 static ScrollingBuffer depth, ref_depth, control, piston;
-static float target_depth = -11.0f;
+static float target_depth = -0.5f;
 static int status = 0;
 
 int main(int, char**) 
@@ -129,7 +129,7 @@ int main(int, char**)
     
         // Interactive Elements
         ImGui::PushItemWidth(200.0f);
-        ImGui::SliderFloat("Reference Depth", &target_depth, -20.0f, 0.1f, "Depth (m) = %.2f");
+        ImGui::SliderFloat("Reference Depth", &target_depth, -2.0f, -0.5f, "Depth (m) = %.2f");
         ImGui::RadioButton("Enable", &status, 1); ImGui::SameLine();
         ImGui::RadioButton("Disable", &status, 0);
 
