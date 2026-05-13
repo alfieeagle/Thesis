@@ -122,7 +122,7 @@ void loop()
 		_VBS.update_control((float)TIMER_INTERVAL_MILLIS/1000.0f);
 		_VBS.update_motor_command();
 		std::vector<float> motorCommand = _VBS.get_motor_command();
-		send_motor_command(motorCommand); 
+		send_motor_command(motorCommand, latest_command);
 	}
 
 	if(Serial.available() > 0)
