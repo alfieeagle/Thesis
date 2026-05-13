@@ -117,6 +117,12 @@ void step()
 // Go to the fully retracted position
 void homing_sequence()
 {
+    if(digitalRead(LIM_RET) == LOW)
+    {
+        _VBS.set_home(true);
+        _VBS.set_volume(-MAX_VOLUME_ONE_WAY_ML);
+        return;
+    }
     motor.enableOutputs();
     encode_data_and_send("[INFO] Performing homing sequence");
 
