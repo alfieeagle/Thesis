@@ -28,6 +28,10 @@ typedef struct _SystemStatus {
 typedef struct _Command {
     bool has_target_depth;
     float target_depth;
+    bool has_piston_vol;
+    float piston_vol;
+    bool has_manual;
+    bool manual;
     bool has_enable;
     bool enable;
 } Command;
@@ -39,9 +43,9 @@ extern "C" {
 
 /* Initializer values for message structs */
 #define SystemStatus_init_default                {false, 0, false, 0, false, 0, false, 0, false, 0, false, ""}
-#define Command_init_default                     {false, 0, false, 0}
+#define Command_init_default                     {false, 0, false, 0, false, 0, false, 0}
 #define SystemStatus_init_zero                   {false, 0, false, 0, false, 0, false, 0, false, 0, false, ""}
-#define Command_init_zero                        {false, 0, false, 0}
+#define Command_init_zero                        {false, 0, false, 0, false, 0, false, 0}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define SystemStatus_depth_tag                   1
@@ -51,7 +55,9 @@ extern "C" {
 #define SystemStatus_control_volume_tag          5
 #define SystemStatus_message_tag                 6
 #define Command_target_depth_tag                 1
-#define Command_enable_tag                       2
+#define Command_piston_vol_tag                   2
+#define Command_manual_tag                       3
+#define Command_enable_tag                       4
 
 /* Struct field encoding specification for nanopb */
 #define SystemStatus_FIELDLIST(X, a) \
@@ -66,7 +72,9 @@ X(a, STATIC,   OPTIONAL, STRING,   message,           6)
 
 #define Command_FIELDLIST(X, a) \
 X(a, STATIC,   OPTIONAL, FLOAT,    target_depth,      1) \
-X(a, STATIC,   OPTIONAL, BOOL,     enable,            2)
+X(a, STATIC,   OPTIONAL, FLOAT,    piston_vol,        2) \
+X(a, STATIC,   OPTIONAL, BOOL,     manual,            3) \
+X(a, STATIC,   OPTIONAL, BOOL,     enable,            4)
 #define Command_CALLBACK NULL
 #define Command_DEFAULT NULL
 
@@ -78,7 +86,7 @@ extern const pb_msgdesc_t Command_msg;
 #define Command_fields &Command_msg
 
 /* Maximum encoded size of messages (where known) */
-#define Command_size                             7
+#define Command_size                             14
 #define MESSAGES_PB_H_MAX_SIZE                   SystemStatus_size
 #define SystemStatus_size                        524
 

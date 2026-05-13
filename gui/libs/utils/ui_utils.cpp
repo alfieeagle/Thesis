@@ -77,32 +77,40 @@ void read_serial(int* filedesc, std::ofstream& PlotFile, std::ofstream& LogFile,
     }
 }
 
-void write_serial(int* filedesc, float* target_depth, int* status)
+void write_serial(int* filedesc, float* target_depth, float* piston_vol, int* manual, int* status)
 {
     // Local storage for the last sent state
-    float last_sent_depth = -999.0f; // Initialize with impossible values
+    float last_sent_depth = -999.0f;
+    float last_sent_vol = -999.0f;
+    int last_sent_manual = -1;
     int last_sent_status = -1;
 
     while(*filedesc >= 0)
     {
         data_mutex.lock();
         float current_depth = *target_depth;
+        float current_vol = *piston_vol;
+        int current_manual = *manual;
         int current_status = *status;
         data_mutex.unlock();
 
         // Check if anything has changed
         bool depth_changed = std::abs(current_depth - last_sent_depth) > 0.001f;
+        bool vol_changed = std::abs(current_vol - last_sent_vol) > 0.001f;
+        bool manual_changed = (current_manual != last_sent_manual);
         bool status_changed = (current_status != last_sent_status);
 
-        if (depth_changed || status_changed)
+        if (depth_changed || vol_changed || manual_changed || status_changed)
         {
             // Only lock and send if there is new info
             data_mutex.lock();
-            encode_data_and_send(*filedesc, current_depth, current_status);
+            encode_data_and_send(*filedesc, current_depth, current_vol, current_manual, current_status);
             data_mutex.unlock();
 
             // Update the last known state
             last_sent_depth = current_depth;
+            last_sent_vol = current_vol;
+            last_sent_manual = current_manual;
             last_sent_status = current_status;
         }
 
@@ -194,7 +202,7 @@ int init_ImGUI(GLFWwindow** window) {
     return 0;
 }
 
-int encode_data_and_send(int filedesc, float target_depth, int enable)
+int encode_data_and_send(int filedesc, float target_depth, float piston_vol, int manual, int enable)
 {
         SerialBuffer buffer;
 
@@ -205,8 +213,12 @@ int encode_data_and_send(int filedesc, float target_depth, int enable)
         // Encode the message and get the length of encoded bytes
         message.enable = enable;
         message.target_depth = target_depth;
+        message.piston_vol = piston_vol;
+        message.manual = manual;
         message.has_enable = true;
         message.has_target_depth = true;
+        message.has_manual = true;
+        message.has_piston_vol = true;
         bool status = pb_encode(&stream, Command_fields, &message);
         size_t message_length = stream.bytes_written;
             

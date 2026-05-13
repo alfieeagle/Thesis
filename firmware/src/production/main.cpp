@@ -79,8 +79,6 @@ void setup() {
 	// Setup interrup for limit switches
 	attachInterrupt(LIM_EXT, handle_max_extension, FALLING);
 	attachInterrupt(LIM_RET, handle_max_retraction, FALLING);
-	attachInterrupt(LIM_EXT, handle_max_extension, LOW);
-	attachInterrupt(LIM_RET, handle_max_retraction, LOW);
 
 	// // Full step mode
 	digitalWrite(DM0, LOW);
@@ -117,7 +115,6 @@ void loop()
 	}
 
 	// Read depth and update control at 10 Hz
-	// provided it's not within the 10 cm deadzone
 	if(ControlTimer.check() == true)
 	{
 		float newDepth = DepthSensor.depth();
@@ -125,12 +122,12 @@ void loop()
 		_VBS.update_control((float)TIMER_INTERVAL_MILLIS/1000.0f);
 		_VBS.update_motor_command();
 		std::vector<float> motorCommand = _VBS.get_motor_command();
-		send_motor_command(motorCommand);
+		send_motor_command(motorCommand); 
 	}
 
 	if(Serial.available() > 0)
 	{
-		read_serial();
+		read_serial(latest_command);
     }
 
 }

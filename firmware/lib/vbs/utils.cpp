@@ -20,7 +20,7 @@ VBS _VBS(
     SAFETY_FACTOR,
     MAX_MOTOR_SPEED_RPM,
     MIN_MOTOR_SPEED_RPM,
-    PISTON_AREA,
+    PISTON_AREA_CM_2,
     STEPS_PER_REV
     );
 
@@ -58,8 +58,66 @@ void msg_callback()
     encode_data_and_send(NULL);
 }
 
-void send_motor_command(const std::vector<float>& motorCommand)
+int check_dir(int chosen_vol, int actual_vol)
 {
+    int dir;
+    if(chosen_vol > actual_vol)
+        {
+            dir = EXTEND;
+        }
+        else if(chosen_vol < actual_vol)
+        {
+            dir = RETRACT;
+        }
+        else
+        {
+            dir = HOLD;
+        }
+        return dir;
+}
+
+void send_motor_command(const std::vector<float>& motorCommand, Command& latest_command)
+{
+    if(latest_command.manual == true)
+    {
+        motor.enableOutputs();
+        _VBS.enable();
+
+        if(latest_command.piston_vol > 0.0f)
+        {
+            _VBS.update_direction(check_dir(latest_command.piston_vol, _VBS.get_control_volume()));
+            int steps = distance_m_to_steps(VBS_HALF_STROKE + volume_mL_to_distance_m(latest_command.piston_vol));
+            motor.moveTo(steps);
+        }
+        else if (latest_command.piston_vol < 0.0f)
+        {
+            _VBS.update_direction(check_dir(latest_command.piston_vol, _VBS.get_control_volume()));
+            int steps = distance_m_to_steps(VBS_HALF_STROKE - volume_mL_to_distance_m(latest_command.piston_vol));
+            motor.moveTo(steps);
+        }
+        else
+        {
+            _VBS.update_direction(check_dir(latest_command.piston_vol, _VBS.get_control_volume()));
+            int steps = distance_m_to_steps(VBS_HALF_STROKE);
+            motor.moveTo(steps);
+        }  
+        return;
+    }
+    else
+    {
+        if(latest_command.enable == true)
+        {
+            motor.enableOutputs();
+            _VBS.enable();
+        }
+        else
+        {
+            motor.stop();
+            motor.disableOutputs();
+            _VBS.disable();
+        }
+        _VBS.set_reference_depth(latest_command.target_depth);
+    }
 
     // Extract the frequency and direction from the command
     float freq = motorCommand[0];
@@ -117,11 +175,22 @@ void step()
 // Go to the fully retracted position
 void homing_sequence()
 {
+    if(digitalRead(LIM_RET) == LOW)
+    {
+        // Set the home position
+        motor.setCurrentPosition((long)0);
+        digitalWrite(RESET_PIN, LOW);
+        delayMicroseconds(100);
+        digitalWrite(RESET_PIN, HIGH);
+        encode_data_and_send("[INFO] homing sequence complete");
+        return;
+    }
+
     motor.enableOutputs();
     encode_data_and_send("[INFO] Performing homing sequence");
 
     // Ensure that the piston reaches the fully retracted position
-    long steps = distance_to_steps(VBS_HALF_STROKE * 2.5);
+    long steps = distance_m_to_steps(VBS_HALF_STROKE * 2.5);
     motor.move(steps);
 
     _VBS.update_direction(RETRACT);
@@ -156,7 +225,7 @@ void neutral_point()
 
     // Neutrally buoyant point should be one half stroke from the 
     // fully retracted position
-    long steps = distance_to_steps(VBS_HALF_STROKE);
+    long steps = distance_m_to_steps(VBS_HALF_STROKE);
     motor.move(-steps);
 
     _VBS.update_direction(EXTEND);
@@ -178,7 +247,7 @@ void neutral_point()
 }
 
 // Convert a distance in meteres to the number of steps required by the motor
-long distance_to_steps(float distance_m)
+long distance_m_to_steps(float distance_m)
 {
     long steps = (distance_m/S_L) * GEAR_RATIO * STEPS_PER_REV;
     return steps;
@@ -321,28 +390,31 @@ int decode_data_and_read(Command* cmd)
     return 1;
 }
 
-void read_serial()
+float volume_mL_to_distance_m(float volume_ml)
+{
+    float distance_cm = volume_ml /PISTON_AREA_CM_2;
+    float distance_m = distance_cm/100;
+    return distance_m;
+}
+
+void read_serial(Command& latest_command)
 {
     Command incoming;
 
     // Check if the serial port is open
     int result = decode_data_and_read(&incoming);
-    if (result == 0)
+    if(result == 0)
     {
-        if(incoming.enable == true)
-        {
-            motor.enableOutputs();
-            _VBS.enable();
-        }
-        else
-        {
-            motor.stop();
-            motor.disableOutputs();
-            _VBS.disable();
-        }
-        _VBS.set_reference_depth(incoming.target_depth);
+        latest_command.target_depth = incoming.target_depth;
+        latest_command.piston_vol = incoming.piston_vol;
+        latest_command.enable = incoming.enable;
+        latest_command.manual = incoming.manual;
 
-    } 
+        latest_command.has_enable = incoming.has_enable;
+        latest_command.has_manual = incoming.has_manual;
+        latest_command.has_piston_vol = incoming.has_piston_vol;
+        latest_command.has_target_depth = incoming.has_target_depth;
+    }
     else
     {
         encode_data_and_send("[ERROR] Issue reading serial sent from PC");

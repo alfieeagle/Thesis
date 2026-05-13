@@ -13,5 +13,7 @@ message SystemStatus
 message Command
 {
   optional float target_depth = 1;
-  optional bool enable = 2;
+  optional float piston_vol = 2;
+  optional bool manual = 3;
+  optional bool enable = 4;
 }

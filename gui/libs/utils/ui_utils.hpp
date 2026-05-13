@@ -82,9 +82,9 @@ void real_time_piston_plot(struct ScrollingBuffer* control, struct ScrollingBuff
 // Serial functions
 int setup_serial(std::string ttyPort);
 void read_serial(int* filedesc, std::ofstream& PlotFile, std::ofstream& LogFile, ScrollingBuffer* depth, struct ScrollingBuffer* ref_depth, struct ScrollingBuffer* control, struct ScrollingBuffer* piston);
-void write_serial(int* filedesc, float* target_depth, int* status);
+void write_serial(int* filedesc, float* target_depth, float* piston_vol, int* manual, int* status);
 void configure_termios(int* filedesc);
-int encode_data_and_send(int filedesc, float target_depth, int enable);
+int encode_data_and_send(int filedesc, float target_depth, float piston_vol, int manual, int enable);
 int decode_data_and_read(int filedesc, SystemStatus* telemetry);
 void disconnect_serial(int filedesc);
 

@@ -30,15 +30,17 @@ extern Command latest_command;
 
 void handle_max_extension();
 void handle_max_retraction();
-void send_motor_command(const std::vector<float>& motorCommand);
+void send_motor_command(const std::vector<float>& motorCommand, Command& latest_command);
 void homing_sequence();
 void neutral_point();
 void step();
-long distance_to_steps(float distance_m);
+float volume_mL_to_distance_m(float volume_ml);
+long distance_m_to_steps(float distance_m);
 
 int encode_data_and_send(const char* msg);
 int decode_data_and_read(Command* cmd);
-void read_serial();
+void read_serial(Command& latest_command);
 void msg_callback();
+int check_dir(int chosen_vol, int actual_vol);
 
 #endif

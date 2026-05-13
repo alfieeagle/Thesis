@@ -4,7 +4,11 @@ int filedesc = -1;
 
 static ScrollingBuffer depth, ref_depth, control, piston;
 static float target_depth = -11.0f;
+static float piston_vol = 0.0f;
+static int manual = 1;
 static int status = 0;
+
+const float max_piston_vol = 120.0f;
 
 int main(int, char**) 
 {
@@ -45,7 +49,7 @@ int main(int, char**)
     {
         // Start a thread for reading and writing serial
         std::thread read_thread(read_serial, &filedesc, std::ref(PlotFile), std::ref(LogFile), &depth, &ref_depth, &control, &piston);
-        std::thread write_thread(write_serial, &filedesc, &target_depth, &status);
+        std::thread write_thread(write_serial, &filedesc, &target_depth, &piston_vol, &manual, &status);
         read_thread.detach();
         write_thread.detach();
     }
@@ -84,7 +88,7 @@ int main(int, char**)
                     if(filedesc >= 0)
                     {
                         std::thread read_thread(read_serial, &filedesc, std::ref(PlotFile), std::ref(LogFile), &depth, &ref_depth, &control, &piston);
-                        std::thread write_thread(write_serial, &filedesc, &target_depth, &status);
+                        std::thread write_thread(write_serial, &filedesc, &target_depth, &piston_vol, &manual, &status);
                         read_thread.detach();
                         write_thread.detach();
                     }
@@ -122,16 +126,78 @@ int main(int, char**)
             ImGui::PopStyleColor();
         }
 
+        // Control panel
         ImGui::Separator();
+        ImGui::Spacing();
         ImGui::PushFont(NULL, 15.0f);
         ImGui::Text("Control Panel");
         ImGui::PopFont();
-    
-        // Interactive Elements
-        ImGui::PushItemWidth(200.0f);
-        ImGui::SliderFloat("Reference Depth", &target_depth, -20.0f, 0.1f, "Depth (m) = %.2f");
-        ImGui::RadioButton("Enable", &status, 1); ImGui::SameLine();
-        ImGui::RadioButton("Disable", &status, 0);
+
+        ImGui::BeginGroup();
+            ImGui::RadioButton("Auto", &manual, 0);
+            ImGui::Text("Reference Depth");
+            ImGui::PushItemWidth(200.0f);
+            ImGui::SliderFloat("##DepthSlider", &target_depth, -20.0f, 0.1f, "%.2f m");
+            ImGui::PopItemWidth();
+
+            ImGui::RadioButton("Enable", &status, 1); 
+            ImGui::SameLine();
+            ImGui::RadioButton("Disable", &status, 0);
+        ImGui::EndGroup();
+
+        ImGui::SameLine(ImGui::GetCursorPosX() + 300.0f); 
+
+        ImGui::BeginGroup();
+            static int counter = 0;
+            float arrow_text_offset = ImGui::GetStyle().ItemInnerSpacing.x;
+
+            ImGui::PushItemFlag(ImGuiItemFlags_ButtonRepeat, true);
+            ImGui::RadioButton("Manual", &manual, 1); 
+            if (ImGui::ArrowButton("##up", ImGuiDir_Up))
+            {
+                if(manual)
+                {
+                    piston_vol += 10.0f;
+                    if (piston_vol > max_piston_vol)
+                        piston_vol = max_piston_vol;
+                }
+                else
+                {
+                    AddLog("[INFO] Switch to manual mode to use piston controls");  
+                }
+            }
+            ImGui::SameLine(0.0f, arrow_text_offset);
+            ImGui::Text("Extend");
+
+            ImGui::Text("Piston Volume: %.1f mL", piston_vol);
+            if (ImGui::ArrowButton("##down", ImGuiDir_Down))
+            {
+                if(manual)
+                {
+                    piston_vol -= 10.0f;
+                    if (piston_vol < -max_piston_vol)
+                        piston_vol = -max_piston_vol;
+                }
+                else
+                {
+                    AddLog("[INFO] Switch to manual mode to use piston controls");  
+                }
+            }
+            ImGui::SameLine(0.0f, arrow_text_offset);
+            ImGui::Text("Retract");
+            if(ImGui::Button("Neutral Pos"))
+            {
+                if(manual)
+                {
+                    piston_vol = 0.0f;
+                }
+                else
+                {
+                    AddLog("[INFO] Switch to manual mode to use piston controls");  
+                }
+            }
+            ImGui::PopItemFlag();  
+        ImGui::EndGroup();
 
         ImVec2 canvasSize = ImGui::GetContentRegionAvail();
 
