@@ -121,7 +121,7 @@ void homing_sequence()
     encode_data_and_send("[INFO] Performing homing sequence");
 
     // Ensure that the piston reaches the fully retracted position
-    long steps = distance_to_steps(VBS_HALF_STROKE );
+    long steps = distance_to_steps(VBS_HALF_STROKE * 2.5);
     motor.move(steps);
 
     _VBS.update_direction(RETRACT);

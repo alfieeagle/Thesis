@@ -79,6 +79,8 @@ void setup() {
 	// Setup interrup for limit switches
 	attachInterrupt(LIM_EXT, handle_max_extension, FALLING);
 	attachInterrupt(LIM_RET, handle_max_retraction, FALLING);
+	attachInterrupt(LIM_EXT, handle_max_extension, LOW);
+	attachInterrupt(LIM_RET, handle_max_retraction, LOW);
 
 	// // Full step mode
 	digitalWrite(DM0, LOW);
