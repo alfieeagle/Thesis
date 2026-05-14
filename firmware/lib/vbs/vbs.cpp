@@ -98,6 +98,7 @@ void VBS::update_motor_command() {
     motor_command.push_back(freq);
 
     double requestedChange = (_controlVolume - _actuator.get_piston_volume()) * 1000000;
+    // motor_command.push_back(requestedChange);
     
     // Find piston direction 
     int dir  = (requestedChange > BUOYANCY_RESOLUTION_GRAMS) ? EXTEND : (requestedChange < -BUOYANCY_RESOLUTION_GRAMS ? RETRACT : HOLD);
