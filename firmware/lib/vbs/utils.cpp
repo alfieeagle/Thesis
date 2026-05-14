@@ -33,7 +33,7 @@ void handle_max_extension()
 	// Disable motor
     noInterrupts();
     motor.stop();
-	motor.disableOutputs();
+    motor.disableOutputs();
     _VBS.disable();
     _VBS.set_volume(MAX_VOLUME_ONE_WAY_ML);
     interrupts();
@@ -119,6 +119,8 @@ void homing_sequence()
 {
     if(digitalRead(LIM_RET) == LOW)
     {
+        motor.stop();
+        motor.setCurrentPosition((long)0);
         _VBS.set_home(true);
         _VBS.set_volume(-MAX_VOLUME_ONE_WAY_ML);
         return;
@@ -139,19 +141,25 @@ void homing_sequence()
         {
             _VBS.update_volume();
         }
-        if(motor.distanceToGo() == 0)
-        {
-            encode_data_and_send("[DEBUG] Tried to go home but limit was never reached");
-            break;
-        }
     }
 
-    // Set the home position
     motor.setCurrentPosition((long)0);
     digitalWrite(RESET_PIN, LOW);
     delayMicroseconds(100);
     digitalWrite(RESET_PIN, HIGH);
-    encode_data_and_send("[INFO] homing sequence complete");
+
+    detachInterrupt(digitalPinToInterrupt(LIM_RET));
+    motor.enableOutputs();
+    _VBS.enable();
+    motor.move(-5000);
+    while(motor.distanceToGo() != 0)
+    {
+        motor.run();
+    }
+    motor.disableOutputs();
+    _VBS.disable();
+    attachInterrupt(digitalPinToInterrupt(LIM_RET), handle_max_retraction, FALLING);
+    encode_data_and_send("[INFO] At home position");
 }
 
 // Go to the neutrally buoyant point

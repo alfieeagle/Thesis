@@ -8,9 +8,9 @@
 #define HOLD 0
 
 // Controller params
-#define KP 0.5f
-#define KD 0.1f
-#define KI 0.001f
+#define KP 1.5f
+#define KD 6.0f
+#define KI 0.01f
 
 // VBS Physical params
 #define DT 0.1f
@@ -41,7 +41,7 @@
 #define BUFFER_SIZE = 2048
 
 // Timing
-const int DEBOUNCE_TIME_MS = 1000;
+const int DEBOUNCE_TIME_MS = 2500;
 const int TIMER_INTERVAL_MILLIS = 100;
 
 // Driver parameters

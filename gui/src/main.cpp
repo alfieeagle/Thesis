@@ -129,7 +129,7 @@ int main(int, char**)
     
         // Interactive Elements
         ImGui::PushItemWidth(200.0f);
-        ImGui::SliderFloat("Reference Depth", &target_depth, -2.0f, -0.5f, "Depth (m) = %.2f");
+        ImGui::SliderFloat("Reference Depth", &target_depth, -2.0f, -0.0f, "Depth (m) = %.2f");
         ImGui::RadioButton("Enable", &status, 1); ImGui::SameLine();
         ImGui::RadioButton("Disable", &status, 0);
 

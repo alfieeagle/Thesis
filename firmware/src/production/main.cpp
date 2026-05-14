@@ -78,8 +78,8 @@ void setup() {
 	debouncePins(LIM_EXT, LIM_RET, DEBOUNCE_TIME_MS);
 
 	// Setup interrup for limit switches
-	attachInterrupt(LIM_EXT, handle_max_extension, FALLING);
-	attachInterrupt(LIM_RET, handle_max_retraction, FALLING);
+	attachInterrupt(digitalPinToInterrupt(LIM_EXT), handle_max_extension, FALLING);
+	attachInterrupt(digitalPinToInterrupt(LIM_RET), handle_max_retraction, FALLING);
 
 	// // Full step mode
 	digitalWrite(DM0, LOW);
@@ -100,8 +100,6 @@ void setup() {
 	motor.setEnablePin(EN_PIN);
 	motor.setPinsInverted(false, false, true);
 	_VBS.set_volume(0);
-	stepTimer.begin(step, 200);
-	encode_data_and_send("[INFO] Step interrupt timer started");
 	encode_data_and_send("[INFO] Finished Setup");
 }
 
@@ -109,9 +107,10 @@ void loop()
 {
 	if(startup && _VBS.is_enabled() == true)
 	{
-		homing_sequence();
-		// delay(500);
+		// homing_sequence();
 		// neutral_point();
+		stepTimer.begin(step, 200);
+		// encode_data_and_send("[INFO] Step interrupt timer started");
 		startup = false;
 	}
 
@@ -119,7 +118,7 @@ void loop()
 	// provided it's not within the 10 cm deadzone
 	if(ControlTimer.check() == true)
 	{
-		DepthSensor.read();
+		// DepthSensor.read();
 		float newDepth = DepthSensor.depth();
 		_VBS.update_depth(newDepth);
 		_VBS.update_control((float)TIMER_INTERVAL_MILLIS/1000.0f);
