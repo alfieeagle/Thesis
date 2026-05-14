@@ -109,8 +109,8 @@ void loop()
 	if(startup && _VBS.is_enabled() == true)
 	{
 		homing_sequence();
-		// delay(500);
-		// neutral_point();
+		delay(500);
+		neutral_point();
 		startup = false;
 	}
 
@@ -129,7 +129,6 @@ void loop()
 	{
 		read_serial(latest_command);
     }
-
 }
 
 

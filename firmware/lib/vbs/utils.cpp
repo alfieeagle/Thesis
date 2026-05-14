@@ -210,6 +210,7 @@ void homing_sequence()
     }
 
     // Set the home position
+    motor.stop();
     motor.setCurrentPosition((long)0);
     digitalWrite(RESET_PIN, LOW);
     delayMicroseconds(100);
