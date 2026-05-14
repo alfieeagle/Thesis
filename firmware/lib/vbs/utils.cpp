@@ -111,7 +111,6 @@ void step()
         // Update the VBS class to reflect new volume each step
         _VBS.update_volume();
     };
-    
 }
 
 // Go to the fully retracted position
@@ -151,7 +150,7 @@ void homing_sequence()
     detachInterrupt(digitalPinToInterrupt(LIM_RET));
     motor.enableOutputs();
     _VBS.enable();
-    motor.move(-5000);
+    motor.move(-3000);
     while(motor.distanceToGo() != 0)
     {
         motor.run();
@@ -183,6 +182,8 @@ void neutral_point()
             _VBS.update_volume();
         }
     }
+
+    _VBS.set_volume(0.0);
 
     motor.stop();
     motor.disableOutputs();
