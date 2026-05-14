@@ -107,10 +107,10 @@ void loop()
 {
 	if(startup && _VBS.is_enabled() == true)
 	{
-		// homing_sequence();
-		// neutral_point();
+		homing_sequence();
+		neutral_point();
 		stepTimer.begin(step, 200);
-		// encode_data_and_send("[INFO] Step interrupt timer started");
+		encode_data_and_send("[INFO] Step interrupt timer started");
 		startup = false;
 	}
 
@@ -120,7 +120,7 @@ void loop()
 	{
 		// DepthSensor.read();
 		float newDepth = DepthSensor.depth();
-		_VBS.update_depth(newDepth);
+		_VBS.update_depth(-newDepth);
 		_VBS.update_control((float)TIMER_INTERVAL_MILLIS/1000.0f);
 		_VBS.update_motor_command();
 		std::vector<float> motorCommand = _VBS.get_motor_command();

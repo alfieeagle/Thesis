@@ -8,9 +8,9 @@
 #define HOLD 0
 
 // Controller params
-#define KP 1.5f
-#define KD 6.0f
-#define KI 0.01f
+#define KP 1.0f
+#define KD 0.0f
+#define KI 0.0f
 
 // VBS Physical params
 #define DT 0.1f
