@@ -101,17 +101,19 @@ void Actuator::set_volume(float vol_mL)
     _pistonVolume = vol_m3;
 }
 
-void Actuator::increment_piston_volume()
+void Actuator::increment_piston_volume(long absolute_steps)
 {
     if(_dir == 0) return;
 
     double volumePerStep = (_screwLead / (_stepsPerRev * _gearRatio)) * _pistonArea;
+    double absPistonVolume = volumePerStep * absolute_steps;
+    _pistonVolume = absPistonVolume - _maxPistonVolume;
 
     // Increment the piston volume by the amount moved in a single step
-    double pistonVolume = (_dir > 0) ? (_pistonVolume + volumePerStep) 
-                         : (_pistonVolume - volumePerStep);
+    // double pistonVolume = (_dir > 0) ? (_pistonVolume + volumePerStep) 
+    //                      : (_pistonVolume - volumePerStep);
     
-    _pistonVolume = std::clamp(pistonVolume, -_maxPistonVolume, _maxPistonVolume);
+    // _pistonVolume = std::clamp(pistonVolume, -_maxPistonVolume, _maxPistonVolume);
 
 }
 

@@ -59,7 +59,7 @@ class VBS
         void update_depth(float depth);
         void update_motor_command();
         void update_control(float dt);
-        void update_volume();
+        void update_volume(long absolute_steps);
         void enable();
         void disable();
         void set_home(bool flag);

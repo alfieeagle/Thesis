@@ -128,9 +128,9 @@ void VBS::update_depth(float depth)
     _currentDepth = depth;
 }
 
-void VBS::update_volume()
+void VBS::update_volume(long absolute_steps)
 {
-    _actuator.increment_piston_volume();
+    _actuator.increment_piston_volume(absolute_steps);
 }
 
 float VBS::get_reference_depth()

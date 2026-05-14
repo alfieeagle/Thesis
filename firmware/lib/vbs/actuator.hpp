@@ -79,7 +79,7 @@ class Actuator
         bool is_enabled();
 
         // Setters
-        void increment_piston_volume();
+        void increment_piston_volume(long absolute_steps);
         void update_direction(int dir);
         void enable();
         void disable();

@@ -20,7 +20,7 @@ VBS _VBS(
     SAFETY_FACTOR,
     MAX_MOTOR_SPEED_RPM,
     MIN_MOTOR_SPEED_RPM,
-    PISTON_AREA_CM_2,
+    PISTON_AREA_M_2,
     STEPS_PER_REV
     );
 
@@ -59,24 +59,6 @@ void handle_max_retraction()
 void msg_callback()
 {
     encode_data_and_send(NULL);
-}
-
-int check_dir(int chosen_vol, int actual_vol)
-{
-    int dir;
-    if(chosen_vol > actual_vol)
-        {
-            dir = EXTEND;
-        }
-        else if(chosen_vol < actual_vol)
-        {
-            dir = RETRACT;
-        }
-        else
-        {
-            dir = HOLD;
-        }
-        return dir;
 }
 
 void send_motor_command(const std::vector<float>& motorCommand, Command& latest_command)
@@ -156,8 +138,6 @@ void step()
     
     bool stepped = false;
     
-    // Use run() for Manual/Homing (position based)
-    // Use runSpeed() for Auto (velocity based)
     if(latest_command.manual || startup) {
         stepped = motor.run(); 
     } else {
@@ -165,8 +145,7 @@ void step()
     }
 
     if(stepped) {
-        // Source of truth: update volume based on absolute position
-        _VBS.update_volume();
+        _VBS.update_volume(-motor.currentPosition());
     }
 }
 
@@ -186,7 +165,10 @@ void homing_sequence()
         motor.move(-3000);
         while(motor.distanceToGo() != 0)
         {
-            motor.run();
+            if(motor.run())
+            {
+                _VBS.update_volume(-motor.currentPosition());
+            }
         }
         motor.disableOutputs();
         _VBS.disable();
@@ -205,7 +187,10 @@ void homing_sequence()
     // Drive the motor to the most retracted position
     while(_VBS.get_home() == false)
     {
-        motor.run();
+        if(motor.run())
+        {
+            _VBS.update_volume(-motor.currentPosition());
+        }
     }
 
     motor.setCurrentPosition((long)0);
@@ -219,7 +204,10 @@ void homing_sequence()
     motor.move(-3000);
     while(motor.distanceToGo() != 0)
     {
-        motor.run();
+        if(motor.run())
+        {
+            _VBS.update_volume(-motor.currentPosition());
+        }
     }
     motor.disableOutputs();
     _VBS.disable();
@@ -245,10 +233,11 @@ void neutral_point()
     // Negative steps equals extension
     while(motor.distanceToGo() != 0)
     {
-        motor.run();
+        if(motor.run())
+        {
+            _VBS.update_volume(-motor.currentPosition());
+        }
     }
-
-    _VBS.set_volume(0.0);
 
     motor.stop();
     motor.disableOutputs();
@@ -403,7 +392,7 @@ int decode_data_and_read(Command* cmd)
 
 float volume_mL_to_distance_m(float volume_ml)
 {
-    float distance_cm = volume_ml /PISTON_AREA_CM_2;
+    float distance_cm = volume_ml /(PISTON_AREA_M_2 * 10000);
     float distance_m = distance_cm/100;
     return distance_m;
 }
