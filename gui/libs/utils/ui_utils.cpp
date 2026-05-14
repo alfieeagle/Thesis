@@ -454,7 +454,7 @@ void real_time_depth_plot(struct ScrollingBuffer* depth, struct ScrollingBuffer*
         ref_spec.Offset = ref_depth->Offset;
 
     // Use a fixed height so it doesn't collapse to 0 pixels
-    if (ImPlot::BeginPlot("Depth Tracking", ImVec2((canvasSize.x)/2, 400))) {
+    if (ImPlot::BeginPlot("Depth Tracking", ImVec2((canvasSize.x)/2, 300))) {
         ImPlot::SetupAxes("Time (s)", "Depth (m)", flags, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1, now - history, now, ImGuiCond_Always);
         ImPlot::SetupAxisLimits(ImAxis_Y1, ymin, ymax, ImGuiCond_Always); // Adjusted range
@@ -510,7 +510,7 @@ void real_time_piston_plot(struct ScrollingBuffer* control, struct ScrollingBuff
     piston_spec.Offset = piston->Offset;
 
     // Use a fixed height so it doesn't collapse to 0 pixels
-    if (ImPlot::BeginPlot("Control Signal and Piston Volume", ImVec2((canvasSize.x), 400))) {
+    if (ImPlot::BeginPlot("Control Signal and Piston Volume", ImVec2((canvasSize.x), 300))) {
         ImPlot::SetupAxes("Time (s)", "Volume (mL)", flags, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1, now - history, now, ImGuiCond_Always);
         ImPlot::SetupAxisLimits(ImAxis_Y1, ymin, ymax, ImGuiCond_Always); // Adjusted range

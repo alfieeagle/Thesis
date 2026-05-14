@@ -19,8 +19,6 @@ Dependencies:	TMCStepper.h, Arduino.h, vbs.hpp, pin_definitions.h
 
 #include "utils.hpp"
 
-int startup = true;
-
 void setup() {
 	// Start USB coms
 	Serial.begin(SERIAL_BAUD_RATE);
@@ -51,11 +49,12 @@ void setup() {
 		DepthSensor.setModel(MS5837::MS5837_30BA);
 
 		// freshwater
-		// depth_sensor.setFluidDensity(997);
+		DepthSensor.setFluidDensity(997);
 		// salt water
-		DepthSensor.setFluidDensity(1025);
+		// DepthSensor.setFluidDensity(1025);
 
 		// Set the initial depth
+		DepthSensor.read();
 		_VBS.update_depth(DepthSensor.depth());
 	}
 	
@@ -77,8 +76,8 @@ void setup() {
 	debouncePins(LIM_EXT, LIM_RET, DEBOUNCE_TIME_MS);
 
 	// Setup interrup for limit switches
-	attachInterrupt(LIM_EXT, handle_max_extension, FALLING);
-	attachInterrupt(LIM_RET, handle_max_retraction, FALLING);
+	attachInterrupt(digitalPinToInterrupt(LIM_EXT), handle_max_extension, FALLING);
+	attachInterrupt(digitalPinToInterrupt(LIM_RET), handle_max_retraction, FALLING);
 
 	// // Full step mode
 	digitalWrite(DM0, LOW);
@@ -98,18 +97,23 @@ void setup() {
 	motor.setMinPulseWidth(MIN_PULSE_WIDTH_MS);
 	motor.setEnablePin(EN_PIN);
 	motor.setPinsInverted(false, false, true);
+	motor.setCurrentPosition((long)0);
 	_VBS.set_volume(0);
-	stepTimer.begin(step, 200);
+	stepTimer.begin(step, 50);
 	encode_data_and_send("[INFO] Step interrupt timer started");
 	encode_data_and_send("[INFO] Finished Setup");
 }
 
 void loop() 
 {
-	if(startup && _VBS.is_enabled() == true)
+	if(Serial.available() > 0)
+	{
+		read_serial(latest_command);
+    }
+
+	if(startup && _VBS.is_enabled() == true && latest_command.manual == false)
 	{
 		homing_sequence();
-		delay(500);
 		neutral_point();
 		startup = false;
 	}
@@ -117,18 +121,15 @@ void loop()
 	// Read depth and update control at 10 Hz
 	if(ControlTimer.check() == true)
 	{
+		DepthSensor.read();
 		float newDepth = DepthSensor.depth();
-		_VBS.update_depth(newDepth);
+		_VBS.update_depth(-newDepth);
 		_VBS.update_control((float)TIMER_INTERVAL_MILLIS/1000.0f);
 		_VBS.update_motor_command();
 		std::vector<float> motorCommand = _VBS.get_motor_command();
 		send_motor_command(motorCommand, latest_command);
 	}
 
-	if(Serial.available() > 0)
-	{
-		read_serial(latest_command);
-    }
 }
 
 

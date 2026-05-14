@@ -3,9 +3,9 @@
 int filedesc = -1;
 
 static ScrollingBuffer depth, ref_depth, control, piston;
-static float target_depth = -11.0f;
 static float piston_vol = 0.0f;
 static int manual = 1;
+static float target_depth = -0.4f;
 static int status = 0;
 
 const float max_piston_vol = 120.0f;
@@ -137,7 +137,7 @@ int main(int, char**)
             ImGui::RadioButton("Auto", &manual, 0);
             ImGui::Text("Reference Depth");
             ImGui::PushItemWidth(200.0f);
-            ImGui::SliderFloat("##DepthSlider", &target_depth, -20.0f, 0.1f, "%.2f m");
+            ImGui::SliderFloat("##DepthSlider", &target_depth, -2.0f, 0.0f, "%.2f m");
             ImGui::PopItemWidth();
 
             ImGui::RadioButton("Enable", &status, 1); 

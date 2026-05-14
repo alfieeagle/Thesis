@@ -28,12 +28,15 @@ AccelStepper motor(1, STEP_PIN, DIR_PIN);
 
 Command latest_command = Command_init_zero;
 
+volatile bool stepEnabled = true;
+bool startup = true;
+
 void handle_max_extension()
 {
 	// Disable motor
     noInterrupts();
     motor.stop();
-	motor.disableOutputs();
+    motor.disableOutputs();
     _VBS.disable();
     _VBS.set_volume(MAX_VOLUME_ONE_WAY_ML);
     interrupts();
@@ -82,25 +85,26 @@ void send_motor_command(const std::vector<float>& motorCommand, Command& latest_
     {
         motor.enableOutputs();
         _VBS.enable();
-
-        if(latest_command.piston_vol > 0.0f)
+        
+        static float last_manual_vol = -999.0f; 
+        if(latest_command.piston_vol != last_manual_vol)
         {
-            _VBS.update_direction(check_dir(latest_command.piston_vol, _VBS.get_control_volume()));
-            int steps = distance_m_to_steps(VBS_HALF_STROKE + volume_mL_to_distance_m(latest_command.piston_vol));
-            motor.moveTo(steps);
+            int target_steps = distance_m_to_steps(volume_mL_to_distance_m(-latest_command.piston_vol));
+            motor.moveTo(target_steps);
+            last_manual_vol = latest_command.piston_vol;
+            if(latest_command.piston_vol > last_manual_vol)
+            {
+                _VBS.update_direction(EXTEND);
+            }
+            else if (latest_command.piston_vol < last_manual_vol)
+            {
+                _VBS.update_direction(RETRACT);
+            }
+            else 
+            {
+                _VBS.update_direction(HOLD);
+            }
         }
-        else if (latest_command.piston_vol < 0.0f)
-        {
-            _VBS.update_direction(check_dir(latest_command.piston_vol, _VBS.get_control_volume()));
-            int steps = distance_m_to_steps(VBS_HALF_STROKE - volume_mL_to_distance_m(latest_command.piston_vol));
-            motor.moveTo(steps);
-        }
-        else
-        {
-            _VBS.update_direction(check_dir(latest_command.piston_vol, _VBS.get_control_volume()));
-            int steps = distance_m_to_steps(VBS_HALF_STROKE);
-            motor.moveTo(steps);
-        }  
         return;
     }
     else
@@ -115,77 +119,80 @@ void send_motor_command(const std::vector<float>& motorCommand, Command& latest_
             motor.stop();
             motor.disableOutputs();
             _VBS.disable();
+            return;
         }
         _VBS.set_reference_depth(latest_command.target_depth);
     }
 
-    // Extract the frequency and direction from the command
     float freq = motorCommand[0];
-    float dir = motorCommand[1];
-    if(dir != _VBS.get_direction())
-    {
-        motor.stop();
-        delay(100);
-    }
+    float dir = motorCommand[2];
 
-    // Only enable the piston if it's outside the deadzone
-    int deadzone = std::abs(_VBS.get_current_depth() - _VBS.get_reference_depth()) < DEADZONE_THRESHOLD ? 1 : 0;
+    // Deadzone Check
+    bool in_deadzone = std::abs(_VBS.get_current_depth() - _VBS.get_reference_depth()) < DEADZONE_THRESHOLD;
 
-    if(!deadzone && _VBS.is_enabled() == true)
+    if(!in_deadzone && _VBS.is_enabled())
     {
-        if(dir == EXTEND)
-        {
-            motor.enableOutputs();
-            _VBS.update_direction(EXTEND);
-            motor.setSpeed(-freq);
-        }
-        else if (dir == RETRACT)
-        {
-            motor.enableOutputs();
-            _VBS.update_direction(RETRACT);
+        _VBS.update_direction(dir);
+        
+        if(dir == EXTEND) {
+            motor.setSpeed(-freq); 
+        } else if (dir == RETRACT) {
             motor.setSpeed(freq);
-        }
-        else
-        {
-            motor.enableOutputs();
-            _VBS.update_direction(HOLD);
+        } else {
             motor.setSpeed(0);
         }
     }
     else
     {
+        motor.stop();
         _VBS.update_direction(HOLD);
         motor.setSpeed(0);
-        _VBS.disable();
-        motor.disableOutputs();
     }
 }
 
 void step()
 {
-    // Step the motor
-    if(motor.runSpeed())
-    {
-        // Update the VBS class to reflect new volume each step
-        _VBS.update_volume();
-    };
+    if (!stepEnabled) return;
     
+    bool stepped = false;
+    
+    // Use run() for Manual/Homing (position based)
+    // Use runSpeed() for Auto (velocity based)
+    if(latest_command.manual || startup) {
+        stepped = motor.run(); 
+    } else {
+        stepped = motor.runSpeed(); 
+    }
+
+    if(stepped) {
+        // Source of truth: update volume based on absolute position
+        _VBS.update_volume();
+    }
 }
 
 // Go to the fully retracted position
 void homing_sequence()
 {
+    stepEnabled = false;
     if(digitalRead(LIM_RET) == LOW)
     {
-        // Set the home position
+        motor.stop();
         motor.setCurrentPosition((long)0);
-        digitalWrite(RESET_PIN, LOW);
-        delayMicroseconds(100);
-        digitalWrite(RESET_PIN, HIGH);
-        encode_data_and_send("[INFO] homing sequence complete");
+        _VBS.set_home(true);
+        _VBS.set_volume(-MAX_VOLUME_ONE_WAY_ML);
+        detachInterrupt(digitalPinToInterrupt(LIM_RET));
+        motor.enableOutputs();
+        _VBS.enable();
+        motor.move(-3000);
+        while(motor.distanceToGo() != 0)
+        {
+            motor.run();
+        }
+        motor.disableOutputs();
+        _VBS.disable();
+        attachInterrupt(digitalPinToInterrupt(LIM_RET), handle_max_retraction, FALLING);
         return;
     }
-
     motor.enableOutputs();
     encode_data_and_send("[INFO] Performing homing sequence");
 
@@ -198,29 +205,33 @@ void homing_sequence()
     // Drive the motor to the most retracted position
     while(_VBS.get_home() == false)
     {
-        if(motor.run())
-        {
-            _VBS.update_volume();
-        }
-        if(motor.distanceToGo() == 0)
-        {
-            encode_data_and_send("[DEBUG] Tried to go home but limit was never reached");
-            break;
-        }
+        motor.run();
     }
 
-    // Set the home position
-    motor.stop();
     motor.setCurrentPosition((long)0);
     digitalWrite(RESET_PIN, LOW);
     delayMicroseconds(100);
     digitalWrite(RESET_PIN, HIGH);
-    encode_data_and_send("[INFO] homing sequence complete");
+
+    detachInterrupt(digitalPinToInterrupt(LIM_RET));
+    motor.enableOutputs();
+    _VBS.enable();
+    motor.move(-3000);
+    while(motor.distanceToGo() != 0)
+    {
+        motor.run();
+    }
+    motor.disableOutputs();
+    _VBS.disable();
+    attachInterrupt(digitalPinToInterrupt(LIM_RET), handle_max_retraction, FALLING);
+    stepEnabled = true;
+    encode_data_and_send("[INFO] At home position");
 }
 
 // Go to the neutrally buoyant point
 void neutral_point()
 {
+    stepEnabled = false;
     encode_data_and_send("[INFO] Moving to neutral position");
     motor.enableOutputs();
 
@@ -234,16 +245,15 @@ void neutral_point()
     // Negative steps equals extension
     while(motor.distanceToGo() != 0)
     {
-        if(motor.run())
-        {
-            _VBS.update_volume();
-        }
+        motor.run();
     }
+
+    _VBS.set_volume(0.0);
 
     motor.stop();
     motor.disableOutputs();
     _VBS.disable();
-
+    stepEnabled = true;
     encode_data_and_send("[INFO] At neutral position");
 }
 

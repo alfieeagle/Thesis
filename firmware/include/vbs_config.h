@@ -8,9 +8,9 @@
 #define HOLD 0
 
 // Controller params
-#define KP 1.0f
-#define KD 0.0f
-#define KI 0.0f
+#define KP 1.0f      
+#define KD 0.0f   
+#define KI 0.0f   
 
 // VBS Physical params
 #define DT 0.1f
@@ -31,7 +31,7 @@
 #define MIN_MOTOR_SPEED_RPM 130
 #define MAX_MOTOR_STEPS_SEC 2000
 #define MIN_MOTOR_STEPS_SEC 433
-#define MAX_ACCELERATION 2000
+#define MAX_ACCELERATION 1500   
 #define MIN_PULSE_WIDTH_MS 10
 #define PISTON_AREA_CM_2 29
 #define STEPS_PER_REV 200
@@ -41,16 +41,17 @@
 #define BUFFER_SIZE = 2048
 
 // Timing
-const int DEBOUNCE_TIME_MS = 1000;
+const int DEBOUNCE_TIME_MS = 2500;
 const int TIMER_INTERVAL_MILLIS = 100;
 
 // Driver parameters
 const long SERIAL_BAUD_RATE = 230400; 
 
 // Logic parameters
-const float DEADZONE_THRESHOLD = 0.01f;
-const float BUOYANCY_RESOLUTION_GRAMS = 1.0f;
+const float DEADZONE_THRESHOLD = 0.05f; 
+const float BUOYANCY_RESOLUTION_GRAMS = 5.0f;
 
+extern bool startup;
 
 #endif
 

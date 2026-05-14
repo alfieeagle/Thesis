@@ -112,6 +112,7 @@ void Actuator::increment_piston_volume()
                          : (_pistonVolume - volumePerStep);
     
     _pistonVolume = std::clamp(pistonVolume, -_maxPistonVolume, _maxPistonVolume);
+
 }
 
 void Actuator::update_direction(int dir)
