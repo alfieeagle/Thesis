@@ -122,6 +122,17 @@ void homing_sequence()
         motor.setCurrentPosition((long)0);
         _VBS.set_home(true);
         _VBS.set_volume(-MAX_VOLUME_ONE_WAY_ML);
+        detachInterrupt(digitalPinToInterrupt(LIM_RET));
+        motor.enableOutputs();
+        _VBS.enable();
+        motor.move(-3000);
+        while(motor.distanceToGo() != 0)
+        {
+            motor.run();
+        }
+        motor.disableOutputs();
+        _VBS.disable();
+        attachInterrupt(digitalPinToInterrupt(LIM_RET), handle_max_retraction, FALLING);
         return;
     }
     motor.enableOutputs();
