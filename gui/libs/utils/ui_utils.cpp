@@ -77,7 +77,7 @@ void read_serial(int* filedesc, std::ofstream& PlotFile, std::ofstream& LogFile,
     }
 }
 
-void write_serial(int* filedesc, float* target_depth, float* piston_vol, int* manual, int* status)
+void write_serial(int* filedesc, float& target_depth, float& piston_vol, int& manual, int& status)
 {
     // Local storage for the last sent state
     float last_sent_depth = -999.0f;
@@ -88,10 +88,10 @@ void write_serial(int* filedesc, float* target_depth, float* piston_vol, int* ma
     while(*filedesc >= 0)
     {
         data_mutex.lock();
-        float current_depth = *target_depth;
-        float current_vol = *piston_vol;
-        int current_manual = *manual;
-        int current_status = *status;
+        float current_depth = target_depth;
+        float current_vol = piston_vol;
+        int current_manual = manual;
+        int current_status = status;
         data_mutex.unlock();
 
         // Check if anything has changed

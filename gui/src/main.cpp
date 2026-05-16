@@ -7,7 +7,6 @@ static float piston_vol = 0.0f;
 static int manual = 1;
 static float target_depth = -0.4f;
 static int status = 0;
-
 const float max_piston_vol = 120.0f;
 
 int main(int, char**) 
@@ -157,7 +156,7 @@ int main(int, char**)
             {
                 if(manual)
                 {
-                    piston_vol += 10.0f;
+                    piston_vol += piston_vol;
                     if (piston_vol > max_piston_vol)
                         piston_vol = max_piston_vol;
                 }

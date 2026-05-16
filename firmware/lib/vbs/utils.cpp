@@ -72,7 +72,8 @@ void send_motor_command(const std::vector<float>& motorCommand, Command& latest_
         static float last_manual_vol = -999.0f; 
         if(latest_command.piston_vol != last_manual_vol)
         {
-            int target_steps = distance_m_to_steps(volume_mL_to_distance_m(-latest_command.piston_vol));
+            float absVol = latest_command.piston_vol + 120.0;
+            int target_steps = distance_m_to_steps(volume_mL_to_distance_m(-absVol));
             motor.moveTo(target_steps);
             last_manual_vol = latest_command.piston_vol;
             if(latest_command.piston_vol > last_manual_vol)
@@ -192,9 +193,16 @@ void homing_sequence()
     _VBS.update_direction(RETRACT);
 
     // Drive the motor to the most retracted position
-    while(_VBS.get_home() == false && latest_command.enable == true)
+    while(_VBS.get_home() == false)
     {
-        motor.run();
+        if(latest_command.enable == true)
+        {
+            motor.run();
+        }
+        else 
+        {
+            motor.stop();
+        }
     }
 
     // motor.setCurrentPosition((long)0);
@@ -233,11 +241,18 @@ void neutral_point()
     _VBS.update_direction(EXTEND);
     
     // Negative steps equals extension
-    while(motor.distanceToGo() != 0 && latest_command.enable == true)
+    while(motor.distanceToGo() != 0)
     {
-        if(motor.run())
+        if(latest_command.enable == true)
         {
-            _VBS.update_volume(-motor.currentPosition());
+            if(motor.run())
+            {
+                _VBS.update_volume(-motor.currentPosition());
+            }
+        }
+        else
+        {
+            motor.stop();
         }
     }
 
