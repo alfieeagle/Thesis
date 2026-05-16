@@ -97,8 +97,7 @@ void setup() {
 	motor.setMinPulseWidth(MIN_PULSE_WIDTH_MS);
 	motor.setEnablePin(EN_PIN);
 	motor.setPinsInverted(false, false, true);
-	motor.setCurrentPosition((long)0);
-	_VBS.set_volume(0);
+	_VBS.disable();
 	stepTimer.begin(step, 50);
 	encode_data_and_send("[INFO] Step interrupt timer started");
 	encode_data_and_send("[INFO] Finished Setup");
@@ -111,7 +110,7 @@ void loop()
 		read_serial(latest_command);
     }
 
-	if(startup && _VBS.is_enabled() == true && latest_command.manual == false)
+	if(startup && latest_command.enable == true && latest_command.manual == false)
 	{
 		homing_sequence();
 		neutral_point();

@@ -36,9 +36,9 @@ void handle_max_extension()
 	// Disable motor
     noInterrupts();
     motor.stop();
-    motor.disableOutputs();
-    _VBS.disable();
-    _VBS.set_volume(MAX_VOLUME_ONE_WAY_ML);
+    // motor.disableOutputs();
+    // _VBS.disable();
+    // _VBS.set_volume(MAX_VOLUME_ONE_WAY_ML);
     interrupts();
     encode_data_and_send("[INFO] Fully Extended");
 }
@@ -48,9 +48,10 @@ void handle_max_retraction()
 	// Disable motor
     noInterrupts();
     motor.stop();
-	motor.disableOutputs();
-    _VBS.disable();
-    _VBS.set_volume(-MAX_VOLUME_ONE_WAY_ML);
+    motor.setCurrentPosition((long)0);
+	// motor.disableOutputs();
+    // _VBS.disable();
+    // _VBS.set_volume(-MAX_VOLUME_ONE_WAY_ML);
     _VBS.set_home(true);
     interrupts();
     encode_data_and_send("[INFO] Fully retracted");
@@ -134,17 +135,22 @@ void send_motor_command(const std::vector<float>& motorCommand, Command& latest_
 
 void step()
 {
-    if (!stepEnabled) return;
+    if(!stepEnabled) return;
+    if(!latest_command.enable) return;
     
     bool stepped = false;
     
-    if(latest_command.manual || startup) {
+    if(latest_command.manual)
+    {
         stepped = motor.run(); 
-    } else {
+    }
+    else
+    {
         stepped = motor.runSpeed(); 
     }
 
-    if(stepped) {
+    if(stepped)
+    {
         _VBS.update_volume(-motor.currentPosition());
     }
 }
@@ -158,7 +164,7 @@ void homing_sequence()
         motor.stop();
         motor.setCurrentPosition((long)0);
         _VBS.set_home(true);
-        _VBS.set_volume(-MAX_VOLUME_ONE_WAY_ML);
+        // _VBS.set_volume(-MAX_VOLUME_ONE_WAY_ML);
         detachInterrupt(digitalPinToInterrupt(LIM_RET));
         motor.enableOutputs();
         _VBS.enable();
@@ -170,12 +176,13 @@ void homing_sequence()
                 _VBS.update_volume(-motor.currentPosition());
             }
         }
-        motor.disableOutputs();
-        _VBS.disable();
+        // motor.disableOutputs();
+        // _VBS.disable();
         attachInterrupt(digitalPinToInterrupt(LIM_RET), handle_max_retraction, FALLING);
         return;
     }
     motor.enableOutputs();
+    _VBS.enable();
     encode_data_and_send("[INFO] Performing homing sequence");
 
     // Ensure that the piston reaches the fully retracted position
@@ -185,22 +192,17 @@ void homing_sequence()
     _VBS.update_direction(RETRACT);
 
     // Drive the motor to the most retracted position
-    while(_VBS.get_home() == false)
+    while(_VBS.get_home() == false && latest_command.enable == true)
     {
-        if(motor.run())
-        {
-            _VBS.update_volume(-motor.currentPosition());
-        }
+        motor.run();
     }
 
-    motor.setCurrentPosition((long)0);
+    // motor.setCurrentPosition((long)0);
     digitalWrite(RESET_PIN, LOW);
-    delayMicroseconds(100);
     digitalWrite(RESET_PIN, HIGH);
 
     detachInterrupt(digitalPinToInterrupt(LIM_RET));
     motor.enableOutputs();
-    _VBS.enable();
     motor.move(-3000);
     while(motor.distanceToGo() != 0)
     {
@@ -209,8 +211,8 @@ void homing_sequence()
             _VBS.update_volume(-motor.currentPosition());
         }
     }
-    motor.disableOutputs();
-    _VBS.disable();
+    // motor.disableOutputs();
+    // _VBS.disable();
     attachInterrupt(digitalPinToInterrupt(LIM_RET), handle_max_retraction, FALLING);
     stepEnabled = true;
     encode_data_and_send("[INFO] At home position");
@@ -231,7 +233,7 @@ void neutral_point()
     _VBS.update_direction(EXTEND);
     
     // Negative steps equals extension
-    while(motor.distanceToGo() != 0)
+    while(motor.distanceToGo() != 0 && latest_command.enable == true)
     {
         if(motor.run())
         {
