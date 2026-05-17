@@ -36,9 +36,6 @@ void handle_max_extension()
 	// Disable motor
     noInterrupts();
     motor.stop();
-    // motor.disableOutputs();
-    // _VBS.disable();
-    // _VBS.set_volume(MAX_VOLUME_ONE_WAY_ML);
     interrupts();
     encode_data_and_send("[INFO] Fully Extended");
 }
@@ -49,9 +46,6 @@ void handle_max_retraction()
     noInterrupts();
     motor.stop();
     motor.setCurrentPosition((long)0);
-	// motor.disableOutputs();
-    // _VBS.disable();
-    // _VBS.set_volume(-MAX_VOLUME_ONE_WAY_ML);
     _VBS.set_home(true);
     interrupts();
     encode_data_and_send("[INFO] Fully retracted");
