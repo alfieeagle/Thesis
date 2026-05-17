@@ -99,15 +99,12 @@ void VBS::update_motor_command() {
 
     double requestedChange = (_controlVolume - _actuator.get_piston_volume()) * 1000000;
     motor_command.push_back(requestedChange);
-    
-    // Find piston direction with hysteresis to prevent chatter
-    // Use 15 mL (3x resolution) hysteresis band to prevent rapid direction switching
-    const float HYSTERESIS_MARGIN = 15.0f;  // mL - increased from 5.0f for stability
+
     int dir = HOLD;
     
-    if(requestedChange > BUOYANCY_RESOLUTION_GRAMS + HYSTERESIS_MARGIN) {
+    if(requestedChange > BUOYANCY_RESOLUTION_GRAMS) {
         dir = EXTEND;
-    } else if(requestedChange < -(BUOYANCY_RESOLUTION_GRAMS + HYSTERESIS_MARGIN)) {
+    } else if(requestedChange < -(BUOYANCY_RESOLUTION_GRAMS)) {
         dir = RETRACT;
     } else {
         dir = HOLD;

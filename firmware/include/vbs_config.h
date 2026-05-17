@@ -37,6 +37,8 @@
 #define STEPS_PER_REV 200
 #define MAX_VOLUME_ONE_WAY_ML 120.5f
 
+#define M_3_TO_ML 1000000
+
 // Buffer setup
 #define BUFFER_SIZE = 2048
 

@@ -75,7 +75,6 @@ void send_motor_command(const std::vector<float>& motorCommand, Command& latest_
             float absVol = latest_command.piston_vol + 120.0;
             int target_steps = distance_m_to_steps(volume_mL_to_distance_m(-absVol));
             motor.moveTo(target_steps);
-            last_manual_vol = latest_command.piston_vol;
             if(latest_command.piston_vol > last_manual_vol)
             {
                 _VBS.update_direction(EXTEND);
@@ -88,6 +87,7 @@ void send_motor_command(const std::vector<float>& motorCommand, Command& latest_
             {
                 _VBS.update_direction(HOLD);
             }
+             last_manual_vol = latest_command.piston_vol;
         }
         return;
     }
@@ -109,7 +109,7 @@ void send_motor_command(const std::vector<float>& motorCommand, Command& latest_
     }
 
     float freq = motorCommand[0];
-    float requestedChange = motorCommand[1];
+    // float requestedChange = motorCommand[1];
     float dir = motorCommand[2];
 
     // Deadzone Check
@@ -117,8 +117,12 @@ void send_motor_command(const std::vector<float>& motorCommand, Command& latest_
 
     if(!in_deadzone && latest_command.enable == true)
     {
+        float targetVolmL = _VBS.get_control_volume() * M_3_TO_ML;
+        float absVol = targetVolmL + MAX_VOLUME_ONE_WAY_ML;
+        long targetSteps = distance_m_to_steps(volume_mL_to_distance_m(absVol));
+
         _VBS.update_direction(dir);
-        motor.move(distance_m_to_steps(volume_mL_to_distance_m(-requestedChange)));
+        motor.moveTo(-targetSteps);
         motor.setMaxSpeed(freq);
     }
     else
