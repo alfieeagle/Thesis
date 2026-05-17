@@ -48,7 +48,7 @@ _length(length),
 _radius(radius),
 _motorCommand(3)
 {
-    _referenceDepth = -2.0;
+    _referenceDepth = -0.4;
     _currentDepth = _referenceDepth;
 
     // Set volume
