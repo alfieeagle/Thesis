@@ -229,7 +229,7 @@ void neutral_point()
     // Neutrally buoyant point should be one half stroke from the 
     // fully retracted position
     long steps = distance_m_to_steps(VBS_HALF_STROKE);
-    motor.move(-steps);
+    motor.moveTo(-steps);
 
     _VBS.update_direction(EXTEND);
     
