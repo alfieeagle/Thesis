@@ -109,13 +109,25 @@ void send_motor_command(const std::vector<float>& motorCommand, Command& latest_
     }
 
     float freq = motorCommand[0];
-    // float requestedChange = motorCommand[1];
+    float requestedChange = motorCommand[1];
     float dir = motorCommand[2];
 
-    // Deadzone Check
-    bool in_deadzone = std::abs(_VBS.get_current_depth() - _VBS.get_reference_depth()) < DEADZONE_THRESHOLD;
+    bool isCorrecting = false;
 
-    if(!in_deadzone && latest_command.enable == true)
+    if(std::abs(requestedChange) < BUOYANCY_RESOLUTION_GRAMS * 0.2)
+    {
+        isCorrecting = false;
+    }
+
+    if(std::abs(requestedChange) > BUOYANCY_RESOLUTION_GRAMS)
+    {
+        isCorrecting = true;
+    }
+
+    // Deadzone Check
+    // bool in_deadzone = std::abs(requestedChange) < DEADZONE_THRESHOLD;
+
+    if(isCorrecting && latest_command.enable == true)
     {
         float targetVolmL = _VBS.get_control_volume() * M_3_TO_ML;
         float absVol = targetVolmL + MAX_VOLUME_ONE_WAY_ML;
