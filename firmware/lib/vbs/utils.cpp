@@ -36,6 +36,10 @@ void handle_max_extension()
 	// Disable motor
     noInterrupts();
     motor.stop();
+    motor.disableOutputs();
+    motor.setCurrentPosition(-(long)distance_m_to_steps(volume_mL_to_distance_m(MAX_VOLUME_ONE_WAY_ML * 2)));
+    _VBS.set_volume(MAX_VOLUME_ONE_WAY_ML);
+    _VBS.disable();
     interrupts();
     encode_data_and_send("[INFO] Fully Extended");
 }
@@ -45,8 +49,11 @@ void handle_max_retraction()
 	// Disable motor
     noInterrupts();
     motor.stop();
+    motor.disableOutputs();
     motor.setCurrentPosition((long)0);
     _VBS.set_home(true);
+    _VBS.set_volume(-MAX_VOLUME_ONE_WAY_ML);
+    _VBS.disable();
     interrupts();
     encode_data_and_send("[INFO] Fully retracted");
 }
