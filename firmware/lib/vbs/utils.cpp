@@ -109,22 +109,17 @@ void send_motor_command(const std::vector<float>& motorCommand, Command& latest_
     }
 
     float freq = motorCommand[0];
+    float requestedChange = motorCommand[1];
     float dir = motorCommand[2];
 
     // Deadzone Check
     bool in_deadzone = std::abs(_VBS.get_current_depth() - _VBS.get_reference_depth()) < DEADZONE_THRESHOLD;
 
-    if(!in_deadzone && _VBS.is_enabled())
+    if(!in_deadzone && latest_command.enable == true)
     {
         _VBS.update_direction(dir);
-        
-        if(dir == EXTEND) {
-            motor.setSpeed(-freq); 
-        } else if (dir == RETRACT) {
-            motor.setSpeed(freq);
-        } else {
-            motor.setSpeed(0);
-        }
+        motor.move(distance_m_to_steps(volume_mL_to_distance_m(-requestedChange)));
+        motor.setMaxSpeed(freq);
     }
     else
     {
@@ -135,22 +130,10 @@ void send_motor_command(const std::vector<float>& motorCommand, Command& latest_
 }
 
 void step()
-{
-    if(!stepEnabled) return;
-    if(!latest_command.enable) return;
+{   
+    if(!stepEnabled || !latest_command.enable) return;
     
-    bool stepped = false;
-    
-    if(latest_command.manual)
-    {
-        stepped = motor.run(); 
-    }
-    else
-    {
-        stepped = motor.runSpeed(); 
-    }
-
-    if(stepped)
+    if(motor.run())
     {
         _VBS.update_volume(-motor.currentPosition());
     }

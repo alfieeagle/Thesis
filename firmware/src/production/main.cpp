@@ -113,7 +113,7 @@ void loop()
 	if(startup && latest_command.enable == true && latest_command.manual == false)
 	{
 		homing_sequence();
-		neutral_point();
+		// neutral_point();
 		startup = false;
 	}
 
