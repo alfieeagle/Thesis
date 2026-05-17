@@ -7,7 +7,7 @@ static float piston_vol = 0.0f;
 static int manual = 1;
 static float target_depth = -0.4f;
 static int status = 0;
-const float max_piston_vol = 100.0f;
+const float max_piston_vol = 107.0f;
 
 int main(int, char**) 
 {

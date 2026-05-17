@@ -16,7 +16,7 @@
 #define DT 0.1f
 #define VBS_LENGTH 0.2f
 #define VBS_RADIUS 0.056f
-#define VBS_HALF_STROKE 0.043f
+#define VBS_HALF_STROKE 0.037f
 
 // Actuator params
 #define E_G 0.9f
@@ -35,7 +35,7 @@
 #define MIN_PULSE_WIDTH_MS 10
 #define PISTON_AREA_M_2 0.0029f
 #define STEPS_PER_REV 200
-#define MAX_VOLUME_ONE_WAY_ML 120.5f
+#define MAX_VOLUME_ONE_WAY_ML 107.0f
 
 #define M_3_TO_ML 1000000
 

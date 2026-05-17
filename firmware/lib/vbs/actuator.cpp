@@ -44,7 +44,7 @@ _stepsPerRev(stepsPerRev)
 {
     _enabled = false;
 
-    _maxPistonVolume = 0.00012053;
+    _maxPistonVolume = 0.000107;
     _pistonVolume = 0.0;
     _dir = 0;
 }

@@ -37,11 +37,10 @@ void handle_max_extension()
     noInterrupts();
     motor.stop();
     motor.disableOutputs();
-    motor.setCurrentPosition(-(long)distance_m_to_steps(volume_mL_to_distance_m(MAX_VOLUME_ONE_WAY_ML * 2)));
+    motor.setCurrentPosition(-distance_m_to_steps(volume_mL_to_distance_m(MAX_VOLUME_ONE_WAY_ML * 2)));
     _VBS.set_volume(MAX_VOLUME_ONE_WAY_ML);
     _VBS.disable();
     interrupts();
-    encode_data_and_send("[INFO] Fully Extended");
 }
 
 void handle_max_retraction()
@@ -50,12 +49,11 @@ void handle_max_retraction()
     noInterrupts();
     motor.stop();
     motor.disableOutputs();
-    motor.setCurrentPosition((long)0);
+    motor.setCurrentPosition(0);
     _VBS.set_home(true);
     _VBS.set_volume(-MAX_VOLUME_ONE_WAY_ML);
     _VBS.disable();
     interrupts();
-    encode_data_and_send("[INFO] Fully retracted");
 }
 
 void msg_callback()
@@ -73,7 +71,7 @@ void send_motor_command(const std::vector<float>& motorCommand, Command& latest_
         static float last_manual_vol = -999.0f; 
         if(latest_command.piston_vol != last_manual_vol)
         {
-            float absVol = latest_command.piston_vol + 120.0;
+            float absVol = latest_command.piston_vol + MAX_VOLUME_ONE_WAY_ML;
             int target_steps = distance_m_to_steps(volume_mL_to_distance_m(-absVol));
             motor.moveTo(target_steps);
             if(latest_command.piston_vol > last_manual_vol)
@@ -165,7 +163,6 @@ void homing_sequence()
         motor.stop();
         motor.setCurrentPosition((long)0);
         _VBS.set_home(true);
-        // _VBS.set_volume(-MAX_VOLUME_ONE_WAY_ML);
         detachInterrupt(digitalPinToInterrupt(LIM_RET));
         motor.enableOutputs();
         _VBS.enable();
