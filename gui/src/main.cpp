@@ -40,7 +40,8 @@ int main(int, char**)
 
     bool my_window_active;
 
-    std::string ttyPort = "/dev/tty.usbmodem167597201";
+    std::string ttyPort = "/dev/ttyvbs";
+
     // Try to open the port. setup_serial uses O_NONBLOCK so it won't hang the UI.
     filedesc = setup_serial(ttyPort);
     
