@@ -1,46 +1,110 @@
 import matplotlib.pyplot as plt 
 import os
-import csv
-from pathlib import Path
 import glob
+import pandas as pd
 
-time = []
-depth = []
-ref_depth = []
-control_vol = []
-piston_vol = []
+# --- Configuration ---
+TELEMETRY_PATH = "../logs/telemetry/*.csv"
+POWER_PATH = "../logs/power/*.xlsx" 
 
-# Get the latest file
-list_of_files = glob.glob("../logs/telemetry/*.csv") 
-latest_file = max(list_of_files, key=os.path.getctime)
+def get_latest_file(path):
+    list_of_files = glob.glob(path)
+    if not list_of_files:
+        return None
+    return max(list_of_files, key=os.path.getctime)
 
-# Extract the data
-with open(latest_file ,'r') as csvfile:
-    plots = csv.reader(csvfile, delimiter = ',')
+latest_tel_file = get_latest_file(TELEMETRY_PATH)
+latest_pwr_file = get_latest_file(POWER_PATH)
+
+# --- 1. Process Telemetry Data (Keep 1s Averaging) ---
+if latest_tel_file:
+    df_tel = pd.read_csv(latest_tel_file, header=None, 
+                         names=['time_str', 'depth', 'ref_depth', 'control_vol', 'piston_vol'])
+    df_tel['datetime'] = pd.to_datetime(df_tel['time_str'])
+    # Resample telemetry to clean up the staircase look
+    df_tel = df_tel.set_index('datetime').resample('1s').mean(numeric_only=True).reset_index()
+    df_tel = df_tel.sort_values('datetime')
+else:
+    print("No telemetry files found.")
+    exit()
+
+# --- 2. Process Power Data (NO RESAMPLING) ---
+if latest_pwr_file:
+    df_pwr = pd.read_excel(latest_pwr_file, header=0, usecols=[1, 2, 4, 5])
+    df_pwr.columns = ['voltage', 'current', 'wh', 'time_str']
+    df_pwr['datetime'] = pd.to_datetime(df_pwr['time_str'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
+    df_pwr = df_pwr.dropna(subset=['datetime']).sort_values('datetime')
     
-    for row in plots:
-        time.append(round(float(row[0]), 1))
-        depth.append(float(row[1]))
-        ref_depth.append(float(row[2]))
-        control_vol.append(float(row[3]))
-        piston_vol.append(float(row[4]))
+    # Calculate raw power before any smoothing
+    df_pwr['power_adj'] = (df_pwr['voltage'] * df_pwr['current']) - 0.85
+    # Smooth the raw data directly
+    df_pwr['power_smooth'] = df_pwr['power_adj'].rolling(window=10, center=True).mean()
+else:
+    print(f"No Excel power files found.")
+    exit()
 
-# Plot the depth
-plt.figure()
-plt.plot(time, depth, color = 'c', label = "Depth",)
-plt.plot(time, ref_depth, color = 'k', label = "Reference Depth",)
-plt.xlabel('Time (s)')
+# --- 3. Synchronize / Intersection using merge_asof ---
+# This aligns the power data to the nearest telemetry second without creating gaps
+df_combined = pd.merge_asof(df_tel, df_pwr, on='datetime', direction='nearest')
+
+# Calculate Initial Elapsed Seconds
+df_combined['seconds'] = (df_combined['datetime'] - df_combined['datetime'].iloc[0]).dt.total_seconds()
+
+# --- 4. CROP TO WINDOW (70s to 130s) ---
+start_crop = 190
+end_crop = 240
+
+mask = (df_combined['seconds'] >= start_crop) & (df_combined['seconds'] <= end_crop)
+df_window = df_combined.loc[mask].copy()
+
+if df_window.empty:
+    print("Error: Window outside available range.")
+    exit()
+
+# FIX: Subtract the first value of the window to force the X-axis to start at 0
+df_window['seconds_rel'] = df_window['seconds'] - df_window['seconds'].iloc[0]
+
+# Keep energy relative to the start of the window
+df_window['wh_rel'] = df_window['wh'] - df_window['wh'].iloc[0]
+
+# --- 5. Plotting ---
+
+# Figure 1: Depth
+plt.figure(figsize=(10, 5))
+plt.plot(df_window['seconds_rel'], df_window['depth'], color='b', label="Actual Depth")
+plt.plot(df_window['seconds_rel'], df_window['ref_depth'], color='k', linestyle='--', label="Reference")
 plt.ylabel('Depth (m)')
-plt.title('Reference Tracking')
-plt.legend()
-plt.show()
-
-# Plot the piston
-plt.figure()
-plt.plot(time, control_vol, color = 'b', label = "Control Volume")
-plt.plot(time, piston_vol, color = 'r', label = "Piston Volume")
 plt.xlabel('Time (s)')
-plt.ylabel('Volume (mL)')
-plt.title('Piston Position')
+plt.title('Depth Tracking')
 plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Figure 2: VBS Actuator
+plt.figure(figsize=(10, 5))
+plt.plot(df_window['seconds_rel'], df_window['control_vol'], color='b', label="Control (Target)")
+plt.plot(df_window['seconds_rel'], df_window['piston_vol'], color='r', label="Piston (Actual)")
+plt.ylabel('Volume (mL)')
+plt.xlabel('Time (s)')
+plt.title('VBS Actuator Position')
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# Figure 3: Power (Smooth and Gap-free)
+plt.figure(figsize=(10, 5))
+plt.plot(df_window['seconds_rel'], df_window['power_smooth'], color='b', label="Net System Power")
+plt.ylabel('Power (Watts)')
+plt.xlabel('Time (s)')
+plt.title('Power Consumption')
+plt.ylim(bottom=0)
+plt.grid(True, alpha=0.3)
+plt.legend()
+
+plt.figure(figsize=(10, 5))
+plt.plot(df_window['seconds_rel'], df_window['wh_rel'], color='b', label="Energy Consumed")
+plt.ylabel('Energy (Wh)')
+plt.xlabel('Time (s)')
+plt.title('Energy Consumption')
+plt.grid(True, alpha=0.3)
+plt.legend()
+
 plt.show()

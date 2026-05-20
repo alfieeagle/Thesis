@@ -19,20 +19,20 @@ int main(int, char**)
     time (&rawtime);
     timeinfo = localtime (&rawtime);
 
-    strftime (buffer,80,"telemetry_log_%d-%m-%Y_%H:%M:%S",timeinfo);
-
+    strftime(buffer, 80, "telemetry_log_%d-%m-%Y_%H-%M-%S", timeinfo);
+    
     std::string plotName(buffer);
     std::string telDir = "../logs/telemetry/";
 
     // Create telemetry log file stream
-    std::ofstream PlotFile(telDir + plotName + ".csv");
+    PlotFile.open(telDir + plotName + ".csv");
 
     // Clear the buffer and create debug file stream
     memset(buffer, 0, sizeof(buffer));
     strftime (buffer,80,"debug_log_%d-%m-%Y_%H:%M:%S",timeinfo);
     std::string logName(buffer);
     std::string debugDir = "../logs/debug/";
-    std::ofstream LogFile(debugDir + logName + ".csv");
+    LogFile.open(debugDir + logName + ".csv");
 
 
     GLFWwindow* window = NULL;
@@ -83,6 +83,10 @@ int main(int, char**)
                 ImGui::MenuItem("Serial Connection", NULL, false, false);
                 if (ImGui::MenuItem("Reconnect Serial"))
                 {
+                    if (filedesc >= 0) disconnect_serial(filedesc); 
+                    
+                    open_new_log_files();
+
                     filedesc = setup_serial(ttyPort);
                     if(filedesc >= 0)
                     {

@@ -16,6 +16,9 @@
 #include <string>
 #include <cstring>
 #include <algorithm>
+#include <chrono>
+#include <iomanip>
+#include <sstream>
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,6 +47,9 @@ extern SystemStatus latest_telemetry;
 extern bool is_connected;
 extern int total_packets_received;
 extern double last_packet_time;
+
+static std::ofstream PlotFile;
+static std::ofstream LogFile;
 
 // utility structure for realtime plot
 struct ScrollingBuffer {
@@ -78,6 +84,7 @@ void ClearLog();
 void AddLog(const char* fmt, ...);
 void real_time_depth_plot(struct ScrollingBuffer* depth, struct ScrollingBuffer* ref_depth);
 void real_time_piston_plot(struct ScrollingBuffer* control, struct ScrollingBuffer* piston);
+void open_new_log_files();
 
 // Serial functions
 int setup_serial(std::string ttyPort);

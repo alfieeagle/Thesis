@@ -41,6 +41,7 @@ void handle_max_extension()
     _VBS.set_volume(MAX_VOLUME_ONE_WAY_ML);
     _VBS.disable();
     interrupts();
+    encode_data_and_send("[INFO] Fully extended");
 }
 
 void handle_max_retraction()
@@ -54,6 +55,7 @@ void handle_max_retraction()
     _VBS.set_volume(-MAX_VOLUME_ONE_WAY_ML);
     _VBS.disable();
     interrupts();
+    encode_data_and_send("[INFO] Fully retracted");
 }
 
 void msg_callback()

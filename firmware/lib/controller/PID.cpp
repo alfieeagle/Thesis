@@ -23,7 +23,7 @@ _ki(ki)
     _prevError = 0.0f;
     _integralError = 0.0f;
     _derivativeError = 0.0f;
-    _maxIntegralError = 0.05f;
+    _maxIntegralError = 1.0f;
     _saturation = 1.0f;
     _elapsedTime = 0.0f;
     _cutoffFrequency = 9.0f;

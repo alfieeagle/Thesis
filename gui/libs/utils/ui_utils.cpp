@@ -37,43 +37,83 @@ void read_serial(int* filedesc, std::ofstream& PlotFile, std::ofstream& LogFile,
     while (*filedesc >= 0)
     {
         SystemStatus incoming;
-        // Check if the serial port is open
         int result = decode_data_and_read(*filedesc, &incoming);
+        
         if (result == 0)
         {
-            // Lock the data so only this thread can access
+            // --- ROBUST TIMESTAMP GENERATION ---
+            auto now = std::chrono::system_clock::now();
+            std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+            struct tm* timeinfo = std::localtime(&now_c);
+
+            // Fixed-size buffer ensures seconds aren't dropped by stream quirks
+            char time_str[20]; 
+            strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", timeinfo);
+
             data_mutex.lock();
 
-            // Update the global telemetry
             latest_telemetry = incoming;
 
-            // Log any message from the firmware
+            // Handle firmware messages
             if (incoming.has_message && incoming.message[0] != '\0')
             {
                 AddLog("%s", incoming.message);
                 LogFile << incoming.message << "\n\r";
+                LogFile.flush(); // Ensure message is written immediately
             }
 
-            // Update connection details
             total_packets_received++;
             last_packet_time = glfwGetTime();
 
-            depth->AddPoint(glfwGetTime(), incoming.depth);
-            ref_depth->AddPoint(glfwGetTime(), incoming.ref_depth);
-            control->AddPoint(glfwGetTime(), incoming.control_volume);
-            piston->AddPoint(glfwGetTime(), incoming.piston_pos);
+            // UI Plotting
+            depth->AddPoint(last_packet_time, incoming.depth);
+            ref_depth->AddPoint(last_packet_time, incoming.ref_depth);
+            control->AddPoint(last_packet_time, incoming.control_volume);
+            piston->AddPoint(last_packet_time, incoming.piston_pos);
 
-            // Log the telemetry data
-            PlotFile << last_packet_time << "," 
-            << incoming.depth << "," 
-            <<  incoming.ref_depth << ","
-            << incoming.control_volume << "," 
-            << incoming.piston_pos << "\n";
+            // CSV Logging
+            PlotFile << time_str << "," 
+                     << incoming.depth << "," 
+                     << incoming.ref_depth << ","
+                     << incoming.control_volume << "," 
+                     << incoming.piston_pos << "\n";
+            
+            // Flush the plot file periodically or every line to prevent data loss on crash
+            PlotFile.flush(); 
 
-            // Unlock for other threads
             data_mutex.unlock();
         } 
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+}
+
+void open_new_log_files() {
+    // If files are already open, close them first
+    if (PlotFile.is_open()) PlotFile.close();
+    if (LogFile.is_open()) LogFile.close();
+
+    time_t rawtime;
+    struct tm * timeinfo;
+    char buffer[80];
+
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+
+    // Telemetry File
+    strftime(buffer, 80, "telemetry_log_%d-%m-%Y_%H-%M-%S", timeinfo);
+    std::string telPath = "../logs/telemetry/" + std::string(buffer) + ".csv";
+    PlotFile.open(telPath);
+
+    // Debug File
+    memset(buffer, 0, sizeof(buffer));
+    strftime(buffer, 80, "debug_log_%d-%m-%Y_%H-%M-%S", timeinfo);
+    std::string logPath = "../logs/debug/" + std::string(buffer) + ".csv";
+    LogFile.open(logPath);
+
+    if (PlotFile.is_open()) {
+        AddLog("[INFO] Created new telemetry log: %s", telPath.c_str());
+    } else {
+        AddLog("[ERROR] Could not create log file. Check if directory exists!");
     }
 }
 
