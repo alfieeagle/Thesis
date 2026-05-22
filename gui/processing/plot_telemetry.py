@@ -7,8 +7,8 @@ import pandas as pd
 TELEMETRY_PATH = "../logs/telemetry/*.csv"
 POWER_PATH = "../logs/power/*.xlsx" 
 
-start_crop = 120
-end_crop = 150
+start_crop = 70
+end_crop = 130
 
 def get_latest_file(path):
     list_of_files = glob.glob(path)
@@ -49,6 +49,26 @@ else:
 # --- 3. Synchronize / Intersection using merge_asof ---
 # This aligns the power data to the nearest telemetry second without creating gaps
 df_combined = pd.merge_asof(df_tel, df_pwr, on='datetime', direction='nearest')
+
+# 1. Identify when the RAW telemetry started (before resampling)
+# We use df_tel from before the .set_index().resample() lines
+tel_actual_start = pd.to_datetime(pd.read_csv(latest_tel_file, header=None, usecols=[0])[0]).min()
+
+# 2. Calculate Target Start
+target_start_time = tel_actual_start + pd.Timedelta(seconds=start_crop)
+
+# 3. Find index in the 10Hz data
+# We re-read the raw time column specifically to find the high-res index
+raw_times = pd.to_datetime(pd.read_csv(latest_tel_file, header=None, usecols=[0])[0])
+target_idx_raw = (raw_times - target_start_time).abs().idxmin()
+
+# 4. Result for MATLAB
+matlab_start_idx = target_idx_raw + 1
+
+print("-" * 30)
+print(f"RAW 10Hz Telemetry Start: {tel_actual_start}")
+print(f"MATLAB START INDEX (at 10Hz): {matlab_start_idx}")
+print("-" * 30)
 
 # Calculate Initial Elapsed Seconds
 df_combined['seconds'] = (df_combined['datetime'] - df_combined['datetime'].iloc[0]).dt.total_seconds()
