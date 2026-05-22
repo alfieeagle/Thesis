@@ -7,6 +7,9 @@ import pandas as pd
 TELEMETRY_PATH = "../logs/telemetry/*.csv"
 POWER_PATH = "../logs/power/*.xlsx" 
 
+start_crop = 120
+end_crop = 150
+
 def get_latest_file(path):
     list_of_files = glob.glob(path)
     if not list_of_files:
@@ -51,8 +54,6 @@ df_combined = pd.merge_asof(df_tel, df_pwr, on='datetime', direction='nearest')
 df_combined['seconds'] = (df_combined['datetime'] - df_combined['datetime'].iloc[0]).dt.total_seconds()
 
 # --- 4. CROP TO WINDOW (70s to 130s) ---
-start_crop = 190
-end_crop = 240
 
 mask = (df_combined['seconds'] >= start_crop) & (df_combined['seconds'] <= end_crop)
 df_window = df_combined.loc[mask].copy()
