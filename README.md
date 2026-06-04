@@ -6,4 +6,4 @@ This repository contains the source code for a thesis project aimed at the devel
 
 /ros_ws contains a ROS2 package which wraps the firmware for use in a software-in-the-loop application. During simulated testing, Simulink and the Mathworks ROS2 toolbox was used as the physics engine
 
-/simulation 
+/simulation contains extra tools for finding added mass constants using Pythons Capytaine library. It also contains Python scripts for plotting data from a csv
